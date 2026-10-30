@@ -1045,3 +1045,9 @@ html.js .reveal.in.tilt.live { transform: perspective(900px) rotateX(var(--rx, 0
 .manifest { padding-bottom: clamp(90px, 16vh, 180px); }
 .statement { font-size: clamp(2.5rem, 7vw, 6rem); line-height: 1.04; letter-spacing: -0.02em; max-width: 13ch; margin: 0 0 clamp(26px, 4vw, 44px); text-shadow: 0 2px 30px rgba(10, 4, 6, 0.85); }
 .statement-sub { max-width: 40ch; margin: 0 0 0 4px; padding-left: 20px; border-left: 1px solid var(--gold); font-size: clamp(1rem, 1.5vw, 1.2rem); line-height: 1.7; color: var(--muted); text-shadow: 0 1px 18px rgba(10, 4, 6, 0.9); }
+
+/* gold gradient text must not clip descenders (g, y, p, j...) or italic overhang */
+.metal, .statement .hi { padding-bottom: 0.2em; margin-bottom: -0.2em; padding-right: 0.04em; }
+.display .shift, .hero h1.name span { padding-bottom: 0.2em; margin-bottom: -0.2em; }
+.row .t, .contact-list .value { padding-bottom: 0.18em; margin-bottom: -0.18em; padding-right: 0.05em; }
+.section-title .metal { display: inline; }
