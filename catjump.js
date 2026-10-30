@@ -15,7 +15,7 @@
   function layout() {
     const narrow = (canvas.parentElement.clientWidth || 800) < 640;
     W = narrow ? 520 : 720;
-    H = narrow ? 250 : 220;
+    H = narrow ? 300 : 310;
     GROUND = H - 48;
     canvas.width = W * dpr;
     canvas.height = H * dpr;
@@ -68,16 +68,16 @@
     scoreEl.textContent = "0";
   }
 
-  // obstacle kinds: water (wide, flat), plant (bush with a rose bud) and rock (low stone)
-  const KINDS = ["puddle", "plant", "rock"];
+  // obstacle kinds: water (wide, flat), thorny plant, low rock and, a little later in a run, a rearing cobra
+  const KINDS = ["puddle", "plant", "rock", "cobra"];
   let lastKind = "";
   function spawn() {
     // alternate: never the same kind twice in a row
-    const pool = KINDS.filter((k) => k !== lastKind);
+    const pool = KINDS.filter((k) => k !== lastKind && (k !== "cobra" || cleared >= 5));
     const kind = pool[Math.floor(Math.random() * pool.length)];
     lastKind = kind;
-    const w = kind === "puddle" ? 52 + Math.random() * 48 : kind === "plant" ? 28 + Math.random() * 12 : 30 + Math.random() * 16;
-    const h = kind === "plant" ? 30 : kind === "rock" ? 22 : 0;
+    const w = kind === "puddle" ? 52 + Math.random() * 48 : kind === "plant" ? 28 + Math.random() * 12 : kind === "cobra" ? 34 + Math.random() * 6 : 30 + Math.random() * 16;
+    const h = kind === "plant" ? 30 : kind === "rock" ? 22 : kind === "cobra" ? 38 : 0;
     puddles.push({ x: W + 20, w: w, h: h, kind: kind, seed: Math.random() });
 
     // later in a run, sometimes add a second small obstacle right behind it, close enough
@@ -103,7 +103,7 @@
   const JUMP_LINES = [
     "Meow-velous!", "Paws up!", "Cat-apult!", "I meant to do that.", "Purr-fect!",
     "Not today, puddle!", "Fur real?", "Nine lives, nine jumps.", "Look ma, dry paws!",
-    "Whisker me away!", "Hiss-terical!", "Zoom zoom!", "Elegance, darling.",
+    "Whisker me away!", "Zoom zoom!", "Elegance, darling.",
   ];
   const WATER_LINES = [
     "I'm not wet, I'm moisturized.", "Dignity: lost.", "Meow-ch, my paws!",
@@ -113,6 +113,8 @@
     "That rock came out of nowhere.", "Was that a plant? Rude.", "I'm calling it a nap.",
     "Bonk! Zero stars.", "The plant started it.", "Smooth. Very smooth.", "Thorns? Really?",
   ];
+  const COBRA_JUMP_LINES = ["Sss-orry, not today!", "Hiss-terical!"];
+  const COBRA_HIT_LINES = ["That snake did not come to play."];
   let bubble = null; // { text, t0 }
   let lastLine = "";
   let failLine = "";
@@ -123,10 +125,16 @@
     return s;
   };
 
+  let lastJumpSpoke = false;
   function jump() {
     if (state !== "running" || y > 0) return;
     vy = JUMP_V;
-    if (Math.random() < 0.65) bubble = { text: pick(JUMP_LINES), t0: t };
+    // the cat only speaks now and then: never two jumps in a row, and not on every jump
+    const nxt = puddles.find((p) => p.x + p.w > CAT_X + 8);
+    const cobraNext = nxt && nxt.kind === "cobra" && nxt.x - (CAT_X + 46) < speed * 0.9;
+    const chance = lastJumpSpoke ? 0 : 0.4;
+    lastJumpSpoke = Math.random() < chance;
+    if (lastJumpSpoke) bubble = { text: pick(cobraNext ? COBRA_JUMP_LINES : JUMP_LINES), t0: t };
   }
 
   function step(dt) {
@@ -167,7 +175,7 @@
   function end() {
     state = "over";
     bubble = null;
-    failLine = pick(hitKind === "puddle" ? WATER_LINES : HIT_LINES);
+    failLine = pick(hitKind === "puddle" ? WATER_LINES : hitKind === "cobra" ? COBRA_HIT_LINES : HIT_LINES);
     cancelAnimationFrame(raf);
     const score = Math.floor(dist / 10);
     if (score > best) {
@@ -175,7 +183,7 @@
       bestEl.textContent = best;
       try { localStorage.setItem(BEST_KEY, String(best)); } catch (e) {}
     }
-    startBtn.textContent = "Play again";
+    I18N.set(startBtn, "Play again", "Gioca ancora");
     GameLock.set(false);
     draw();
   }
@@ -192,7 +200,7 @@
     cancelAnimationFrame(raf);
     reset();
     state = "running";
-    startBtn.textContent = "Pause";
+    I18N.set(startBtn, "Pause", "Pausa");
     startBtn.blur();
     GameLock.set(true);
     const card = canvas.closest(".game-card");
@@ -205,14 +213,14 @@
     if (state !== "running") return;
     cancelAnimationFrame(raf);
     state = "paused";
-    startBtn.textContent = "Resume";
+    I18N.set(startBtn, "Resume", "Riprendi");
     GameLock.set(false);
     draw();
   }
 
   function resume() {
     state = "running";
-    startBtn.textContent = "Pause";
+    I18N.set(startBtn, "Pause", "Pausa");
     startBtn.blur();
     GameLock.set(true);
     last = performance.now();
@@ -411,46 +419,117 @@
     });
   }
 
+  // The cat's comment sits in the sky at the top of the board: bigger and easy to read,
+  // and always above the cat's highest jump, so it never covers the cat or the obstacles.
   function drawBubble() {
     if (!bubble) return;
     const age = t - bubble.t0;
-    const life = 1.3;
+    const life = 1.8;
     if (age > life) { bubble = null; return; }
-    const alpha = Math.min(age / 0.12, 1) * Math.min((life - age) / 0.3, 1);
+    const alpha = Math.min(age / 0.15, 1) * Math.min((life - age) / 0.35, 1);
+    const size = W < 600 ? 30 : 26;
+    const text = I18N.t(bubble.text);
     ctx.save();
     ctx.globalAlpha = Math.max(alpha, 0);
-    ctx.font = 'italic 16px "Playfair Display", Georgia, serif';
-    const w = ctx.measureText(bubble.text).width + 24;
-    const x = Math.min(CAT_X - 4, W - w - 8);
-    const by = Math.max(GROUND - Math.max(y, 0) - 82, 10) - age * 6;
-    ctx.fillStyle = "rgba(21, 9, 17, 0.9)";
-    ctx.strokeStyle = "rgba(201, 168, 122, 0.8)";
-    ctx.lineWidth = 1;
+    ctx.font = "italic " + size + 'px "Playfair Display", Georgia, serif';
+    const padX = 20, h = size + 24;
+    const w = Math.min(ctx.measureText(text).width + padX * 2, W - 24);
+    const x = Math.min(CAT_X - 20, W - w - 12);
+    const by = 12;
+    ctx.fillStyle = "rgba(21, 9, 17, 0.92)";
+    ctx.strokeStyle = "rgba(201, 168, 122, 0.9)";
+    ctx.lineWidth = 1.2;
     ctx.beginPath();
-    ctx.moveTo(x + 8, by);
-    ctx.lineTo(x + w - 8, by);
-    ctx.quadraticCurveTo(x + w, by, x + w, by + 8);
-    ctx.lineTo(x + w, by + 22);
-    ctx.quadraticCurveTo(x + w, by + 30, x + w - 8, by + 30);
-    ctx.lineTo(x + 40, by + 30);
-    ctx.lineTo(x + 30, by + 38);
-    ctx.lineTo(x + 28, by + 30);
-    ctx.lineTo(x + 8, by + 30);
-    ctx.quadraticCurveTo(x, by + 30, x, by + 22);
-    ctx.lineTo(x, by + 8);
-    ctx.quadraticCurveTo(x, by, x + 8, by);
+    ctx.moveTo(x + 10, by);
+    ctx.lineTo(x + w - 10, by);
+    ctx.quadraticCurveTo(x + w, by, x + w, by + 10);
+    ctx.lineTo(x + w, by + h - 10);
+    ctx.quadraticCurveTo(x + w, by + h, x + w - 10, by + h);
+    ctx.lineTo(x + 56, by + h);
+    ctx.lineTo(x + 44, by + h + 9);
+    ctx.lineTo(x + 40, by + h);
+    ctx.lineTo(x + 10, by + h);
+    ctx.quadraticCurveTo(x, by + h, x, by + h - 10);
+    ctx.lineTo(x, by + 10);
+    ctx.quadraticCurveTo(x, by, x + 10, by);
     ctx.closePath();
     ctx.fill();
     ctx.stroke();
-    ctx.fillStyle = "#f1deb8";
+    ctx.fillStyle = "#f6e7c6";
     ctx.textAlign = "left";
-    ctx.fillText(bubble.text, x + 12, by + 20);
+    ctx.textBaseline = "middle";
+    ctx.fillText(text, x + padX, by + h / 2 + 1, W - 40);
     ctx.restore();
+  }
+
+
+  function drawCobra(p) {
+    const cx = p.x + p.w / 2, b = GROUND + 1, h = p.h;
+    const sway = Math.sin(t * 3 + p.seed * 6) * 2;
+    ctx.lineCap = "round";
+    // coiled base
+    ctx.fillStyle = "#5e4d1d";
+    ctx.beginPath();
+    ctx.ellipse(cx, b - 4, p.w / 2, 5, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = "#8a7330";
+    ctx.beginPath();
+    ctx.ellipse(cx + 1, b - 8, p.w / 2 - 6, 4.5, 0, 0, Math.PI * 2);
+    ctx.fill();
+    // rising body
+    const g = ctx.createLinearGradient(cx - 6, 0, cx + 6, 0);
+    g.addColorStop(0, "#6e5a22");
+    g.addColorStop(1, "#b89a4a");
+    ctx.strokeStyle = g;
+    ctx.lineWidth = 8;
+    ctx.beginPath();
+    ctx.moveTo(cx + 2, b - 9);
+    ctx.bezierCurveTo(cx - 9, b - h * 0.35, cx + 9, b - h * 0.5, cx + sway, b - h * 0.78);
+    ctx.stroke();
+    // hood
+    const hx = cx + sway, hy = b - h * 0.86;
+    ctx.fillStyle = "#b89a4a";
+    ctx.beginPath();
+    ctx.moveTo(hx - 2, hy + 12);
+    ctx.quadraticCurveTo(hx - 17, hy + 2, hx - 9, hy - 9);
+    ctx.quadraticCurveTo(hx, hy - 15, hx + 9, hy - 9);
+    ctx.quadraticCurveTo(hx + 15, hy + 2, hx + 2, hy + 12);
+    ctx.closePath();
+    ctx.fill();
+    // spectacle mark on the hood
+    ctx.strokeStyle = "#3b2f12";
+    ctx.lineWidth = 1.6;
+    ctx.beginPath();
+    ctx.arc(hx - 3, hy + 1, 3.2, 0, Math.PI * 2);
+    ctx.arc(hx + 4, hy + 1, 3.2, 0, Math.PI * 2);
+    ctx.stroke();
+    // head, eye and flickering forked tongue (looking toward the cat)
+    ctx.fillStyle = "#8a7330";
+    ctx.beginPath();
+    ctx.ellipse(hx - 4, hy - 11, 6, 4.5, -0.2, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = "#d23a58";
+    ctx.beginPath();
+    ctx.arc(hx - 6, hy - 12, 1.3, 0, Math.PI * 2);
+    ctx.fill();
+    if (Math.sin(t * 9 + p.seed * 10) > 0) {
+      ctx.strokeStyle = "#d23a58";
+      ctx.lineWidth = 1.1;
+      ctx.beginPath();
+      ctx.moveTo(hx - 9, hy - 10);
+      ctx.lineTo(hx - 15, hy - 10);
+      ctx.moveTo(hx - 15, hy - 10);
+      ctx.lineTo(hx - 18, hy - 12);
+      ctx.moveTo(hx - 15, hy - 10);
+      ctx.lineTo(hx - 18, hy - 8);
+      ctx.stroke();
+    }
   }
 
   function drawObstacle(p) {
     if (p.kind === "rock") drawRock(p);
     else if (p.kind === "plant") drawPlant(p);
+    else if (p.kind === "cobra") drawCobra(p);
     else drawPuddle(p);
   }
 
@@ -538,9 +617,9 @@
       }
     }
 
-    if (state === "idle") overlay("Ready?", "Press Start, then tap or press Space to jump");
-    if (state === "paused") overlay("Paused", "Press Resume");
-    if (state === "over") overlay(hitKind === "puddle" ? "Splash!" : "Ouch!", failLine, "Score " + Math.floor(dist / 10));
+    if (state === "idle") overlay(I18N.pick("Ready?", "Pronti?"), I18N.pick("Press Start, then tap or press Space to jump", "Premi Avvia, poi tocca o premi Spazio per saltare"));
+    if (state === "paused") overlay(I18N.pick("Paused", "In pausa"), I18N.pick("Press Resume", "Premi Riprendi"));
+    if (state === "over") overlay(hitKind === "puddle" ? "Splash!" : I18N.pick("Ouch!", "Ahia!"), I18N.t(failLine), I18N.pick("Score ", "Punteggio ") + Math.floor(dist / 10));
   }
 
   function overlay(title, sub, extra) {
@@ -580,6 +659,7 @@
 
   document.addEventListener("visibilitychange", () => { if (document.hidden) pause(); });
   document.addEventListener("gamehide", pause);
+  window.addEventListener("langchange", () => draw());
 
   // re-fit when the screen size or orientation changes (only between games)
   window.addEventListener("resize", () => {
@@ -588,7 +668,7 @@
     makeStars();
     reset();
     state = "idle";
-    startBtn.textContent = "Start";
+    I18N.set(startBtn, "Start", "Avvia");
     draw();
   });
 

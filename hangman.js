@@ -60,6 +60,9 @@
 
   const wordEl = document.getElementById("hm-word");
   const statusEl = document.getElementById("hm-status");
+  let statusFn = null;
+  function setStatus(fn) { statusFn = fn; statusEl.textContent = fn(); }
+  window.addEventListener("langchange", () => { if (statusFn) statusEl.textContent = statusFn(); });
   const keysEl = document.getElementById("hm-keys");
   const wrongEl = document.getElementById("hm-wrong");
   const streakEl = document.getElementById("hm-streak");
@@ -137,13 +140,13 @@
         try { localStorage.setItem(BEST_KEY, String(best)); } catch (e) {}
       }
       streakEl.textContent = streak;
-      statusEl.textContent = "You got it.";
+      setStatus(() => I18N.pick("You got it.", "Ci sei!"));
       showMeaning(true);
     } else if (wrong >= MAX_WRONG) {
       over = true;
       streak = 0;
       streakEl.textContent = streak;
-      statusEl.textContent = "The word was " + word.toUpperCase() + ".";
+      setStatus(() => I18N.pick("The word was ", "La parola era ") + word.toUpperCase() + ".");
       showMeaning(true);
     }
     render();
@@ -157,7 +160,7 @@
     guessed = new Set();
     wrong = 0;
     over = false;
-    statusEl.textContent = word.length + " letters";
+    setStatus(() => word.length + " " + I18N.pick("letters", "lettere"));
     Object.values(buttons).forEach((b) => {
       b.disabled = false;
       b.classList.remove("hit");

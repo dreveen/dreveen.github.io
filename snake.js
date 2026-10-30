@@ -81,7 +81,7 @@
       bestEl.textContent = best;
       try { localStorage.setItem(BEST_KEY, String(best)); } catch (e) {}
     }
-    startBtn.textContent = "Play again";
+    I18N.set(startBtn, "Play again", "Gioca ancora");
     GameLock.set(false);
     draw();
   }
@@ -90,7 +90,7 @@
     clearTimeout(timer);
     reset();
     state = "running";
-    startBtn.textContent = "Pause";
+    I18N.set(startBtn, "Pause", "Pausa");
     GameLock.set(true);
     const card = canvas.closest(".game-card");
     if (card) card.scrollIntoView({ block: "center", behavior: "smooth" });
@@ -182,24 +182,24 @@
     if (apple) drawApple(apple);
     drawSnake();
 
-    if (state === "idle") overlay("Ready?", "Press Start");
-    if (state === "paused") overlay("Paused", "Press Resume");
-    if (state === "over") overlay("Game over", "Score " + score);
-    if (state === "won") overlay("You win", "Perfect board");
+    if (state === "idle") overlay(I18N.pick("Ready?", "Pronti?"), I18N.pick("Press Start", "Premi Avvia"));
+    if (state === "paused") overlay(I18N.pick("Paused", "In pausa"), I18N.pick("Press Resume", "Premi Riprendi"));
+    if (state === "over") overlay("Game over", I18N.pick("Score ", "Punteggio ") + score);
+    if (state === "won") overlay(I18N.pick("You win", "Hai vinto"), I18N.pick("Perfect board", "Tabellone perfetto"));
   }
 
   function pause() {
     if (state !== "running") return;
     clearTimeout(timer);
     state = "paused";
-    startBtn.textContent = "Resume";
+    I18N.set(startBtn, "Resume", "Riprendi");
     GameLock.set(false);
     draw();
   }
 
   function resume() {
     state = "running";
-    startBtn.textContent = "Pause";
+    I18N.set(startBtn, "Pause", "Pausa");
     GameLock.set(true);
     draw();
     schedule();
@@ -247,6 +247,7 @@
   document.addEventListener("visibilitychange", () => { if (document.hidden) pause(); });
   document.addEventListener("gamehide", pause);
   document.addEventListener("keydown", (e) => { if (e.key === "Escape") pause(); });
+  window.addEventListener("langchange", () => draw());
 
   reset();
   draw();

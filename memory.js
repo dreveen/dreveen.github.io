@@ -5,6 +5,8 @@
   const movesEl = document.getElementById("mem-moves");
   const bestEl = document.getElementById("mem-best");
   const statusEl = document.getElementById("mem-status");
+  let statusFn = null;
+  function setStatus(fn) { statusFn = fn; statusEl.textContent = fn(); }
   const newBtn = document.getElementById("mem-new");
   const BEST_KEY = "dreveen-memory-best";
   // eight elegant line icons (24x24, drawn with a fine gold stroke)
@@ -39,7 +41,7 @@
 
   function label(card, i) {
     const open = card.classList.contains("flipped");
-    card.setAttribute("aria-label", "Card " + (i + 1) + (open ? ": " + card.dataset.s : ", face down"));
+    card.setAttribute("aria-label", I18N.pick("Card ", "Carta ") + (i + 1) + (open ? ": " + I18N.t(card.dataset.s) : I18N.pick(", face down", ", coperta")));
   }
 
   function newGame() {
@@ -48,7 +50,7 @@
     moves = 0;
     pairs = 0;
     movesEl.textContent = "0";
-    statusEl.textContent = "Find the 8 matching pairs.";
+    setStatus(() => I18N.pick("Find the 8 matching pairs.", "Trova le 8 coppie."));
     board.innerHTML = "";
     shuffle(SYMBOLS.concat(SYMBOLS)).forEach((s, i) => {
       const card = document.createElement("button");
@@ -93,15 +95,24 @@
   }
 
   function win() {
-    let msg = "Well played: all pairs found in " + moves + " moves.";
+    let newBest = false;
     if (!best || moves < best) {
       best = moves;
       bestEl.textContent = best;
       try { localStorage.setItem(BEST_KEY, String(best)); } catch (e) {}
-      msg += " New best!";
+      newBest = true;
     }
-    statusEl.textContent = msg;
+    const n = moves;
+    setStatus(() => I18N.pick(
+      "Well played: all pairs found in " + n + " moves." + (newBest ? " New best!" : ""),
+      "Ben giocato: tutte le coppie in " + n + " mosse." + (newBest ? " Nuovo record!" : "")
+    ));
   }
+
+  window.addEventListener("langchange", () => {
+    if (statusFn) statusEl.textContent = statusFn();
+    Array.from(board.children).forEach((c, i) => label(c, i));
+  });
 
   newBtn.addEventListener("click", newGame);
   newGame();

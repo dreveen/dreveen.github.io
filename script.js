@@ -11,7 +11,7 @@ if (toggle && links) {
   toggle.addEventListener("click", () => {
     const open = links.classList.toggle("open");
     toggle.setAttribute("aria-expanded", String(open));
-    toggle.textContent = open ? "Close" : "Menu";
+    I18N.set(toggle, open ? "Close" : "Menu");
     document.body.style.overflow = open ? "hidden" : "";
   });
 }
@@ -34,12 +34,17 @@ if (roseCanvas && window.THREE && typeof mountRose === "function") {
 }
 
 // ---------- scroll: nav state, rose, metal sheen, statement words ----------
-const metals = Array.from(document.querySelectorAll(".metal, .statement .hi"));
+let metals = Array.from(document.querySelectorAll(".metal, .statement .hi"));
 const statement = document.getElementById("statement");
 let words = [];
-if (statement) {
+const STATEMENT_IT = 'L’informatica è un equilibrio tra <span class="hi">logica</span> e <span class="hi">creatività</span>: strumenti che semplificano i processi e migliorano l’esperienza delle persone.';
+const STATEMENT_EN = statement ? statement.innerHTML : "";
+function buildStatement(html) {
+  if (!statement) return;
+  statement.innerHTML = html;
   const nodes = Array.from(statement.childNodes);
   statement.textContent = "";
+  words = [];
   nodes.forEach((n) => {
     const hi = n.nodeType === 1 && n.classList.contains("hi");
     n.textContent.split(/(\s+)/).forEach((part) => {
@@ -52,7 +57,14 @@ if (statement) {
       words.push(s);
     });
   });
+  metals = Array.from(document.querySelectorAll(".metal, .statement .hi"));
 }
+buildStatement(STATEMENT_EN);
+window.addEventListener("langchange", () => {
+  if (!statement) return;
+  buildStatement(I18N.lang === "it" ? STATEMENT_IT : STATEMENT_EN);
+  onScroll();
+});
 
 let pointerX = 0.5;
 let ticking = false;
@@ -234,7 +246,8 @@ if (intro && introOn) {
     "Compile courage, run confidence.",
   ];
   let i = Math.floor(Math.random() * LINES.length);
-  el.textContent = LINES[i];
+  el.textContent = I18N.t(LINES[i]);
+  window.addEventListener("langchange", () => { el.textContent = I18N.t(LINES[i]); });
   el.classList.add("show");
   if (reduce) return;
   setInterval(() => {
@@ -244,7 +257,7 @@ if (intro && introOn) {
       let n;
       do { n = Math.floor(Math.random() * LINES.length); } while (n === i);
       i = n;
-      el.textContent = LINES[i];
+      el.textContent = I18N.t(LINES[i]);
       el.classList.add("show");
     }, 1000);
   }, 9000);

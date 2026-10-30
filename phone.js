@@ -78,14 +78,31 @@
     setTimeout(() => btn.classList.remove("moving"), reduce ? 0 : 900);
   }
 
+  let noteShown = false;
+  function renderNote() {
+    if (!noteShown) return;
+    const mail = document.getElementById("emailLink");
+    const href = mail ? mail.getAttribute("href") : "#";
+    const en = 'Nice try! 😉 I’d much rather hear from you by email — <a href="' + href + '">write to me there</a> and I’ll happily reply.';
+    const it = 'Bel tentativo! 😉 Preferisco essere contattata via email. <a href="' + href + '">Scrivimi lì</a>, ti risponderò con piacere.';
+    note.innerHTML = I18N.lang === "it"
+      ? it + '<span class="it" lang="en">' + en + "</span>"
+      : en + '<span class="it" lang="it">' + it + "</span>";
+  }
+  function renderLabel() {
+    btn.setAttribute("aria-label", I18N.t(btn.classList.contains("done") ? "Phone (not available, please use email)" : "Call Denise"));
+  }
+  window.addEventListener("langchange", () => { renderNote(); renderLabel(); });
+
   btn.addEventListener("click", (e) => {
     if (attempts >= MAX) {
       // fourth click: close the note and start over
       attempts = 0;
+      noteShown = false;
       note.classList.remove("show");
       note.textContent = "";
       btn.classList.remove("done");
-      btn.setAttribute("aria-label", "Call Denise");
+      renderLabel();
       const d = size();
       place(d.w - d.s, (d.h - d.s) / 2);
       return;
@@ -102,11 +119,9 @@
     if (oops) oops.classList.remove("show");
     // third attempt: accepted
     btn.classList.add("done");
-    btn.setAttribute("aria-label", "Phone (not available, please use email)");
-    const mail = document.getElementById("emailLink");
-    const href = mail ? mail.getAttribute("href") : "#";
-    note.innerHTML = 'Nice try! 😉 I’d much rather hear from you by email — <a href="' + href + '">write to me there</a> and I’ll happily reply.' +
-      '<span class="it" lang="it">Bel tentativo! 😉 Preferisco essere contattata via email. <a href="' + href + '">Scrivimi lì</a>, ti risponderò con piacere.</span>';
+    renderLabel();
+    noteShown = true;
+    renderNote();
     note.classList.add("show");
   });
 })();

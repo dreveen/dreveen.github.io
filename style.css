@@ -851,7 +851,7 @@ html.has-moon, html.has-moon * { cursor: none !important; }
 .mem-front svg { width: 54%; height: 54%; fill: none; stroke: var(--gold-hi); stroke-width: 1.15; stroke-linecap: round; stroke-linejoin: round; filter: drop-shadow(0 0 6px rgba(241, 222, 184, 0.35)); }
 
 /* ---------- CAT JUMP ---------- */
-#cat { display: block; width: 100%; max-width: 860px; height: auto; aspect-ratio: 720 / 220; margin: 0 auto; border: 1px solid var(--line); touch-action: none; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+#cat { display: block; width: 100%; max-width: 980px; height: auto; aspect-ratio: 720 / 220; margin: 0 auto; border: 1px solid var(--line); touch-action: none; cursor: pointer; -webkit-tap-highlight-color: transparent; }
 @media (max-width: 760px) { .game-card { padding: 24px 16px; } }
 
 /* ---------- GAMES PAGE: picker + stage ---------- */
@@ -1004,3 +1004,39 @@ html.js .reveal.in.tilt.live { transform: perspective(900px) rotateX(var(--rx, 0
   mask: url("sparkle-mark.svg") center / contain no-repeat;
   filter: drop-shadow(0 0 7px rgba(241, 222, 184, 0.55));
 }
+
+/* ---------- language switch ---------- */
+.lang { order: 3; margin-left: 28px; padding: 6px 2px; display: inline-flex; align-items: center; gap: 6px; background: none; border: 0; font: inherit; font-size: 0.7rem; letter-spacing: 0.22em; color: var(--muted); cursor: pointer; -webkit-appearance: none; appearance: none; position: relative; z-index: 70; }
+.lang i { font-style: normal; color: var(--line-strong); }
+.lang span { transition: color 0.3s ease; }
+.lang span.on { color: var(--gold-hi); }
+.lang:hover span:not(.on) { color: var(--ink); }
+.links { order: 2; }
+@media (max-width: 760px) { .lang { order: 1; margin-left: auto; margin-right: 12px; } .menu-toggle { order: 2; } }
+.lang { padding: 7px 13px; border: 1px solid var(--line-strong); border-radius: 999px; background: rgba(10, 4, 6, 0.35); transition: border-color 0.3s ease, background 0.3s ease; }
+.lang:hover { border-color: var(--gold); background: rgba(163, 20, 47, 0.2); }
+@media (max-width: 760px) { .lang { padding: 8px 12px; } }
+.lang span:not(.on):not(i) { opacity: 0.55; }
+.lang span.on { color: var(--gold-hi); text-shadow: 0 0 10px rgba(241, 222, 184, 0.45); border-bottom: 1px solid var(--gold); }
+
+/* language button: sits below the bar, so the navigation is not pushed */
+.lang { position: absolute; top: calc(100% + 8px); right: var(--pad); order: 0; margin: 0; }
+@media (max-width: 760px) { .lang { order: 0; margin: 0; right: var(--pad); top: calc(100% + 6px); } }
+
+/* language switch: the selected half is filled with gold metal */
+.lang { padding: 3px; gap: 0; background: rgba(10, 4, 6, 0.55); border: 1px solid var(--line-strong); overflow: hidden; }
+.lang i { display: none; }
+.lang span { padding: 5px 12px; border-radius: 999px; border-bottom: 0; text-shadow: none; opacity: 1; color: var(--muted); letter-spacing: 0.2em; transition: color 0.35s ease, background 0.35s ease; }
+.lang span.on { background: var(--metal); background-size: 220% 100%; background-position: 30% 0; color: #1a0a0d; font-weight: 500; box-shadow: 0 0 14px rgba(201, 168, 122, 0.35); }
+.lang:hover span:not(.on) { color: var(--gold-hi); }
+
+/* game title + description: slightly larger */
+.game-card h3 { font-size: 2rem; }
+.game-card .hint { font-size: 1.02rem; line-height: 1.65; }
+@media (max-width: 560px) { .game-card h3 { font-size: 1.75rem; } .game-card .hint { font-size: 0.98rem; } }
+.game-card h3 { font-size: 2.35rem; }
+.game-card .hint { font-size: 1.12rem; line-height: 1.7; }
+@media (max-width: 560px) { .game-card h3 { font-size: 2rem; } .game-card .hint { font-size: 1.02rem; } }
+.game-card h3 { font-size: 2.6rem; }
+.game-card .hint { font-size: 1.2rem; line-height: 1.7; }
+@media (max-width: 560px) { .game-card h3 { font-size: 2.15rem; } .game-card .hint { font-size: 1.08rem; } }
