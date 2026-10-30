@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400&family=Playfair+Display:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=4">
 </head>
 <body>
   <canvas class="bg-rose" id="bgRose" aria-hidden="true"></canvas>
@@ -50,8 +50,8 @@
         <div class="phone-arena" id="phoneArena">
           <button class="phone-btn" id="phoneBtn" type="button" aria-describedby="phoneNote" aria-label="Call Denise">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-          <span class="oops" aria-hidden="true">Ops!</span>
           </button>
+          <span class="oops" id="phoneOops" aria-hidden="true">Ops!</span>
         </div>
         <p class="phone-note" id="phoneNote" role="status" aria-live="polite"></p>
       </li>
@@ -83,8 +83,8 @@
   </footer>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-  <script src="rose.js"></script>
-  <script src="script.js"></script>
-  <script src="phone.js"></script>
+  <script src="rose.js?v=4"></script>
+  <script src="script.js?v=4"></script>
+  <script src="phone.js?v=4"></script>
 </body>
 </html>

@@ -25,13 +25,15 @@
   window.addEventListener("resize", () => { const d = size(); place(x, y); });
 
   const rnd = (a, b) => a + Math.random() * (b - a);
-  const oops = btn.querySelector(".oops");
+  const oops = document.getElementById("phoneOops");
   let oopsTimer;
   function showOops() {
     if (!oops) return;
     clearTimeout(oopsTimer);
     const d = size();
-    oops.classList.toggle("left", x > d.w / 2);
+    oops.style.top = y + d.s / 2 + "px";
+    if (x > d.w / 2) { oops.style.left = "auto"; oops.style.right = d.w - x + 12 + "px"; }
+    else { oops.style.right = "auto"; oops.style.left = x + d.s + 12 + "px"; }
     oops.classList.add("show");
     oopsTimer = setTimeout(() => oops.classList.remove("show"), reduce ? 2000 : 2200);
   }
