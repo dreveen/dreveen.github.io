@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en" data-page="inner">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Planner | Dreveen</title>
+  <meta name="description" content="A small organizer and planner by Denise Guadagnuolo: calendar, daily tasks and priorities.">
+  <meta name="theme-color" content="#0a0406">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%230a0406'/><text x='50' y='70' font-size='64' text-anchor='middle' fill='%23c9a87a' font-family='serif' font-style='italic'>D</text></svg>">
+  <script>document.documentElement.classList.add("js");</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400&family=Playfair+Display:ital,wght@0,400;1,400&family=Great+Vibes&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css?v=72">
+</head>
+<body>
+  <canvas class="bg-rose" id="bgRose" aria-hidden="true"></canvas>
+
+  <header class="site-nav">
+    <a class="logo" href="index.html">Dreveen</a>
+    <button class="menu-toggle" aria-expanded="false" aria-controls="menu">Menu</button>
+    <button class="lang" type="button" aria-label="Language: English. Switch to Italian"><span data-l="en" class="on">EN</span><i>/</i><span data-l="it">IT</span></button>
+    <nav class="links" id="menu">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="projects.html" aria-current="page">Projects</a>
+      <a href="games.html">Games</a>
+      <a href="contacts.html">Contacts</a>
+    </nav>
+  </header>
+
+  <main class="page">
+    <p class="eyebrow reveal" data-en="Project" data-it="Progetto">Project</p>
+    <h1 class="display reveal" style="--d:.1s">
+      <span class="metal">Planner</span>
+    </h1>
+    <p class="lead reveal" style="--d:.3s" data-en="Plan your days with calm. Pick a date, add what matters and tick it off. Everything stays saved in your browser." data-it="Organizza le tue giornate con calma. Scegli una data, aggiungi ciò che conta e spuntalo. Tutto resta salvato nel tuo browser.">Plan your days with calm. Pick a date, add what matters and tick it off. Everything stays saved in your browser.</p>
+
+    <div class="planner reveal" style="--d:.4s" id="planner">
+      <section class="glass pl-cal" aria-label="Calendar">
+        <div class="pl-head">
+          <button class="pl-nav" id="plPrev" type="button" aria-label="Previous month">&larr;</button>
+          <h2 id="plMonth"></h2>
+          <button class="pl-nav" id="plNext" type="button" aria-label="Next month">&rarr;</button>
+        </div>
+        <div class="pl-week" id="plWeek"></div>
+        <div class="pl-grid" id="plGrid"></div>
+        <button class="btn pl-today" id="plToday" type="button" data-en="Today" data-it="Oggi">Today</button>
+      </section>
+
+      <section class="glass pl-day" aria-label="Tasks">
+        <p class="pl-date" id="plDate"></p>
+        <div class="pl-prog"><i id="plBar"></i></div>
+        <p class="pl-count" id="plCount"></p>
+        <form class="pl-form" id="plForm" autocomplete="off">
+          <input id="plText" type="text" maxlength="90" required>
+          <input id="plTime" type="time" aria-label="Time">
+          <div class="pl-prio" id="plPrio" role="group" aria-label="Priority">
+            <button type="button" data-p="1" class="on" aria-label="Low"></button>
+            <button type="button" data-p="2" aria-label="Medium"></button>
+            <button type="button" data-p="3" aria-label="High"></button>
+          </div>
+          <button class="btn solid" type="submit" data-en="Add" data-it="Aggiungi">Add</button>
+        </form>
+        <ul class="pl-list" id="plList"></ul>
+        <p class="pl-empty" id="plEmpty" data-en="Nothing planned. A free day is a gift." data-it="Niente in programma. Un giorno libero è un regalo.">Nothing planned. A free day is a gift.</p>
+        <button class="pl-clear" id="plClear" type="button" data-en="Clear completed" data-it="Elimina completati">Clear completed</button>
+      </section>
+    </div>
+
+    <section class="glass habits reveal" id="habits" aria-label="Habits">
+      <div class="hb-top">
+        <h2 class="hb-title"><span class="section-num" data-en="Habit tracker" data-it="Abitudini">Habit tracker</span><span data-en="Fill a square every day" data-it="Colora un quadratino ogni giorno">Fill a square every day</span></h2>
+        <form class="hb-form" id="hbForm" autocomplete="off">
+          <input id="hbText" type="text" maxlength="40" required>
+          <div class="hb-pal" id="hbPal" role="group" aria-label="Colour"></div>
+          <button class="btn solid" type="submit" data-en="Add habit" data-it="Aggiungi">Add habit</button>
+        </form>
+      </div>
+      <ul class="hb-list" id="hbList"></ul>
+      <p class="pl-empty" id="hbEmpty" data-en="No habits yet. Start with one small thing, like drinking water." data-it="Ancora nessuna abitudine. Parti da una cosa piccola, come bere acqua.">No habits yet. Start with one small thing, like drinking water.</p>
+      <div class="hb-chart" id="hbChart">
+        <div class="hb-score"><b id="hbPct">0%</b><span data-en="consistency, last 14 days" data-it="costanza, ultimi 14 giorni">consistency, last 14 days</span></div>
+        <svg id="hbSvg" viewBox="0 0 560 150" preserveAspectRatio="none" role="img" aria-label="Consistency chart"></svg>
+      </div>
+    </section>
+
+    <a class="row reveal" href="projects.html" style="margin-top: clamp(60px, 10vw, 110px); border-top: 1px solid var(--line);">
+      <span class="n">&larr;</span><span class="t" data-en="Projects" data-it="Progetti">Projects</span><span class="d" data-en="Back to all projects" data-it="Torna a tutti i progetti">Back to all projects</span>
+    </a>
+  </main>
+
+  <footer>
+    <span>&copy; <span id="year">2026</span> Denise Guadagnuolo</span>
+    <nav aria-label="Social">
+      <a href="https://github.com/dreveen" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://www.instagram.com/dreveen" target="_blank" rel="noopener">Instagram</a>
+      <a href="https://www.linkedin.com/in/dreveen" target="_blank" rel="noopener">LinkedIn</a>
+    </nav>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="i18n.js?v=72"></script>
+  <script src="rose.js?v=72"></script>
+  <script src="script.js?v=72"></script>
+  <script src="planner.js?v=72"></script>
+  <script src="habits.js?v=72"></script>
+</body>
+</html>
