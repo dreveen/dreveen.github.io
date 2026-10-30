@@ -17,13 +17,8 @@
   let view = new Date(today.getFullYear(), today.getMonth(), 1);
   let sel = keyOf(today);
   let tcol = 0;
-  // optional colour chosen for a whole day; without one, a day takes the colour of its first task
-  const DKEY = "dreveen-planner-days";
-  let dayCol = {};
-  try { dayCol = JSON.parse(localStorage.getItem(DKEY)) || {}; } catch (e) { dayCol = {}; }
-  function saveDays() { try { localStorage.setItem(DKEY, JSON.stringify(dayCol)); } catch (e) {} }
+  // one colour per task; a day takes the colour of its first open task
   const taskPick = METAL.picker($("plPrio"), 0, (i) => { tcol = i; });
-  const dayPick = METAL.picker($("plDayCol"), undefined, (i) => { dayCol[sel] = i; saveDays(); renderCal(); });
 
   function renderWeek() {
     // Monday first
@@ -45,7 +40,7 @@
       const k = y + "-" + pad(m + 1) + "-" + pad(d);
       const items = tasks[k] || [];
       const open = items.filter((t) => !t.done).length;
-      const ci = dayCol[k] !== undefined ? dayCol[k] : items.length ? (items.find((t) => !t.done) || items[0]).c || 0 : -1;
+      const ci = items.length ? (items.find((t) => !t.done) || items[0]).c || 0 : -1;
       const cls = (k === keyOf(today) ? " today" : "") + (k === sel ? " sel" : "") + (items.length ? " has" : "") + (items.length && !open ? " all" : "") + (ci >= 0 ? " col" : "");
       html += '<button type="button" class="d' + cls + '" data-k="' + k + '"' + (ci >= 0 ? ' style="--dm:' + METAL.grad(ci) + '"' : "") + ">" + d + "</button>";
     }
@@ -83,7 +78,6 @@
     $("plEmpty").hidden = n > 0;
     $("plClear").hidden = !done;
     $("plDay").value = sel;
-    dayPick.set(dayCol[sel]);
     text.placeholder = I18N.pick("What do you want to do?", "Cosa vuoi fare?");
   }
 
@@ -104,8 +98,9 @@
       const li = document.createElement("li"), b = document.createElement("button"), when = document.createElement("b"), what = document.createElement("span");
       b.type = "button";
       when.textContent = i === 0 ? I18N.pick("Today", "Oggi") : i === 1 ? I18N.pick("Tomorrow", "Domani") : d.toLocaleDateString(locale(), { weekday: "short", day: "numeric", month: "short" });
-      what.textContent = items.map((t) => (t.time ? t.time + " " : "") + t.text).join("  ·  ");
+      items.forEach((t) => { const r = document.createElement("div"); r.textContent = (t.time ? t.time + " " : "") + t.text; what.appendChild(r); });
       b.append(when, what);
+      if (i === 0) li.className = "now";
       b.addEventListener("click", () => { sel = k; view = new Date(d.getFullYear(), d.getMonth(), 1); renderAll(); $("planner").scrollIntoView({ behavior: "smooth" }); });
       li.appendChild(b);
       ul.appendChild(li);
@@ -123,7 +118,6 @@
   $("plPrev").addEventListener("click", () => { view = new Date(view.getFullYear(), view.getMonth() - 1, 1); renderCal(); });
   $("plNext").addEventListener("click", () => { view = new Date(view.getFullYear(), view.getMonth() + 1, 1); renderCal(); });
   $("plToday").addEventListener("click", () => { view = new Date(today.getFullYear(), today.getMonth(), 1); sel = keyOf(today); renderAll(); });
-  $("plDayAuto").addEventListener("click", () => { delete dayCol[sel]; saveDays(); renderAll(); });
   $("plClear").addEventListener("click", () => {
     tasks[sel] = (tasks[sel] || []).filter((t) => !t.done);
     if (!tasks[sel].length) delete tasks[sel];

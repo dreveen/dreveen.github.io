@@ -1323,3 +1323,47 @@ a.pick { text-decoration: none; color: inherit; }
   filter: drop-shadow(0 0 5px rgba(255, 240, 210, .65));
 }
 .pl-grid .d.col:not(.has)::after, .pl-grid .d.has.all::after, .pl-grid .d.sel.has.all::after { display: none; }
+
+/* today's commitments stand out in the agenda */
+.ag-list li.now { position: relative; margin: 6px 0; background: linear-gradient(90deg, rgba(201, 168, 122, .22), rgba(201, 168, 122, .04) 70%, transparent); box-shadow: 0 0 24px rgba(201, 168, 122, .18); border-radius: 2px; }
+.ag-list li.now::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: var(--metal); box-shadow: 0 0 12px var(--gold); }
+.ag-list li.now button { border-top: 0; padding-left: 20px; padding-right: 12px; color: var(--gold-hi); }
+.ag-list li.now button:hover { padding-left: 26px; }
+.ag-list li.now b { color: var(--gold-hi); font-weight: 600; }
+.ag-list li.now span { font-size: 1.08em; color: #fff6e6; }
+.ag-list li.now span::after { content: " \2726"; color: var(--gold); text-shadow: 0 0 8px var(--gold); }
+
+/* one commitment per line */
+.ag-list span > div { padding: 2px 0; }
+.ag-list span > div + div { margin-top: 4px; }
+.ag-list li.now span::after { content: none; }
+.ag-list li.now span > div::after { content: " \2726"; color: var(--gold); text-shadow: 0 0 8px var(--gold); }
+.ag-list li.now span > div::after { content: none; }
+.ag-list span > div { position: relative; padding-left: 18px; }
+.ag-list span > div::before { content: "\2022"; position: absolute; left: 3px; top: 2px; color: var(--gold); }
+.ag-list li.now span > div::before { color: var(--gold-hi); text-shadow: 0 0 8px var(--gold); }
+
+/* 25 colours: palettes get their own row */
+.hb-form { flex-wrap: wrap; max-width: 640px; }
+.hb-form input { flex: 1 1 220px; }
+.hb-form .hb-pal { flex: 1 1 100%; order: 3; }
+.hb-form .btn { flex: none; }
+.pl-form .pl-prio { flex: 1 1 100%; }
+.pl-form .btn.solid { margin-left: 0; }
+
+/* 26 colours = two full rows of 13 */
+.pl-prio, .hb-pal { display: grid; grid-template-columns: repeat(13, minmax(0, 28px)); gap: 8px 6px; justify-content: start; align-items: center; }
+.pl-prio button, .hb-pal button { width: 100%; height: auto; aspect-ratio: 1; }
+@media (max-width: 560px) { .pl-prio, .hb-pal { grid-template-columns: repeat(13, minmax(0, 1fr)); gap: 8px 4px; } }
+
+/* the chosen colour must be obvious: bigger, white double ring, glow and a tick */
+.pl-prio button, .hb-pal button { position: relative; opacity: .55; }
+.pl-prio button.on, .hb-pal button.on { opacity: 1; z-index: 2; transform: scale(1.3); border-color: transparent; box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px #fff, 0 0 14px 3px rgba(255, 255, 255, .55); }
+.pl-prio button.on::after, .hb-pal button.on::after { content: ""; position: absolute; left: 50%; top: 46%; width: 28%; height: 52%; border: solid #fff; border-width: 0 2.5px 2.5px 0; transform: translate(-50%, -50%) rotate(45deg); filter: drop-shadow(0 0 2px rgba(0, 0, 0, .8)); }
+/* a little calmer */
+.pl-prio button, .hb-pal button { opacity: .7; }
+.pl-prio button.on, .hb-pal button.on { transform: scale(1.18); box-shadow: 0 0 0 2px var(--bg), 0 0 0 3px rgba(255, 255, 255, .9), 0 0 8px 1px rgba(255, 255, 255, .3); }
+.pl-prio button.on::after, .hb-pal button.on::after { border-width: 0 2px 2px 0; opacity: .9; }
+.pl-prio button.on::after, .hb-pal button.on::after { content: none; }
+/* a small diamond marks the chosen colour */
+.pl-prio button.on::after, .hb-pal button.on::after { content: ""; position: absolute; left: 50%; top: 50%; width: 30%; height: 30%; border: 0; background: #fff; transform: translate(-50%, -50%) rotate(45deg); box-shadow: 0 0 5px rgba(0, 0, 0, .55), 0 0 6px rgba(255, 255, 255, .6); opacity: 1; filter: none; }
