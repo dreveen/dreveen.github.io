@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400&family=Playfair+Display:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=4">
+  <link rel="stylesheet" href="style.css?v=6">
 </head>
 <body>
   <canvas class="bg-rose" id="bgRose" aria-hidden="true"></canvas>
@@ -83,6 +83,17 @@
         <p class="hm-status" id="hm-status" role="status"></p>
         <div class="hm-keys" id="hm-keys"></div>
       </section>
+
+      <section class="glass game-card game-wide reveal" id="memory" aria-labelledby="mem-title">
+        <h3 id="mem-title">Memory</h3>
+        <p class="hint">Flip two cards at a time and find all the matching pairs in as few moves as you can.</p>
+        <div class="game-head">
+          <div class="score">Moves<b id="mem-moves">0</b> &nbsp; Best<b id="mem-best">-</b></div>
+          <button class="btn" id="mem-new" type="button">New game</button>
+        </div>
+        <div class="mem-board" id="mem-board"></div>
+        <p class="hm-status" id="mem-status" role="status"></p>
+      </section>
     </div>
   </main>
 
@@ -96,9 +107,11 @@
   </footer>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-  <script src="rose.js?v=4"></script>
-  <script src="script.js?v=4"></script>
-  <script src="snake.js?v=4"></script>
-  <script src="hangman.js?v=4"></script>
+  <script src="rose.js?v=6"></script>
+  <script src="script.js?v=6"></script>
+  <script src="gamelock.js?v=6"></script>
+  <script src="snake.js?v=6"></script>
+  <script src="hangman.js?v=6"></script>
+  <script src="memory.js?v=6"></script>
 </body>
 </html>

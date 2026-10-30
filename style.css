@@ -830,3 +830,21 @@ html.has-moon, html.has-moon * { cursor: none !important; }
 .phone-item:hover .phone-row { padding-left: 18px; }
 .phone-item:hover .phone-row .value { background-image: var(--metal); background-size: 260% 100%; -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent; }
 @media (max-width: 760px) { .phone-item:hover .phone-row { padding-left: 0; } }
+
+/* ---------- MEMORY ---------- */
+.game-wide { grid-column: 1 / -1; }
+.mem-board { display: grid; grid-template-columns: repeat(4, 1fr); gap: clamp(8px, 2vw, 14px); max-width: 460px; margin: 0 auto; perspective: 900px; }
+.mem-card { position: relative; aspect-ratio: 1; padding: 0; border: 0; background: none; cursor: pointer; font: inherit; -webkit-appearance: none; appearance: none; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+.mem-inner { position: absolute; inset: 0; transform-style: preserve-3d; -webkit-transform-style: preserve-3d; transition: transform 0.6s var(--ease); }
+.mem-card.flipped .mem-inner { transform: rotateY(180deg); }
+.mem-face { position: absolute; inset: 0; display: grid; place-items: center; border: 1px solid var(--line-strong); -webkit-backface-visibility: hidden; backface-visibility: hidden; }
+.mem-back { background: radial-gradient(circle at 30% 25%, rgba(241, 222, 184, 0.14), rgba(107, 15, 38, 0.7) 70%); }
+.mem-back::after { content: ""; width: 26%; aspect-ratio: 1; transform: rotate(45deg); border: 1px solid var(--gold); background: linear-gradient(135deg, var(--gold-hi), var(--gold-lo)); opacity: 0.85; }
+.mem-front { transform: rotateY(180deg); background: linear-gradient(150deg, #2a0d17, #14070c); font-family: var(--serif); font-style: italic; font-size: clamp(1.1rem, 5vw, 1.9rem); color: var(--gold-hi); }
+.mem-card:hover:not(.flipped) .mem-back { border-color: var(--gold); }
+.mem-card.matched .mem-front { border-color: var(--gold); box-shadow: 0 0 22px rgba(201, 168, 122, 0.35), inset 0 0 18px rgba(201, 168, 122, 0.12); }
+.mem-card.matched { cursor: default; }
+.mem-card:focus-visible { outline: 1px solid var(--gold); outline-offset: 3px; }
+#mem-status { margin: 16px 0 0; }
+@media (prefers-reduced-motion: reduce) { .mem-inner { transition: none; } }
+.mem-front svg { width: 54%; height: 54%; fill: none; stroke: var(--gold-hi); stroke-width: 1.15; stroke-linecap: round; stroke-linejoin: round; filter: drop-shadow(0 0 6px rgba(241, 222, 184, 0.35)); }

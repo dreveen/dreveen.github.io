@@ -82,6 +82,7 @@
       try { localStorage.setItem(BEST_KEY, String(best)); } catch (e) {}
     }
     startBtn.textContent = "Play again";
+    GameLock.set(false);
     draw();
   }
 
@@ -89,7 +90,10 @@
     clearTimeout(timer);
     reset();
     state = "running";
-    startBtn.textContent = "Restart";
+    startBtn.textContent = "Pause";
+    GameLock.set(true);
+    const card = canvas.closest(".game-card");
+    if (card) card.scrollIntoView({ block: "center", behavior: "smooth" });
     draw();
     schedule();
   }
@@ -179,11 +183,33 @@
     drawSnake();
 
     if (state === "idle") overlay("Ready?", "Press Start");
+    if (state === "paused") overlay("Paused", "Press Resume");
     if (state === "over") overlay("Game over", "Score " + score);
     if (state === "won") overlay("You win", "Perfect board");
   }
 
-  startBtn.addEventListener("click", start);
+  function pause() {
+    if (state !== "running") return;
+    clearTimeout(timer);
+    state = "paused";
+    startBtn.textContent = "Resume";
+    GameLock.set(false);
+    draw();
+  }
+
+  function resume() {
+    state = "running";
+    startBtn.textContent = "Pause";
+    GameLock.set(true);
+    draw();
+    schedule();
+  }
+
+  startBtn.addEventListener("click", () => {
+    if (state === "running") pause();
+    else if (state === "paused") resume();
+    else start();
+  });
 
   document.addEventListener("keydown", (e) => {
     const map = {
@@ -218,13 +244,8 @@
     else turn(0, dy > 0 ? 1 : -1);
   }, { passive: true });
 
-  document.addEventListener("visibilitychange", () => {
-    if (document.hidden && state === "running") {
-      clearTimeout(timer);
-      state = "paused";
-      startBtn.textContent = "Resume";
-    }
-  });
+  document.addEventListener("visibilitychange", () => { if (document.hidden) pause(); });
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape") pause(); });
 
   reset();
   draw();
