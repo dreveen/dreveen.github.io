@@ -1,25 +1,37 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-page="home">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Dreveen | Denise Guadagnuolo</title>
   <meta name="description" content="Portfolio of Denise Guadagnuolo, Computer Engineer and Software Developer.">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%230a0406'/><text x='50' y='70' font-size='64' text-anchor='middle' fill='%23d23a58' font-family='serif' font-style='italic'>D</text></svg>">
+  <meta name="theme-color" content="#0a0406">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%230a0406'/><text x='50' y='70' font-size='64' text-anchor='middle' fill='%23c9a87a' font-family='serif' font-style='italic'>D</text></svg>">
+  <script>
+    (function (d) {
+      d.classList.add("js");
+      try {
+        if (!sessionStorage.getItem("dreveen-intro") && !matchMedia("(prefers-reduced-motion: reduce)").matches) d.classList.add("intro-on");
+      } catch (e) {}
+    })(document.documentElement);
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400&family=Playfair+Display:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div id="intro" hidden>
-    <canvas id="introRose" aria-hidden="true"></canvas>
-    <button class="skip" id="skip" type="button">Skip</button>
-    <div class="intro-text">
-      <div class="signature">Dreveen</div>
-      <div class="typed" id="typed" aria-hidden="true"></div>
+  <div id="intro" aria-hidden="true">
+    <div class="curtain top"></div>
+    <div class="curtain bot"></div>
+    <div class="mark">
+      <div class="word">Dreveen</div>
+      <div class="bar"></div>
     </div>
+    <button class="skip" id="skip" type="button">Skip</button>
   </div>
+
+  <canvas class="bg-rose" id="bgRose" aria-hidden="true"></canvas>
 
   <header class="site-nav">
     <a class="logo" href="index.html">Dreveen</a>
@@ -32,77 +44,55 @@
     </nav>
   </header>
 
-  <main class="hero">
-    <div>
+  <div class="side-label" aria-hidden="true">Computer Engineering &mdash; UNICAL</div>
+
+  <main>
+    <section class="hero">
       <p class="eyebrow reveal">Portfolio</p>
-      <h1 class="reveal" style="--d:.1s">Denise <em>Guadagnuolo</em></h1>
-      <p class="role reveal" style="--d:.25s">Computer Engineer &amp; Software Developer</p>
-      <p class="tag reveal" style="--d:.4s">Building digital solutions through software, technology and innovation.</p>
-      <div class="actions reveal" style="--d:.55s">
+      <h1 class="name" aria-label="Denise Guadagnuolo">
+        <span class="l1 metal reveal" style="--d:.1s">Denise</span>
+        <span class="l2 outline reveal" style="--d:.25s">Guadagnuolo</span>
+      </h1>
+      <p class="role reveal" style="--d:.4s">Computer Engineer &amp; Software Developer</p>
+      <p class="tag reveal" style="--d:.5s">Building digital solutions through software, technology and innovation.</p>
+      <div class="actions reveal" style="--d:.6s">
         <a class="btn solid" href="about.html">About me</a>
         <a class="btn" href="projects.html">Projects</a>
       </div>
-    </div>
-    <div class="rose-stage reveal" style="--d:.3s">
-      <canvas id="heroRose" aria-label="A rotating three-dimensional rose" role="img"></canvas>
-    </div>
+      <div class="scroll-cue" aria-hidden="true"><i></i>Scroll</div>
+    </section>
+
+    <section class="manifest">
+      <p class="eyebrow reveal">Approach</p>
+      <p class="statement" id="statement">Computer science is a balance between <span class="hi">logic</span> and <span class="hi">creativity</span>: tools that simplify processes and improve people's experience.</p>
+      <div class="manifest-foot">
+        <div class="glass fact reveal"><small>Studying</small><strong>Computer Engineering</strong></div>
+        <div class="glass fact reveal" style="--d:.12s"><small>University</small><strong>UNICAL</strong></div>
+      </div>
+    </section>
+
+    <section class="index">
+      <p class="eyebrow reveal">Explore</p>
+      <div class="index-list">
+        <a class="row reveal" href="about.html"><span class="n">01</span><span class="t">About</span><span class="d">Who I am and where I'm heading</span></a>
+        <a class="row reveal" href="projects.html"><span class="n">02</span><span class="t">Projects</span><span class="d">Selected work and experiments</span></a>
+        <a class="row reveal" href="projects.html#games"><span class="n">03</span><span class="t">Games</span><span class="d">Snake and Hangman, built for fun</span></a>
+        <a class="row reveal" href="contacts.html"><span class="n">04</span><span class="t">Contacts</span><span class="d">Let's get in touch</span></a>
+      </div>
+    </section>
   </main>
 
   <footer>
     <span>&copy; <span id="year">2026</span> Denise Guadagnuolo</span>
-    <a href="https://github.com/dreveen" target="_blank" rel="noopener">GitHub</a>
+    <nav aria-label="Social">
+      <a href="https://github.com/dreveen" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://www.instagram.com/dreveen" target="_blank" rel="noopener">Instagram</a>
+      <a href="https://www.linkedin.com/in/dreveen" target="_blank" rel="noopener">LinkedIn</a>
+    </nav>
   </footer>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="rose.js"></script>
   <script src="script.js"></script>
-  <script>
-    (function () {
-      const intro = document.getElementById("intro");
-      const heroCanvas = document.getElementById("heroRose");
-      const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      let seen = false;
-      try { seen = sessionStorage.getItem("dreveen-intro") === "1"; } catch (e) {}
-
-      function showHero(bloomed) {
-        mountRose(heroCanvas, { startBloomed: bloomed, minDist: 4.9, lookY: 0.05 });
-      }
-
-      if (seen || reduce) {
-        intro.remove();
-        showHero(true);
-        return;
-      }
-
-      intro.hidden = false;
-      document.body.style.overflow = "hidden";
-      const introRose = mountRose(document.getElementById("introRose"), { lookY: -0.2 });
-      const text = "Computer Engineer & Software Developer";
-      const typed = document.getElementById("typed");
-      let i = 0;
-      const typer = setTimeout(function type() {
-        typed.textContent = text.slice(0, ++i);
-        if (i < text.length) setTimeout(type, 55);
-      }, 3200);
-
-      let done = false;
-      function finish() {
-        if (done) return;
-        done = true;
-        clearTimeout(typer);
-        try { sessionStorage.setItem("dreveen-intro", "1"); } catch (e) {}
-        intro.classList.add("leaving");
-        document.body.style.overflow = "";
-        showHero(true);
-        setTimeout(function () {
-          if (introRose) introRose.dispose();
-          intro.remove();
-        }, 1300);
-      }
-
-      document.getElementById("skip").addEventListener("click", finish);
-      setTimeout(finish, 7500);
-    })();
-  </script>
 </body>
 </html>

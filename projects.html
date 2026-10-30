@@ -1,17 +1,21 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-page="inner">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Projects | Dreveen</title>
   <meta name="description" content="Projects and games by Denise Guadagnuolo.">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%230a0406'/><text x='50' y='70' font-size='64' text-anchor='middle' fill='%23d23a58' font-family='serif' font-style='italic'>D</text></svg>">
+  <meta name="theme-color" content="#0a0406">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%230a0406'/><text x='50' y='70' font-size='64' text-anchor='middle' fill='%23c9a87a' font-family='serif' font-style='italic'>D</text></svg>">
+  <script>document.documentElement.classList.add("js");</script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400&family=Playfair+Display:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <canvas class="bg-rose" id="bgRose" aria-hidden="true"></canvas>
+
   <header class="site-nav">
     <a class="logo" href="index.html">Dreveen</a>
     <button class="menu-toggle" aria-expanded="false" aria-controls="menu">Menu</button>
@@ -25,24 +29,25 @@
 
   <main class="page">
     <p class="eyebrow reveal">Projects</p>
-    <h1 class="reveal" style="--d:.1s">Selected work</h1>
-    <div class="rule"></div>
+    <h1 class="display reveal" style="--d:.1s">
+      Selected
+      <span class="shift metal">work</span>
+    </h1>
     <p class="lead reveal" style="--d:.3s">
       I'm currently building my projects portfolio. Until then, you can explore my code and
       experiments on GitHub.
     </p>
     <p class="reveal" style="--d:.4s">
-      <a class="btn" href="https://github.com/dreveen" target="_blank" rel="noopener">Visit GitHub</a>
+      <a class="btn solid" href="https://github.com/dreveen" target="_blank" rel="noopener">Visit GitHub</a>
     </p>
 
-    <div class="card empty reveal" style="--d:.5s; margin-top: 50px;">More projects coming soon</div>
+    <div class="glass empty reveal"><span>More projects coming soon</span></div>
 
-    <h2 class="section-title" id="games">Games</h2>
-    <div class="rule"></div>
-    <p class="section-sub">A few small things I built for fun. Go on, play.</p>
+    <h2 class="section-title reveal" id="games"><span class="section-num">02 &mdash; Play</span>Games</h2>
+    <p class="section-sub reveal">A few small things I built for fun. Go on, play.</p>
 
     <div class="games">
-      <section class="card game-card" aria-labelledby="snake-title">
+      <section class="glass game-card reveal" aria-labelledby="snake-title">
         <h3 id="snake-title">Snake</h3>
         <p class="hint">Use the arrow keys, or swipe on touch screens. Eat the apples, avoid the walls and yourself.</p>
         <div class="game-head">
@@ -58,7 +63,7 @@
         </div>
       </section>
 
-      <section class="card game-card" id="hangman" tabindex="0" aria-labelledby="hm-title">
+      <section class="glass game-card reveal" style="--d:.15s" id="hangman" tabindex="0" aria-labelledby="hm-title">
         <h3 id="hm-title">Hangman</h3>
         <p class="hint">Guess the word before the drawing is complete. Click the board and type, or use the keys below.</p>
         <div class="game-head">
@@ -83,8 +88,15 @@
 
   <footer>
     <span>&copy; <span id="year">2026</span> Denise Guadagnuolo</span>
-    <a href="https://github.com/dreveen" target="_blank" rel="noopener">GitHub</a>
+    <nav aria-label="Social">
+      <a href="https://github.com/dreveen" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://www.instagram.com/dreveen" target="_blank" rel="noopener">Instagram</a>
+      <a href="https://www.linkedin.com/in/dreveen" target="_blank" rel="noopener">LinkedIn</a>
+    </nav>
   </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="rose.js"></script>
   <script src="script.js"></script>
   <script src="snake.js"></script>
   <script src="hangman.js"></script>
