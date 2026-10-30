@@ -59,7 +59,7 @@ let ticking = false;
 function paintMetal() {
   const sy = window.scrollY || 0;
   const sx = Math.min(Math.max(pointerX * 0.7 + (sy / 2400) * 0.3, 0), 1);
-  metals.forEach((el) => el.style.setProperty("--sx", sx.toFixed(3)));
+  metals.forEach((el) => { if (!el.closest("[data-hot]")) el.style.setProperty("--sx", sx.toFixed(3)); });
 }
 function onScroll() {
   ticking = false;
@@ -165,4 +165,52 @@ if (intro && introOn) {
     light.style.transform = "translate(" + lx + "px," + ly + "px)";
     requestAnimationFrame(loop);
   })();
+})();
+
+// ---------- titles: the metal sheen follows the pointer, with a slight 3D tilt ----------
+(function () {
+  const titles = Array.from(document.querySelectorAll(".display, .hero h1.name, .section-title, .game-card h3"));
+  if (!titles.length) return;
+  const tiltOk = fine && !reduce;
+  let px = -1, py = -1, queued = false, touchMode = false;
+
+  titles.forEach((el) => {
+    el.classList.add("tilt");
+    el._metals = Array.from(el.querySelectorAll(".metal"));
+    if (el.classList.contains("metal")) el._metals.push(el);
+  });
+
+  function update() {
+    queued = false;
+    titles.forEach((el) => {
+      const r = el.getBoundingClientRect();
+      const x = (px - r.left) / r.width;
+      const y = (py - r.top) / r.height;
+      const inside = px >= 0 && x > -0.04 && x < 1.04 && y > -0.25 && y < 1.25 && r.width > 0;
+      if (inside) {
+        el.dataset.hot = "1";
+        el._metals.forEach((m) => m.style.setProperty("--sx", Math.min(Math.max(x, 0), 1).toFixed(3)));
+        if (tiltOk && !touchMode) {
+          el.classList.add("live");
+          el.style.setProperty("--rx", ((0.5 - y) * 6).toFixed(2) + "deg");
+          el.style.setProperty("--ry", ((x - 0.5) * 8).toFixed(2) + "deg");
+        }
+      } else if (el.dataset.hot) {
+        delete el.dataset.hot;
+        el.style.setProperty("--rx", "0deg");
+        el.style.setProperty("--ry", "0deg");
+      }
+    });
+  }
+  function point(x, y, touch) {
+    px = x; py = y; touchMode = touch;
+    if (!queued) { queued = true; requestAnimationFrame(update); }
+  }
+  document.addEventListener("pointermove", (e) => { if (e.pointerType !== "touch") point(e.clientX, e.clientY, false); }, { passive: true });
+  document.addEventListener("pointerleave", () => point(-1, -1, false));
+  // touch: following the finger (also while scrolling) lights the titles up
+  const t = (e) => { const f = e.touches[0]; if (f) point(f.clientX, f.clientY, true); };
+  document.addEventListener("touchstart", t, { passive: true });
+  document.addEventListener("touchmove", t, { passive: true });
+  document.addEventListener("touchend", () => setTimeout(() => point(-1, -1, true), 500), { passive: true });
 })();

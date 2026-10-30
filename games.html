@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en" data-page="inner">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Games | Dreveen</title>
+  <meta name="description" content="Small games by Denise Guadagnuolo: Snake, Hangman, Memory and Cat Jump.">
+  <meta name="theme-color" content="#0a0406">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%230a0406'/><text x='50' y='70' font-size='64' text-anchor='middle' fill='%23c9a87a' font-family='serif' font-style='italic'>D</text></svg>">
+  <script>document.documentElement.classList.add("js");</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400&family=Playfair+Display:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css?v=18">
+</head>
+<body>
+  <canvas class="bg-rose" id="bgRose" aria-hidden="true"></canvas>
+
+  <header class="site-nav">
+    <a class="logo" href="index.html">Dreveen</a>
+    <button class="menu-toggle" aria-expanded="false" aria-controls="menu">Menu</button>
+    <nav class="links" id="menu">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="projects.html">Projects</a>
+      <a href="games.html" aria-current="page">Games</a>
+      <a href="contacts.html">Contacts</a>
+    </nav>
+  </header>
+
+  <main class="page">
+    <p class="eyebrow reveal">Play</p>
+    <h1 class="display reveal" style="--d:.1s">
+      Game
+      <span class="shift metal">room</span>
+    </h1>
+    <p class="lead reveal" style="--d:.3s">A few small things I built for fun. Pick one and play.</p>
+
+    <div class="picker reveal" style="--d:.4s" role="group" aria-label="Choose a game">
+      <button class="pick glass" type="button" data-game="snake" aria-controls="stage" aria-pressed="false">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h11a4 4 0 0 1 0 8H8a4 4 0 0 0 0 8h11"/><circle cx="19.500" cy="20" r="1.100"/></svg>
+        <b>Snake</b><small>Arrow keys or swipe</small>
+      </button>
+      <button class="pick glass" type="button" data-game="hangman" aria-controls="stage" aria-pressed="false">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 21h14M7 21V3h9v4"/><circle cx="16" cy="9.500" r="2.300"/><path d="M16 12v5M16 14l-3 2M16 14l3 2"/></svg>
+        <b>Hangman</b><small>Guess the word</small>
+      </button>
+      <button class="pick glass" type="button" data-game="memory" aria-controls="stage" aria-pressed="false">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="6" width="10" height="14" rx="1.500"/><rect x="11" y="4" width="10" height="14" rx="1.500"/><path d="M16 8.500l2 2-2 2-2-2z"/></svg>
+        <b>Memory</b><small>Find the pairs</small>
+      </button>
+      <button class="pick glass" type="button" data-game="catjump" aria-controls="stage" aria-pressed="false">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 20V7.500l4 3h6l4-3V20z"/><circle cx="9.500" cy="14" r="0.900"/><circle cx="14.500" cy="14" r="0.900"/><path d="M11 17h2"/></svg>
+        <b>Cat Jump</b><small>Tap to jump</small>
+      </button>
+    </div>
+
+    <div class="stage" id="stage" aria-live="polite">
+      <p class="stage-hint" id="stageHint">Choose a game above and it opens right here.</p>
+      <section class="glass game-card panel" data-game="snake" hidden aria-labelledby="snake-title">
+        <h3 id="snake-title">Snake</h3>
+        <p class="hint">Use the arrow keys, or swipe on touch screens. Eat the apples, avoid the walls and yourself.</p>
+        <div class="game-head">
+          <div class="score">Score<b id="snake-score">0</b> &nbsp; Best<b id="snake-best">0</b></div>
+          <button class="btn" id="snake-start" type="button">Start</button>
+        </div>
+        <canvas id="snake" width="400" height="400" aria-label="Snake game board"></canvas>
+        <div class="dpad" aria-label="Direction controls">
+          <button type="button" data-dir="up" aria-label="Up">&uarr;</button>
+          <button type="button" data-dir="left" aria-label="Left">&larr;</button>
+          <button type="button" data-dir="down" aria-label="Down">&darr;</button>
+          <button type="button" data-dir="right" aria-label="Right">&rarr;</button>
+        </div>
+      </section>
+
+      <section class="glass game-card panel" data-game="hangman" id="hangman" hidden tabindex="0" aria-labelledby="hm-title">
+        <h3 id="hm-title">Hangman</h3>
+        <p class="hint">Guess the word before the drawing is complete. Click the board and type, or use the keys below.</p>
+        <div class="game-head">
+          <div class="score">Mistakes<b id="hm-wrong">0</b> / 6 &nbsp; Streak<b id="hm-streak">0</b> &nbsp; Best<b id="hm-best">0</b></div>
+          <button class="btn" id="hm-new" type="button">New word</button>
+        </div>
+        <svg class="hm-figure" viewBox="0 0 200 220" aria-hidden="true">
+          <path class="frame" d="M30 205 H150 M60 205 V20 H130 V45"/>
+          <circle class="part" cx="130" cy="62" r="17"/>
+          <path class="part" d="M130 79 V135"/>
+          <path class="part" d="M130 92 L105 118"/>
+          <path class="part" d="M130 92 L155 118"/>
+          <path class="part" d="M130 135 L108 175"/>
+          <path class="part" d="M130 135 L152 175"/>
+        </svg>
+        <div class="hm-word" id="hm-word" aria-live="polite"></div>
+        <p class="hm-status" id="hm-status" role="status"></p>
+        <div class="hm-keys" id="hm-keys"></div>
+      </section>
+
+      <section class="glass game-card panel" data-game="memory" id="memory" hidden aria-labelledby="mem-title">
+        <h3 id="mem-title">Memory</h3>
+        <p class="hint">Flip two cards at a time and find all the matching pairs in as few moves as you can.</p>
+        <div class="game-head">
+          <div class="score">Moves<b id="mem-moves">0</b> &nbsp; Best<b id="mem-best">-</b></div>
+          <button class="btn" id="mem-new" type="button">New game</button>
+        </div>
+        <div class="mem-board" id="mem-board"></div>
+        <p class="hm-status" id="mem-status" role="status"></p>
+      </section>
+
+      <section class="glass game-card panel" data-game="catjump" id="catjump" hidden aria-labelledby="cat-title">
+        <h3 id="cat-title">Cat Jump</h3>
+        <p class="hint">A cat, a moonlit night and puddles, thorny weeds and rocks. Tap the board or press Space to jump over them.</p>
+        <div class="game-head">
+          <div class="score">Score<b id="cat-score">0</b> &nbsp; Best<b id="cat-best">0</b></div>
+          <button class="btn" id="cat-start" type="button">Start</button>
+        </div>
+        <canvas id="cat" aria-label="Cat Jump game board"></canvas>
+      </section>
+    </div>
+  </main>
+
+
+  <footer>
+    <span>&copy; <span id="year">2026</span> Denise Guadagnuolo</span>
+    <nav aria-label="Social">
+      <a href="https://github.com/dreveen" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://www.instagram.com/dreveen" target="_blank" rel="noopener">Instagram</a>
+      <a href="https://www.linkedin.com/in/dreveen" target="_blank" rel="noopener">LinkedIn</a>
+    </nav>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="rose.js?v=18"></script>
+  <script src="script.js?v=18"></script>
+  <script src="gamelock.js?v=18"></script>
+  <script src="snake.js?v=18"></script>
+  <script src="hangman.js?v=18"></script>
+  <script src="memory.js?v=18"></script>
+  <script src="catjump.js?v=18"></script>
+  <script src="games.js?v=18"></script>
+</body>
+</html>

@@ -850,4 +850,62 @@ html.has-moon, html.has-moon * { cursor: none !important; }
 .mem-front svg { width: 54%; height: 54%; fill: none; stroke: var(--gold-hi); stroke-width: 1.15; stroke-linecap: round; stroke-linejoin: round; filter: drop-shadow(0 0 6px rgba(241, 222, 184, 0.35)); }
 
 /* ---------- CAT JUMP ---------- */
-#cat { display: block; width: 100%; max-width: 720px; height: auto; aspect-ratio: 720 / 220; margin: 0 auto; border: 1px solid var(--line); touch-action: none; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+#cat { display: block; width: 100%; max-width: 860px; height: auto; aspect-ratio: 720 / 220; margin: 0 auto; border: 1px solid var(--line); touch-action: none; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+@media (max-width: 760px) { .game-card { padding: 24px 16px; } }
+
+/* ---------- GAMES PAGE: picker + stage ---------- */
+.picker { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(10px, 2vw, 18px); margin-top: 8px; }
+.pick {
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+  padding: clamp(18px, 3vw, 30px) 12px;
+  font: inherit;
+  color: var(--ink);
+  text-align: center;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 0.5s var(--ease), border-color 0.4s ease, box-shadow 0.5s ease;
+}
+.pick svg { width: clamp(34px, 5vw, 48px); height: clamp(34px, 5vw, 48px); fill: none; stroke: var(--gold); stroke-width: 1.2; stroke-linecap: round; stroke-linejoin: round; transition: stroke 0.4s ease, transform 0.5s var(--ease); }
+.pick b { font-family: var(--serif); font-style: italic; font-weight: 400; font-size: clamp(1.15rem, 2.2vw, 1.6rem); line-height: 1.2; }
+.pick small { font-size: 0.66rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); }
+.pick:hover { transform: translateY(-4px); border-color: var(--line-strong); }
+.pick:hover svg { stroke: var(--gold-hi); transform: scale(1.08); }
+.pick.active { border-color: var(--gold); box-shadow: 0 0 30px rgba(201, 168, 122, 0.22), 0 30px 60px -30px rgba(0, 0, 0, 0.7); background: linear-gradient(150deg, rgba(163, 20, 47, 0.28), rgba(243, 233, 226, 0.02) 70%); }
+.pick.active svg { stroke: var(--gold-hi); }
+.pick:focus-visible { outline: 1px solid var(--gold); outline-offset: 4px; }
+
+.stage { scroll-margin-top: 90px; margin-top: clamp(30px, 5vw, 56px); }
+.stage-hint { text-align: center; color: var(--muted); font-family: var(--serif); font-style: italic; font-size: 1.15rem; margin: 40px 0; }
+.stage .panel { padding: clamp(22px, 4vw, 44px); animation: panelIn 0.8s var(--ease) both; }
+.stage .panel[hidden] { display: none; }
+@keyframes panelIn { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
+.stage #snake { max-width: 560px; }
+.stage .mem-board { max-width: 540px; }
+.stage .hm-figure { width: 180px; }
+.stage .hm-word { font-size: clamp(1.7rem, 4vw, 2.6rem); }
+@media (max-width: 760px) { .picker { grid-template-columns: repeat(2, minmax(0, 1fr)); } .pick small { letter-spacing: 0.12em; } }
+@media (prefers-reduced-motion: reduce) { .stage .panel { animation: none; } .pick, .pick svg { transition: none; } }
+
+/* hangman letters: exactly two lines (13 + 13) */
+.hm-keys { grid-template-columns: repeat(13, minmax(0, 1fr)); gap: 5px; }
+.hm-keys button { padding: 11px 0; font-size: 0.8rem; min-width: 0; }
+@media (max-width: 560px) { .hm-keys { gap: 3px; } .hm-keys button { padding: 13px 0; font-size: 0.72rem; } }
+@media (max-width: 560px) {
+  .hm-word, .stage .hm-word { font-size: 1.55rem; letter-spacing: 0.08em; word-break: normal; }
+  .stage .hm-figure { width: 140px; }
+  .game-head { gap: 10px; }
+  .game-card h3 { font-size: 1.45rem; }
+}
+
+/* ---------- interactive titles ---------- */
+.tilt { transform-origin: 50% 60%; }
+.tilt .outline { transition: -webkit-text-stroke-color 0.4s ease, filter 0.4s ease; }
+.tilt .metal { transition: filter 0.4s ease; }
+.tilt[data-hot] .outline { -webkit-text-stroke-color: var(--gold-hi); filter: drop-shadow(0 0 10px rgba(201, 168, 122, 0.35)); }
+.tilt[data-hot] .metal { filter: drop-shadow(0 0 14px rgba(241, 222, 184, 0.25)); }
+.tilt.live { transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)); transition: transform 0.35s ease-out; will-change: transform; }
+html.js .reveal.in.tilt.live { transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)); transition: transform 0.35s ease-out; }

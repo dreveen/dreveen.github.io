@@ -8,12 +8,21 @@
   const startBtn = document.getElementById("cat-start");
   const BEST_KEY = "dreveen-cat-best";
 
-  const W = 720, H = 220, GROUND = 172;
+  let W = 720, H = 220, GROUND = 172;
   const dpr = Math.min(window.devicePixelRatio || 1, 2);
-  canvas.width = W * dpr;
-  canvas.height = H * dpr;
   const ctx = canvas.getContext("2d");
-  ctx.scale(dpr, dpr);
+  // on narrow screens use a smaller, taller world so the cat and obstacles look bigger
+  function layout() {
+    const narrow = (canvas.parentElement.clientWidth || 800) < 640;
+    W = narrow ? 520 : 720;
+    H = narrow ? 250 : 220;
+    GROUND = H - 48;
+    canvas.width = W * dpr;
+    canvas.height = H * dpr;
+    canvas.style.aspectRatio = W + " / " + H;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  layout();
 
   const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const GRAVITY = 2400;
@@ -40,7 +49,11 @@
   let hitKind = "puddle";
   let cleared = 0;
 
-  for (let i = 0; i < 38; i++) stars.push({ x: Math.random() * W, y: Math.random() * 110, r: Math.random() * 1.2 + 0.3, s: Math.random() * 0.3 + 0.1 });
+  function makeStars() {
+    stars = [];
+    for (let i = 0; i < 38; i++) stars.push({ x: Math.random() * W, y: Math.random() * (GROUND - 60), r: Math.random() * 1.2 + 0.3, s: Math.random() * 0.3 + 0.1 });
+  }
+  makeStars();
 
   function reset() {
     dist = 0;
@@ -476,11 +489,11 @@
     ctx.fillStyle = "#f1deb8";
     ctx.globalAlpha = 0.9;
     ctx.beginPath();
-    ctx.arc(620, 52, 20, 0, Math.PI * 2);
+    ctx.arc(W - 100, 52, 20, 0, Math.PI * 2);
     ctx.fill();
     ctx.fillStyle = "#1a0710";
     ctx.beginPath();
-    ctx.arc(630, 46, 18, 0, Math.PI * 2);
+    ctx.arc(W - 90, 46, 18, 0, Math.PI * 2);
     ctx.fill();
     ctx.globalAlpha = 1;
 
@@ -566,6 +579,18 @@
   });
 
   document.addEventListener("visibilitychange", () => { if (document.hidden) pause(); });
+  document.addEventListener("gamehide", pause);
+
+  // re-fit when the screen size or orientation changes (only between games)
+  window.addEventListener("resize", () => {
+    if (state === "running") return;
+    layout();
+    makeStars();
+    reset();
+    state = "idle";
+    startBtn.textContent = "Start";
+    draw();
+  });
 
   reset();
   draw();

@@ -4,14 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Projects | Dreveen</title>
-  <meta name="description" content="Projects and games by Denise Guadagnuolo.">
+  <meta name="description" content="Projects by Denise Guadagnuolo.">
   <meta name="theme-color" content="#0a0406">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%230a0406'/><text x='50' y='70' font-size='64' text-anchor='middle' fill='%23c9a87a' font-family='serif' font-style='italic'>D</text></svg>">
   <script>document.documentElement.classList.add("js");</script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400&family=Playfair+Display:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=7">
+  <link rel="stylesheet" href="style.css?v=18">
 </head>
 <body>
   <canvas class="bg-rose" id="bgRose" aria-hidden="true"></canvas>
@@ -23,6 +23,7 @@
       <a href="index.html">Home</a>
       <a href="about.html">About</a>
       <a href="projects.html" aria-current="page">Projects</a>
+      <a href="games.html">Games</a>
       <a href="contacts.html">Contacts</a>
     </nav>
   </header>
@@ -43,68 +44,9 @@
 
     <div class="glass empty reveal"><span>More projects coming soon</span></div>
 
-    <h2 class="section-title reveal" id="games"><span class="section-num">02 &mdash; Play</span>Games</h2>
-    <p class="section-sub reveal">A few small things I built for fun. Go on, play.</p>
-
-    <div class="games">
-      <section class="glass game-card reveal" aria-labelledby="snake-title">
-        <h3 id="snake-title">Snake</h3>
-        <p class="hint">Use the arrow keys, or swipe on touch screens. Eat the apples, avoid the walls and yourself.</p>
-        <div class="game-head">
-          <div class="score">Score<b id="snake-score">0</b> &nbsp; Best<b id="snake-best">0</b></div>
-          <button class="btn" id="snake-start" type="button">Start</button>
-        </div>
-        <canvas id="snake" width="400" height="400" aria-label="Snake game board"></canvas>
-        <div class="dpad" aria-label="Direction controls">
-          <button type="button" data-dir="up" aria-label="Up">&uarr;</button>
-          <button type="button" data-dir="left" aria-label="Left">&larr;</button>
-          <button type="button" data-dir="down" aria-label="Down">&darr;</button>
-          <button type="button" data-dir="right" aria-label="Right">&rarr;</button>
-        </div>
-      </section>
-
-      <section class="glass game-card reveal" style="--d:.15s" id="hangman" tabindex="0" aria-labelledby="hm-title">
-        <h3 id="hm-title">Hangman</h3>
-        <p class="hint">Guess the word before the drawing is complete. Click the board and type, or use the keys below.</p>
-        <div class="game-head">
-          <div class="score">Mistakes<b id="hm-wrong">0</b> / 6 &nbsp; Streak<b id="hm-streak">0</b> &nbsp; Best<b id="hm-best">0</b></div>
-          <button class="btn" id="hm-new" type="button">New word</button>
-        </div>
-        <svg class="hm-figure" viewBox="0 0 200 220" aria-hidden="true">
-          <path class="frame" d="M30 205 H150 M60 205 V20 H130 V45"/>
-          <circle class="part" cx="130" cy="62" r="17"/>
-          <path class="part" d="M130 79 V135"/>
-          <path class="part" d="M130 92 L105 118"/>
-          <path class="part" d="M130 92 L155 118"/>
-          <path class="part" d="M130 135 L108 175"/>
-          <path class="part" d="M130 135 L152 175"/>
-        </svg>
-        <div class="hm-word" id="hm-word" aria-live="polite"></div>
-        <p class="hm-status" id="hm-status" role="status"></p>
-        <div class="hm-keys" id="hm-keys"></div>
-      </section>
-
-      <section class="glass game-card game-wide reveal" id="memory" aria-labelledby="mem-title">
-        <h3 id="mem-title">Memory</h3>
-        <p class="hint">Flip two cards at a time and find all the matching pairs in as few moves as you can.</p>
-        <div class="game-head">
-          <div class="score">Moves<b id="mem-moves">0</b> &nbsp; Best<b id="mem-best">-</b></div>
-          <button class="btn" id="mem-new" type="button">New game</button>
-        </div>
-        <div class="mem-board" id="mem-board"></div>
-        <p class="hm-status" id="mem-status" role="status"></p>
-      </section>
-
-      <section class="glass game-card game-wide reveal" id="catjump" aria-labelledby="cat-title">
-        <h3 id="cat-title">Cat Jump</h3>
-        <p class="hint">A cat, a moonlit night and puddles, thorny weeds and rocks. Tap the board or press Space to jump over them.</p>
-        <div class="game-head">
-          <div class="score">Score<b id="cat-score">0</b> &nbsp; Best<b id="cat-best">0</b></div>
-          <button class="btn" id="cat-start" type="button">Start</button>
-        </div>
-        <canvas id="cat" aria-label="Cat Jump game board"></canvas>
-      </section>
-    </div>
+    <a class="row reveal" href="games.html" style="margin-top: clamp(60px, 10vw, 110px); border-top: 1px solid var(--line);">
+      <span class="n">02</span><span class="t">Games</span><span class="d">Snake, Hangman, Memory and Cat Jump</span>
+    </a>
   </main>
 
   <footer>
@@ -117,12 +59,7 @@
   </footer>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-  <script src="rose.js?v=7"></script>
-  <script src="script.js?v=7"></script>
-  <script src="gamelock.js?v=7"></script>
-  <script src="snake.js?v=7"></script>
-  <script src="hangman.js?v=8"></script>
-  <script src="memory.js?v=7"></script>
-  <script src="catjump.js?v=12"></script>
+  <script src="rose.js?v=18"></script>
+  <script src="script.js?v=18"></script>
 </body>
 </html>

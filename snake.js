@@ -245,6 +245,7 @@
   }, { passive: true });
 
   document.addEventListener("visibilitychange", () => { if (document.hidden) pause(); });
+  document.addEventListener("gamehide", pause);
   document.addEventListener("keydown", (e) => { if (e.key === "Escape") pause(); });
 
   reset();
