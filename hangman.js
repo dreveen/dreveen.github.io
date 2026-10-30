@@ -2,10 +2,59 @@
   const root = document.getElementById("hangman");
   if (!root) return;
 
-  // Placeholder words: we'll pick the real ones together later. Lowercase letters a-z only.
-  const WORDS = [
-    "algorithm", "compiler", "recursion", "database", "network",
-    "variable", "function", "binary", "pointer", "framework",
+  // Curious words from the computing world, each with a short, funny definition in English and Italian.
+  // Lowercase letters a-z only (no spaces, hyphens or accents). The definition appears when the word is revealed.
+  const ENTRIES = [
+    {
+      word: "procrastinate",
+      en: "Putting off until tomorrow the bug you should fix today.",
+      it: "Rimandare a domani il bug che dovresti correggere oggi.",
+    },
+    {
+      word: "gremlin",
+      en: "The imaginary creature we blame when the code breaks for no reason.",
+      it: "La creatura immaginaria a cui diamo la colpa quando il codice si rompe senza motivo.",
+    },
+    {
+      word: "bugfix",
+      en: "The fix that creates two more bugs.",
+      it: "La correzione che crea altri due bug.",
+    },
+    {
+      word: "coffee",
+      en: "The fuel that turns developers' ideas into code.",
+      it: "Il carburante che trasforma le idee degli sviluppatori in codice.",
+    },
+    {
+      word: "rubberduck",
+      en: "The little duck you explain your code to, until the error shows up on its own.",
+      it: "La paperella a cui spieghi il codice, finché l'errore non salta fuori da solo.",
+    },
+    {
+      word: "nightowl",
+      en: "The developer who writes their best code after midnight.",
+      it: "Lo sviluppatore che scrive il suo codice migliore dopo mezzanotte.",
+    },
+    {
+      word: "cloud",
+      en: "Someone else's computer, with a more poetic name.",
+      it: "Il computer di qualcun altro, con un nome più poetico.",
+    },
+    {
+      word: "cookie",
+      en: "The little digital biscuit websites leave behind to remember you. Zero calories.",
+      it: "Il biscottino digitale che i siti ti lasciano per ricordarsi di te. Zero calorie.",
+    },
+    {
+      word: "password",
+      en: "The secret word you forget exactly when you need it.",
+      it: "La parola segreta che dimentichi proprio quando ti serve.",
+    },
+    {
+      word: "wifi",
+      en: "The invisible magic that makes you feel at home anywhere.",
+      it: "La magia invisibile che ti fa sentire a casa in qualsiasi posto.",
+    },
   ];
   const MAX_WRONG = 6;
 
@@ -38,12 +87,27 @@
     buttons[l] = b;
   });
 
+  let entry = null;
+  const meaningEl = document.getElementById("hm-meaning");
+  const meaningEn = document.getElementById("hm-meaning-en");
+  const meaningIt = document.getElementById("hm-meaning-it");
+
+  function showMeaning(show) {
+    if (!meaningEl) return;
+    if (show && entry) {
+      meaningEn.textContent = entry.en;
+      meaningIt.textContent = entry.it;
+    }
+    meaningEl.hidden = !show;
+  }
+
   function pick() {
     let next;
     do {
-      next = WORDS[Math.floor(Math.random() * WORDS.length)];
-    } while (WORDS.length > 1 && next === word);
-    return next;
+      next = ENTRIES[Math.floor(Math.random() * ENTRIES.length)];
+    } while (ENTRIES.length > 1 && entry && next.word === entry.word);
+    entry = next;
+    return next.word;
   }
 
   function render() {
@@ -74,11 +138,13 @@
       }
       streakEl.textContent = streak;
       statusEl.textContent = "You got it.";
+      showMeaning(true);
     } else if (wrong >= MAX_WRONG) {
       over = true;
       streak = 0;
       streakEl.textContent = streak;
       statusEl.textContent = "The word was " + word.toUpperCase() + ".";
+      showMeaning(true);
     }
     render();
   }
@@ -87,6 +153,7 @@
     // skipping a word that is still in progress breaks the streak
     if (!over && guessed.size > 0) { streak = 0; streakEl.textContent = streak; }
     word = pick();
+    showMeaning(false);
     guessed = new Set();
     wrong = 0;
     over = false;

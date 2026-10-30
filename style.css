@@ -947,3 +947,14 @@ html.js .reveal.in.tilt.live { transform: perspective(900px) rotateX(var(--rx, 0
 .chips li.more-chip::before { content: ""; position: absolute; inset: 0; z-index: -1; background: var(--metal); background-size: 260% 100%; transform: translateY(101%); transition: transform 0.5s var(--ease); }
 .chips li.more-chip:hover { color: #1a0a0d; border-style: solid; }
 .chips li.more-chip:hover::before { transform: none; }
+
+/* hangman: what does it mean? */
+.hm-hint { display: block; margin: 18px auto 0; padding: 6px 2px; background: none; border: 0; font: inherit; font-size: 0.74rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold-hi); cursor: pointer; border-bottom: 1px solid var(--line-strong); -webkit-appearance: none; appearance: none; transition: color 0.3s ease, border-color 0.3s ease; }
+.hm-hint span { color: var(--gold); margin: 0 4px; }
+.hm-hint:hover, .hm-hint[aria-expanded="true"] { border-color: var(--gold); color: var(--ink); }
+.hm-meaning { margin: 18px auto 0; max-width: 560px; padding: 18px 22px; border: 1px solid transparent; background: linear-gradient(#150911, #150911) padding-box, var(--metal) border-box; animation: noteIn 0.8s var(--ease) both; }
+.hm-meaning[hidden] { display: none; }
+.hm-meaning p { margin: 0; display: grid; grid-template-columns: 30px 1fr; gap: 10px; font-size: 0.95rem; line-height: 1.55; color: var(--ink); }
+.hm-meaning p + p { margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--line); color: var(--muted); }
+.hm-meaning b { font-weight: 400; font-size: 0.64rem; letter-spacing: 0.2em; color: var(--gold); padding-top: 0.35em; }
+.hm-meaning { margin: 6px auto 20px; }
