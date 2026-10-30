@@ -981,3 +981,26 @@ html.js .reveal.in.tilt.live { transform: perspective(900px) rotateX(var(--rx, 0
 .quote::before { display: none; }
 .quote.show { opacity: 0.9; transform: translateY(-50%) rotate(180deg); }
 @media (max-width: 760px) { .quote { right: 5px; font-size: 0.78rem; max-width: none; bottom: auto; max-height: 70vh; } }
+
+/* logo: a small gold rose in bloom instead of the pink dot */
+.logo::after {
+  width: 20px; height: 20px;
+  margin-left: 3px;
+  border-radius: 0;
+  box-shadow: none;
+  vertical-align: 0.3em;
+  background: linear-gradient(135deg, var(--gold-lo), var(--gold-hi) 50%, var(--gold));
+  -webkit-mask: url("rose-mark.svg") center / contain no-repeat;
+  mask: url("rose-mark.svg") center / contain no-repeat;
+  filter: drop-shadow(0 0 6px rgba(241, 222, 184, 0.3));
+}
+
+/* logo: a small gold sparkle (four-point star) */
+.logo::after {
+  width: 18px; height: 18px;
+  margin-left: 2px;
+  vertical-align: 0.4em;
+  -webkit-mask: url("sparkle-mark.svg") center / contain no-repeat;
+  mask: url("sparkle-mark.svg") center / contain no-repeat;
+  filter: drop-shadow(0 0 7px rgba(241, 222, 184, 0.55));
+}
