@@ -181,7 +181,7 @@ if (intro && introOn) {
 
 // ---------- titles: the metal sheen follows the pointer, with a slight 3D tilt ----------
 (function () {
-  const titles = Array.from(document.querySelectorAll(".display, .hero h1.name, .section-title, .game-card h3"));
+  const titles = Array.from(document.querySelectorAll(".display, .hero h1.name, .section-title, .game-card h3, .codecard"));
   if (!titles.length) return;
   const tiltOk = fine && !reduce;
   let px = -1, py = -1, queued = false, touchMode = false;
