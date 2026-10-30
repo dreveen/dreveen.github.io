@@ -1367,3 +1367,4 @@ a.pick { text-decoration: none; color: inherit; }
 .pl-prio button.on::after, .hb-pal button.on::after { content: none; }
 /* a small diamond marks the chosen colour */
 .pl-prio button.on::after, .hb-pal button.on::after { content: ""; position: absolute; left: 50%; top: 50%; width: 30%; height: 30%; border: 0; background: #fff; transform: translate(-50%, -50%) rotate(45deg); box-shadow: 0 0 5px rgba(0, 0, 0, .55), 0 0 6px rgba(255, 255, 255, .6); opacity: 1; filter: none; }
+@media (max-width: 760px) { .phone-note { text-align: center; margin-left: auto; margin-right: auto; } }

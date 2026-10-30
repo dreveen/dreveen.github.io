@@ -43,12 +43,14 @@
     ["Too slow! Try again (1/3)", "Troppo lenta! Riprova (1/3)"],
     ["Almost… once more (2/3)", "Quasi… ancora una volta (2/3)"],
   ];
+  let hintIdx = 0;
   function say(i) {
     if (!hint) return;
+    hintIdx = i;
     if (i >= HINTS.length) { hint.style.display = "none"; return; }
     hint.classList.add("swap");
     setTimeout(() => {
-      hint.innerHTML = HINTS[i][0] + "<small>" + HINTS[i][1] + "</small>";
+      hint.textContent = I18N.pick(HINTS[i][0], HINTS[i][1]);
       hint.classList.remove("swap");
     }, reduce ? 0 : 300);
   }
@@ -85,14 +87,15 @@
     const href = mail ? mail.getAttribute("href") : "#";
     const en = 'Nice try! 😉 I’d much rather hear from you by email — <a href="' + href + '">write to me there</a> and I’ll happily reply.';
     const it = 'Bel tentativo! 😉 Preferisco essere contattata via email. <a href="' + href + '">Scrivimi lì</a>, ti risponderò con piacere.';
-    note.innerHTML = I18N.lang === "it"
-      ? it + '<span class="it" lang="en">' + en + "</span>"
-      : en + '<span class="it" lang="it">' + it + "</span>";
+    note.innerHTML = I18N.lang === "it" ? it : en;
   }
   function renderLabel() {
     btn.setAttribute("aria-label", I18N.t(btn.classList.contains("done") ? "Phone (not available, please use email)" : "Call Denise"));
   }
-  window.addEventListener("langchange", () => { renderNote(); renderLabel(); });
+  window.addEventListener("langchange", () => {
+    if (hint && hintIdx < HINTS.length) hint.textContent = I18N.pick(HINTS[hintIdx][0], HINTS[hintIdx][1]);
+    renderNote(); renderLabel();
+  });
 
   btn.addEventListener("click", (e) => {
     if (attempts >= MAX) {
