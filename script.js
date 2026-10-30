@@ -214,3 +214,38 @@ if (intro && introOn) {
   document.addEventListener("touchmove", t, { passive: true });
   document.addEventListener("touchend", () => setTimeout(() => point(-1, -1, true), 500), { passive: true });
 })();
+
+// ---------- home: a motivational line that changes at random ----------
+(function () {
+  const el = document.getElementById("quote");
+  if (!el) return;
+  const LINES = [
+    "Make it work, then make it beautiful.",
+    "Small steps, every single day.",
+    "Curiosity compiles everything.",
+    "Debug your doubts.",
+    "Elegant code, fearless mind.",
+    "Dream in logic, build in colour.",
+    "Every expert once wrote hello world.",
+    "Progress is a loop with no exit condition.",
+    "Fail fast, learn faster.",
+    "Bloom where you compile.",
+    "Stay curious, stay unstoppable.",
+    "Compile courage, run confidence.",
+  ];
+  let i = Math.floor(Math.random() * LINES.length);
+  el.textContent = LINES[i];
+  el.classList.add("show");
+  if (reduce) return;
+  setInterval(() => {
+    if (document.hidden) return;
+    el.classList.remove("show");
+    setTimeout(() => {
+      let n;
+      do { n = Math.floor(Math.random() * LINES.length); } while (n === i);
+      i = n;
+      el.textContent = LINES[i];
+      el.classList.add("show");
+    }, 1000);
+  }, 9000);
+})();
