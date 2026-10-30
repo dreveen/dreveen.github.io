@@ -14,6 +14,7 @@ window.I18N = (function () {
     "Studying": "Studio", "Computer Engineering": "Ingegneria Informatica", "University": "Università",
     "Based in": "Vivo in", "Italy": "Italia", "Skills": "Competenze", "Java, Python, PHP & more": "Java, Python, PHP e altro",
     "Explore": "Esplora",
+    "From idea to code, with care for every detail.": "Dall'idea al codice, con cura per ogni dettaglio.",
     "Who I am and where I'm heading": "Chi sono e dove sto andando",
     "Selected work and experiments": "Lavori selezionati ed esperimenti",
     "Snake, Hangman, Memory and Cat Jump": "Snake, Impiccato, Memory e Cat Jump",

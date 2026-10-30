@@ -1040,3 +1040,8 @@ html.js .reveal.in.tilt.live { transform: perspective(900px) rotateX(var(--rx, 0
 .game-card h3 { font-size: 2.6rem; }
 .game-card .hint { font-size: 1.2rem; line-height: 1.7; }
 @media (max-width: 560px) { .game-card h3 { font-size: 2.15rem; } .game-card .hint { font-size: 1.08rem; } }
+
+/* home "Approach": a shorter, more elegant statement */
+.manifest { padding-bottom: clamp(90px, 16vh, 180px); }
+.statement { font-size: clamp(2.5rem, 7vw, 6rem); line-height: 1.04; letter-spacing: -0.02em; max-width: 13ch; margin: 0 0 clamp(26px, 4vw, 44px); text-shadow: 0 2px 30px rgba(10, 4, 6, 0.85); }
+.statement-sub { max-width: 40ch; margin: 0 0 0 4px; padding-left: 20px; border-left: 1px solid var(--gold); font-size: clamp(1rem, 1.5vw, 1.2rem); line-height: 1.7; color: var(--muted); text-shadow: 0 1px 18px rgba(10, 4, 6, 0.9); }

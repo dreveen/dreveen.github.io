@@ -37,7 +37,7 @@ if (roseCanvas && window.THREE && typeof mountRose === "function") {
 let metals = Array.from(document.querySelectorAll(".metal, .statement .hi"));
 const statement = document.getElementById("statement");
 let words = [];
-const STATEMENT_IT = 'L’informatica è un equilibrio tra <span class="hi">logica</span> e <span class="hi">creatività</span>: strumenti che semplificano i processi e migliorano l’esperienza delle persone.';
+const STATEMENT_IT = 'Dove la <span class="hi">logica</span> incontra la <span class="hi">creatività</span>.';
 const STATEMENT_EN = statement ? statement.innerHTML : "";
 function buildStatement(html) {
   if (!statement) return;
