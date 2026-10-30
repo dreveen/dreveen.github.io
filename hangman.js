@@ -13,6 +13,13 @@
   const statusEl = document.getElementById("hm-status");
   const keysEl = document.getElementById("hm-keys");
   const wrongEl = document.getElementById("hm-wrong");
+  const streakEl = document.getElementById("hm-streak");
+  const bestEl = document.getElementById("hm-best");
+  const BEST_KEY = "dreveen-hangman-best";
+  let streak = 0;
+  let best = 0;
+  try { best = Number(localStorage.getItem(BEST_KEY)) || 0; } catch (e) {}
+  bestEl.textContent = best;
   const newBtn = document.getElementById("hm-new");
   const parts = root.querySelectorAll(".part");
 
@@ -59,15 +66,26 @@
     const won = word.split("").every((c) => guessed.has(c));
     if (won) {
       over = true;
+      streak++;
+      if (streak > best) {
+        best = streak;
+        bestEl.textContent = best;
+        try { localStorage.setItem(BEST_KEY, String(best)); } catch (e) {}
+      }
+      streakEl.textContent = streak;
       statusEl.textContent = "You got it.";
     } else if (wrong >= MAX_WRONG) {
       over = true;
+      streak = 0;
+      streakEl.textContent = streak;
       statusEl.textContent = "The word was " + word.toUpperCase() + ".";
     }
     render();
   }
 
   function newGame() {
+    // skipping a word that is still in progress breaks the streak
+    if (!over && guessed.size > 0) { streak = 0; streakEl.textContent = streak; }
     word = pick();
     guessed = new Set();
     wrong = 0;

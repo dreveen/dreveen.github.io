@@ -848,3 +848,6 @@ html.has-moon, html.has-moon * { cursor: none !important; }
 #mem-status { margin: 16px 0 0; }
 @media (prefers-reduced-motion: reduce) { .mem-inner { transition: none; } }
 .mem-front svg { width: 54%; height: 54%; fill: none; stroke: var(--gold-hi); stroke-width: 1.15; stroke-linecap: round; stroke-linejoin: round; filter: drop-shadow(0 0 6px rgba(241, 222, 184, 0.35)); }
+
+/* ---------- CAT JUMP ---------- */
+#cat { display: block; width: 100%; max-width: 720px; height: auto; aspect-ratio: 720 / 220; margin: 0 auto; border: 1px solid var(--line); touch-action: none; cursor: pointer; -webkit-tap-highlight-color: transparent; }

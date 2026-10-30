@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400&family=Playfair+Display:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=6">
+  <link rel="stylesheet" href="style.css?v=7">
 </head>
 <body>
   <canvas class="bg-rose" id="bgRose" aria-hidden="true"></canvas>
@@ -67,7 +67,7 @@
         <h3 id="hm-title">Hangman</h3>
         <p class="hint">Guess the word before the drawing is complete. Click the board and type, or use the keys below.</p>
         <div class="game-head">
-          <div class="score">Mistakes<b id="hm-wrong">0</b> / 6</div>
+          <div class="score">Mistakes<b id="hm-wrong">0</b> / 6 &nbsp; Streak<b id="hm-streak">0</b> &nbsp; Best<b id="hm-best">0</b></div>
           <button class="btn" id="hm-new" type="button">New word</button>
         </div>
         <svg class="hm-figure" viewBox="0 0 200 220" aria-hidden="true">
@@ -94,6 +94,16 @@
         <div class="mem-board" id="mem-board"></div>
         <p class="hm-status" id="mem-status" role="status"></p>
       </section>
+
+      <section class="glass game-card game-wide reveal" id="catjump" aria-labelledby="cat-title">
+        <h3 id="cat-title">Cat Jump</h3>
+        <p class="hint">A cat, a moonlit night and puddles, thorny weeds and rocks. Tap the board or press Space to jump over them.</p>
+        <div class="game-head">
+          <div class="score">Score<b id="cat-score">0</b> &nbsp; Best<b id="cat-best">0</b></div>
+          <button class="btn" id="cat-start" type="button">Start</button>
+        </div>
+        <canvas id="cat" aria-label="Cat Jump game board"></canvas>
+      </section>
     </div>
   </main>
 
@@ -107,11 +117,12 @@
   </footer>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-  <script src="rose.js?v=6"></script>
-  <script src="script.js?v=6"></script>
-  <script src="gamelock.js?v=6"></script>
-  <script src="snake.js?v=6"></script>
-  <script src="hangman.js?v=6"></script>
-  <script src="memory.js?v=6"></script>
+  <script src="rose.js?v=7"></script>
+  <script src="script.js?v=7"></script>
+  <script src="gamelock.js?v=7"></script>
+  <script src="snake.js?v=7"></script>
+  <script src="hangman.js?v=8"></script>
+  <script src="memory.js?v=7"></script>
+  <script src="catjump.js?v=12"></script>
 </body>
 </html>
