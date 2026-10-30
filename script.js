@@ -97,7 +97,7 @@ if (fine) {
   document.addEventListener("pointermove", (e) => {
     pointerX = e.clientX / window.innerWidth;
     if (!ticking) { ticking = true; requestAnimationFrame(onScroll); }
-    const el = e.target.closest && e.target.closest(".glass, .row, .contact-list a");
+    const el = e.target.closest && e.target.closest(".glass, .row, .contact-list li > a, .phone-item");
     if (el) {
       const r = el.getBoundingClientRect();
       el.style.setProperty("--mx", e.clientX - r.left + "px");
@@ -136,7 +136,7 @@ if (intro && introOn) {
   const moon = document.createElement("div");
   moon.className = "moon";
   moon.innerHTML =
-    '<svg viewBox="0 0 40 40" aria-hidden="true"><path d="M26 3 A17 17 0 0 0 26 37 A22 22 0 0 1 26 3 Z"/></svg>';
+    '<svg viewBox="0 0 40 40" aria-hidden="true"><path d="M28 5 A16 16 0 1 0 28 35 A15 15 0 0 1 28 5 Z"/></svg>';
   document.body.append(light, moon);
   root.classList.add("has-moon");
 
@@ -161,7 +161,7 @@ if (intro && introOn) {
   (function loop() {
     lx += (x - lx) * 0.2;
     ly += (y - ly) * 0.2;
-    moon.style.transform = "translate(" + (x - 8) + "px," + (y - 17) + "px)";
+    moon.style.transform = "translate(" + (x - 9) + "px," + (y - 12) + "px)";
     light.style.transform = "translate(" + lx + "px," + ly + "px)";
     requestAnimationFrame(loop);
   })();

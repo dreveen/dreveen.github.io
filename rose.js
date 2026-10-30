@@ -12,7 +12,7 @@ function mountRose(canvas, opts) {
   }
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, opts.dpr || 2));
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.05;
+  renderer.toneMappingExposure = 1.2;
 
   // procedural studio: dark wine room, champagne softboxes, a crimson glow (used for reflections)
   function makeEnv() {
@@ -80,8 +80,8 @@ function mountRose(canvas, opts) {
 
   const PETALS = 40;
   const GOLDEN = 2.39996;
-  const inner = new THREE.Color(0x9e0f2e);
-  const outer = new THREE.Color(0x4f0617);
+  const inner = new THREE.Color(0xc4203f);
+  const outer = new THREE.Color(0x8c1329);
   const gold = new THREE.Color(0xe0c48f);
   const petals = [];
 
@@ -153,6 +153,34 @@ function mountRose(canvas, opts) {
       new THREE.MeshStandardMaterial({ color: 0x214d34, roughness: 0.42, metalness: 0.35, envMapIntensity: 0.9 })
     )
   );
+  // leaves along the stem
+  const leafShape = new THREE.Shape();
+  leafShape.moveTo(0, 0);
+  leafShape.bezierCurveTo(0.25, 0.26, 0.75, 0.3, 1.0, 0);
+  leafShape.bezierCurveTo(0.75, -0.3, 0.25, -0.26, 0, 0);
+  const leafMat = new THREE.MeshStandardMaterial({ color: 0x1d5a36, roughness: 0.5, metalness: 0.12, side: THREE.DoubleSide, envMapIntensity: 0.9 });
+  [
+    { y: -1.3, a: 0.5, s: 1.0 },
+    { y: -2.15, a: Math.PI + 0.35, s: 1.15 },
+    { y: -3.0, a: -0.6, s: 1.25 },
+    { y: -3.9, a: Math.PI - 0.5, s: 1.3 },
+  ].forEach(function (d) {
+    const g = new THREE.ShapeGeometry(leafShape, 14);
+    g.rotateX(-Math.PI / 2);
+    const lp = g.attributes.position;
+    for (let v = 0; v < lp.count; v++) {
+      const x = lp.getX(v), z = lp.getZ(v);
+      lp.setY(v, 0.18 * Math.abs(z) - 0.22 * x * x);
+    }
+    g.computeVertexNormals();
+    const leaf = new THREE.Group();
+    leaf.position.set(0, d.y, 0);
+    leaf.rotation.y = d.a;
+    leaf.rotation.z = 0.55;
+    leaf.scale.setScalar(d.s);
+    leaf.add(new THREE.Mesh(g, leafMat));
+    rose.add(leaf);
+  });
   rose.position.y = -0.35;
 
   // gold orbits: thin polished rings, each carrying a small bead
@@ -218,6 +246,19 @@ function mountRose(canvas, opts) {
     ty = (e.clientY / window.innerHeight - 0.5) * 2;
   }
   window.addEventListener("pointermove", onPointer, { passive: true });
+  // touch: pointer events stop once the browser takes over for scrolling, so follow the finger
+  // with passive touch listeners (they never block the scroll)
+  function onTouch(e) {
+    const t = e.touches[0];
+    if (!t) return;
+    tx = (t.clientX / window.innerWidth - 0.5) * 2;
+    ty = (t.clientY / window.innerHeight - 0.5) * 2;
+  }
+  function onTouchEnd() { tx = 0; ty = 0; }
+  window.addEventListener("touchstart", onTouch, { passive: true });
+  window.addEventListener("touchmove", onTouch, { passive: true });
+  window.addEventListener("touchend", onTouchEnd, { passive: true });
+  window.addEventListener("touchcancel", onTouchEnd, { passive: true });
 
   function frame(now) {
     if (!alive) return;
@@ -267,6 +308,10 @@ function mountRose(canvas, opts) {
       alive = false;
       window.removeEventListener("resize", resize);
       window.removeEventListener("pointermove", onPointer);
+      window.removeEventListener("touchstart", onTouch);
+      window.removeEventListener("touchmove", onTouch);
+      window.removeEventListener("touchend", onTouchEnd);
+      window.removeEventListener("touchcancel", onTouchEnd);
       renderer.dispose();
     },
   };

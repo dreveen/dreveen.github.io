@@ -368,7 +368,7 @@ main, footer { position: relative; z-index: 2; }
 /* CONTACTS */
 .contact-list { list-style: none; margin: 40px 0 0; padding: 0; border-top: 1px solid var(--line); }
 .contact-list li { border-bottom: 1px solid var(--line); }
-.contact-list a {
+.contact-list li > a {
   position: relative;
   display: grid;
   grid-template-columns: minmax(110px, 1fr) minmax(0, 4fr) auto;
@@ -379,7 +379,7 @@ main, footer { position: relative; z-index: 2; }
   overflow: hidden;
   transition: padding 0.5s var(--ease);
 }
-.contact-list a::before {
+.contact-list li > a::before {
   content: "";
   position: absolute;
   inset: 0;
@@ -388,10 +388,10 @@ main, footer { position: relative; z-index: 2; }
   opacity: 0;
   transition: opacity 0.4s ease;
 }
-.contact-list a::after { content: "\2197"; font-size: 1.5rem; color: var(--gold); transition: transform 0.5s var(--ease); }
-.contact-list a:hover { padding-left: 18px; }
-.contact-list a:hover::before { opacity: 1; }
-.contact-list a:hover::after { transform: translate(6px, -6px); }
+.contact-list li > a::after { content: "\2197"; font-size: 1.5rem; color: var(--gold); transition: transform 0.5s var(--ease); }
+.contact-list li > a:hover { padding-left: 18px; }
+.contact-list li > a:hover::before { opacity: 1; }
+.contact-list li > a:hover::after { transform: translate(6px, -6px); }
 .contact-list .label { font-size: 0.72rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); }
 .contact-list .value {
   font-family: var(--serif);
@@ -400,7 +400,7 @@ main, footer { position: relative; z-index: 2; }
   line-height: 1.1;
   word-break: break-word;
 }
-.contact-list a:hover .value { background-image: var(--metal); background-size: 260% 100%; -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent; }
+.contact-list li > a:hover .value { background-image: var(--metal); background-size: 260% 100%; -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent; }
 
 /* ---------- HOME ---------- */
 .hero {
@@ -672,9 +672,9 @@ html.intro-on #intro, #intro.leaving { display: grid; }
   .scroll-cue { bottom: 22px; }
 
   .facts { grid-template-columns: 1fr; }
-  .contact-list a { grid-template-columns: 1fr auto; row-gap: 4px; }
+  .contact-list li > a { grid-template-columns: 1fr auto; row-gap: 4px; }
   .contact-list .label { grid-column: 1 / -1; }
-  .contact-list a:hover { padding-left: 0; }
+  .contact-list li > a:hover { padding-left: 0; }
   .row:hover { padding-left: 0; }
   .row:hover .t { transform: none; }
 
@@ -699,14 +699,14 @@ html.has-moon, html.has-moon * { cursor: none !important; }
   position: fixed;
   left: 0;
   top: 0;
-  width: 560px;
-  height: 560px;
-  margin: -280px 0 0 -280px;
+  width: 420px;
+  height: 420px;
+  margin: -210px 0 0 -210px;
   border-radius: 50%;
   pointer-events: none;
   z-index: 190;
   mix-blend-mode: screen;
-  background: radial-gradient(circle, rgba(255, 226, 184, 0.2) 0%, rgba(210, 58, 88, 0.1) 38%, transparent 68%);
+  background: radial-gradient(circle, rgba(255, 226, 184, 0.07) 0%, rgba(210, 58, 88, 0.035) 35%, transparent 62%);
   transition: opacity 0.3s ease;
 }
 
@@ -714,17 +714,115 @@ html.has-moon, html.has-moon * { cursor: none !important; }
   position: fixed;
   left: 0;
   top: 0;
-  width: 34px;
-  height: 34px;
+  width: 24px;
+  height: 24px;
   pointer-events: none;
   z-index: 200;
-  filter: drop-shadow(0 0 4px rgba(255, 232, 196, 0.95)) drop-shadow(0 0 14px rgba(255, 200, 150, 0.6));
+  filter: drop-shadow(0 0 3px rgba(255, 232, 196, 0.6)) drop-shadow(0 0 8px rgba(255, 200, 150, 0.25));
   transition: width 0.25s ease, height 0.25s ease;
 }
 
 .moon svg { display: block; width: 100%; height: 100%; fill: #fff1d6; transition: transform 0.25s ease; }
-.moon.hover { width: 46px; height: 46px; }
+.moon.hover { width: 32px; height: 32px; }
 .moon.hover svg { transform: rotate(-25deg); }
 .moon-light.hover { opacity: 1; }
 .moon-light.idle { opacity: 0; }
 #games { scroll-margin-top: 90px; }
+
+/* ---------- SHY PHONE (contacts micro-interaction) ---------- */
+.contact-list .phone-item { padding: clamp(20px, 3vw, 34px) 0 0; }
+.phone-row { display: grid; grid-template-columns: minmax(110px, 1fr) minmax(0, 4fr); align-items: baseline; gap: 20px; }
+.phone-row .label { font-size: 0.72rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); }
+.phone-row .value { font-family: var(--serif); font-style: italic; font-size: clamp(1.5rem, 4.6vw, 3.6rem); line-height: 1.1; color: var(--muted); }
+.phone-arena { position: relative; height: clamp(120px, 16vw, 170px); margin-top: 6px; }
+.phone-btn {
+  position: absolute;
+  left: 0; top: 0;
+  width: 58px; height: 58px;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  color: var(--gold-hi);
+  background: radial-gradient(circle at 30% 25%, rgba(241, 222, 184, 0.18), rgba(107, 15, 38, 0.55) 70%);
+  border: 1px solid var(--line-strong);
+  border-radius: 50%;
+  box-shadow: 0 10px 26px -8px rgba(0, 0, 0, 0.8), 0 0 18px rgba(201, 168, 122, 0.18);
+  cursor: pointer;
+  touch-action: manipulation;
+  will-change: transform;
+  transition: transform 1.5s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.5s ease;
+}
+.phone-btn svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; transition: transform 1.5s cubic-bezier(0.22, 1, 0.36, 1); }
+.phone-btn:hover svg { animation: shiver 0.6s ease-in-out; }
+.phone-btn.moving svg { transform: rotate(-24deg) scale(1.1); }
+.phone-btn.done { cursor: default; border-color: var(--gold); box-shadow: 0 0 26px rgba(201, 168, 122, 0.4); animation: pulse 0.9s var(--ease); }
+.phone-note {
+  margin: 8px 0 clamp(20px, 3vw, 34px);
+  padding: 20px 24px;
+  max-width: 54ch;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: clamp(1.1rem, 2vw, 1.4rem);
+  line-height: 1.5;
+  color: var(--ink);
+  border: 1px solid transparent;
+  background: linear-gradient(#150911, #150911) padding-box, var(--metal) border-box;
+  box-shadow: 0 24px 50px -24px rgba(0, 0, 0, 0.9), 0 0 30px rgba(163, 20, 47, 0.25);
+}
+.phone-note:empty { display: none; }
+.phone-note.show { animation: noteIn 1s var(--ease) both; }
+.phone-note a { color: var(--gold-hi); text-underline-offset: 4px; text-decoration-color: var(--gold); }
+@keyframes shiver { 0%, 100% { transform: rotate(0); } 20% { transform: rotate(-14deg); } 40% { transform: rotate(12deg); } 60% { transform: rotate(-8deg); } 80% { transform: rotate(5deg); } }
+@keyframes pulse { 0% { transform: var(--tf) scale(1); } 40% { transform: var(--tf) scale(1.18); } 100% { transform: var(--tf) scale(1); } }
+@keyframes noteIn { from { opacity: 0; transform: translateY(14px) scale(0.98); clip-path: inset(0 100% 0 0); } to { opacity: 1; transform: none; clip-path: inset(0 0 0 0); } }
+@media (max-width: 760px) { .phone-row { grid-template-columns: 1fr; gap: 4px; } }
+@media (prefers-reduced-motion: reduce) {
+  .phone-btn, .phone-btn svg { transition: none; }
+  .phone-btn:hover svg, .phone-btn.done, .phone-note.show { animation: none; }
+}
+
+.phone-hint { position: absolute; left: 0; bottom: 0; margin: 0; max-width: 34ch; font-size: 0.8rem; line-height: 1.5; color: var(--gold-hi); letter-spacing: 0.04em; transition: opacity 0.5s ease; }
+.phone-hint small { display: block; color: var(--muted); font-style: italic; font-size: 0.92em; }
+.phone-hint.swap { opacity: 0; }
+.phone-btn:not(.done)::before { content: ""; position: absolute; inset: -7px; border-radius: 50%; border: 1px solid var(--gold); opacity: 0; animation: beckon 2.6s ease-out infinite; pointer-events: none; }
+@keyframes beckon { 0% { transform: scale(0.85); opacity: 0.7; } 100% { transform: scale(1.5); opacity: 0; } }
+.phone-note .it { display: block; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--line); font-size: 0.88em; color: var(--muted); }
+@media (prefers-reduced-motion: reduce) { .phone-btn::before { animation: none; opacity: 0; } }
+
+.phone-btn .oops {
+  position: absolute;
+  top: 50%;
+  left: calc(100% + 12px);
+  padding: 0 4px;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 1.2rem;
+  line-height: 1.4;
+  white-space: nowrap;
+  color: var(--gold-hi);
+  text-shadow: 0 0 14px rgba(10, 4, 6, 0.9);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-50%) scale(0.8);
+  transition: opacity 0.35s ease, transform 0.5s var(--ease);
+}
+.phone-btn .oops.left { left: auto; right: calc(100% + 12px); }
+.phone-btn .oops.show { opacity: 1; transform: translateY(-50%) scale(1); }
+
+/* phone row reacts to hover like the other contact rows */
+.contact-list .phone-item { position: relative; }
+.contact-list .phone-item::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: radial-gradient(500px circle at var(--mx, 30%) 30%, rgba(163, 20, 47, 0.28), transparent 60%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+.contact-list .phone-item:hover::before { opacity: 1; }
+.phone-row { transition: padding 0.5s var(--ease); }
+.phone-item:hover .phone-row { padding-left: 18px; }
+.phone-item:hover .phone-row .value { background-image: var(--metal); background-size: 260% 100%; -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent; }
+@media (max-width: 760px) { .phone-item:hover .phone-row { padding-left: 0; } }
