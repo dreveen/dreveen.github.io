@@ -16,7 +16,14 @@
   const today = new Date();
   let view = new Date(today.getFullYear(), today.getMonth(), 1);
   let sel = keyOf(today);
-  let prio = 1;
+  let tcol = 0;
+  // optional colour chosen for a whole day; without one, a day takes the colour of its first task
+  const DKEY = "dreveen-planner-days";
+  let dayCol = {};
+  try { dayCol = JSON.parse(localStorage.getItem(DKEY)) || {}; } catch (e) { dayCol = {}; }
+  function saveDays() { try { localStorage.setItem(DKEY, JSON.stringify(dayCol)); } catch (e) {} }
+  const taskPick = METAL.picker($("plPrio"), 0, (i) => { tcol = i; });
+  const dayPick = METAL.picker($("plDayCol"), undefined, (i) => { dayCol[sel] = i; saveDays(); renderCal(); });
 
   function renderWeek() {
     // Monday first
@@ -38,8 +45,9 @@
       const k = y + "-" + pad(m + 1) + "-" + pad(d);
       const items = tasks[k] || [];
       const open = items.filter((t) => !t.done).length;
-      const cls = (k === keyOf(today) ? " today" : "") + (k === sel ? " sel" : "") + (items.length ? " has" : "") + (items.length && !open ? " all" : "");
-      html += '<button type="button" class="d' + cls + '" data-k="' + k + '">' + d + "</button>";
+      const ci = dayCol[k] !== undefined ? dayCol[k] : items.length ? (items.find((t) => !t.done) || items[0]).c || 0 : -1;
+      const cls = (k === keyOf(today) ? " today" : "") + (k === sel ? " sel" : "") + (items.length ? " has" : "") + (items.length && !open ? " all" : "") + (ci >= 0 ? " col" : "");
+      html += '<button type="button" class="d' + cls + '" data-k="' + k + '"' + (ci >= 0 ? ' style="--dm:' + METAL.grad(ci) + '"' : "") + ">" + d + "</button>";
     }
     grid.innerHTML = html;
   }
@@ -47,11 +55,12 @@
   function renderDay() {
     const [y, m, d] = sel.split("-").map(Number);
     $("plDate").textContent = new Date(y, m - 1, d).toLocaleDateString(locale(), { weekday: "long", day: "numeric", month: "long" });
-    const items = (tasks[sel] || []).slice().sort((a, b) => (a.done - b.done) || (a.time || "99").localeCompare(b.time || "99") || (b.p - a.p));
+    const items = (tasks[sel] || []).slice().sort((a, b) => (a.done - b.done) || (a.time || "99").localeCompare(b.time || "99"));
     list.innerHTML = "";
     items.forEach((t) => {
       const li = document.createElement("li");
-      li.className = "p" + t.p + (t.done ? " done" : "");
+      li.className = t.done ? "done" : "";
+      li.style.setProperty("--tm", METAL.grad(t.c));
       const chk = document.createElement("button");
       chk.type = "button"; chk.className = "chk"; chk.setAttribute("aria-pressed", t.done);
       chk.setAttribute("aria-label", I18N.pick("Done", "Fatto"));
@@ -68,12 +77,43 @@
     const n = items.length, done = items.filter((t) => t.done).length;
     $("plBar").style.width = (n ? (done / n) * 100 : 0) + "%";
     $("plCount").textContent = n ? done + " / " + n + " " + I18N.pick("completed", "completati") : "";
+    const cheer = $("plCheer");
+    cheer.hidden = !(n > 0 && done === n);
+    cheer.textContent = I18N.pick("Perfect day. Your rose is in full bloom.", "Giornata perfetta. La tua rosa è sbocciata.");
     $("plEmpty").hidden = n > 0;
     $("plClear").hidden = !done;
+    $("plDay").value = sel;
+    dayPick.set(dayCol[sel]);
     text.placeholder = I18N.pick("What do you want to do?", "Cosa vuoi fare?");
   }
 
-  function renderAll() { renderWeek(); renderCal(); renderDay(); }
+  function renderAgenda() {
+    const t0 = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+    const open = (tasks[keyOf(t0)] || []).filter((t) => !t.done).length;
+    $("plToday2").textContent = open
+      ? open + " " + (open === 1 ? I18N.pick("thing to do today", "impegno per oggi") : I18N.pick("things to do today", "impegni per oggi"))
+      : I18N.pick("Nothing left for today", "Oggi non hai impegni");
+    const ul = $("plUp");
+    ul.innerHTML = "";
+    let any = false;
+    for (let i = 0; i < 14; i++) {
+      const d = new Date(t0.getFullYear(), t0.getMonth(), t0.getDate() + i), k = keyOf(d);
+      const items = (tasks[k] || []).filter((t) => !t.done);
+      if (!items.length) continue;
+      any = true;
+      const li = document.createElement("li"), b = document.createElement("button"), when = document.createElement("b"), what = document.createElement("span");
+      b.type = "button";
+      when.textContent = i === 0 ? I18N.pick("Today", "Oggi") : i === 1 ? I18N.pick("Tomorrow", "Domani") : d.toLocaleDateString(locale(), { weekday: "short", day: "numeric", month: "short" });
+      what.textContent = items.map((t) => (t.time ? t.time + " " : "") + t.text).join("  ·  ");
+      b.append(when, what);
+      b.addEventListener("click", () => { sel = k; view = new Date(d.getFullYear(), d.getMonth(), 1); renderAll(); $("planner").scrollIntoView({ behavior: "smooth" }); });
+      li.appendChild(b);
+      ul.appendChild(li);
+    }
+    $("plUpEmpty").hidden = any;
+  }
+
+  function renderAll() { renderWeek(); renderCal(); renderDay(); renderAgenda(); }
 
   grid.addEventListener("click", (e) => {
     const b = e.target.closest("[data-k]");
@@ -83,12 +123,7 @@
   $("plPrev").addEventListener("click", () => { view = new Date(view.getFullYear(), view.getMonth() - 1, 1); renderCal(); });
   $("plNext").addEventListener("click", () => { view = new Date(view.getFullYear(), view.getMonth() + 1, 1); renderCal(); });
   $("plToday").addEventListener("click", () => { view = new Date(today.getFullYear(), today.getMonth(), 1); sel = keyOf(today); renderAll(); });
-  $("plPrio").addEventListener("click", (e) => {
-    const b = e.target.closest("[data-p]");
-    if (!b) return;
-    prio = Number(b.dataset.p);
-    $("plPrio").querySelectorAll("button").forEach((x) => x.classList.toggle("on", x === b));
-  });
+  $("plDayAuto").addEventListener("click", () => { delete dayCol[sel]; saveDays(); renderAll(); });
   $("plClear").addEventListener("click", () => {
     tasks[sel] = (tasks[sel] || []).filter((t) => !t.done);
     if (!tasks[sel].length) delete tasks[sel];
@@ -98,10 +133,13 @@
     e.preventDefault();
     const v = text.value.trim();
     if (!v) return;
-    (tasks[sel] = tasks[sel] || []).push({ text: v, time: time.value, p: prio, done: false });
+    const day = $("plDay").value || sel;
+    sel = day; const p = day.split("-").map(Number); view = new Date(p[0], p[1] - 1, 1);
+    (tasks[sel] = tasks[sel] || []).push({ text: v, time: time.value, c: tcol, done: false });
     text.value = ""; time.value = "";
     save(); renderAll(); text.focus();
   });
+  $("plDay").addEventListener("change", (e) => { if (!e.target.value) return; sel = e.target.value; const p = sel.split("-").map(Number); view = new Date(p[0], p[1] - 1, 1); renderAll(); });
   window.addEventListener("langchange", renderAll);
   renderAll();
 })();

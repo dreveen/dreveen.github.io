@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400&family=Playfair+Display:ital,wght@0,400;1,400&family=Great+Vibes&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=72">
+  <link rel="stylesheet" href="style.css?v=90">
 </head>
 <body>
   <canvas class="bg-rose" id="bgRose" aria-hidden="true"></canvas>
@@ -36,6 +36,13 @@
     </h1>
     <p class="lead reveal" style="--d:.3s" data-en="Plan your days with calm. Pick a date, add what matters and tick it off. Everything stays saved in your browser." data-it="Organizza le tue giornate con calma. Scegli una data, aggiungi ciò che conta e spuntalo. Tutto resta salvato nel tuo browser.">Plan your days with calm. Pick a date, add what matters and tick it off. Everything stays saved in your browser.</p>
 
+    <section class="glass agenda reveal" id="agenda" aria-label="Coming up">
+      <p class="ag-today" id="plToday2"></p>
+      <p class="section-num" data-en="Coming up · next 14 days" data-it="In arrivo · prossimi 14 giorni">Coming up · next 14 days</p>
+      <ul class="ag-list" id="plUp"></ul>
+      <p class="pl-empty" id="plUpEmpty" data-en="Nothing planned yet. Pick a future day below and add something." data-it="Ancora niente in programma. Scegli un giorno futuro qui sotto e aggiungi qualcosa.">Nothing planned yet. Pick a future day below and add something.</p>
+    </section>
+
     <div class="planner reveal" style="--d:.4s" id="planner">
       <section class="glass pl-cal" aria-label="Calendar">
         <div class="pl-head">
@@ -52,16 +59,16 @@
         <p class="pl-date" id="plDate"></p>
         <div class="pl-prog"><i id="plBar"></i></div>
         <p class="pl-count" id="plCount"></p>
+        <p class="pl-cheer" id="plCheer" hidden></p>
         <form class="pl-form" id="plForm" autocomplete="off">
           <input id="plText" type="text" maxlength="90" required>
+          <label class="pl-lab" for="plDay" data-en="Day" data-it="Giorno">Day</label>
+          <input id="plDay" type="date" aria-label="Date">
           <input id="plTime" type="time" aria-label="Time">
-          <div class="pl-prio" id="plPrio" role="group" aria-label="Priority">
-            <button type="button" data-p="1" class="on" aria-label="Low"></button>
-            <button type="button" data-p="2" aria-label="Medium"></button>
-            <button type="button" data-p="3" aria-label="High"></button>
-          </div>
+          <div class="pl-prio" id="plPrio" role="group" aria-label="Colour"></div>
           <button class="btn solid" type="submit" data-en="Add" data-it="Aggiungi">Add</button>
         </form>
+        <div class="pl-daycol"><span data-en="Day colour" data-it="Colore del giorno">Day colour</span><div class="pl-prio" id="plDayCol" role="group" aria-label="Day colour"></div><button class="pl-clear" id="plDayAuto" type="button" data-en="auto" data-it="auto">auto</button></div>
         <ul class="pl-list" id="plList"></ul>
         <p class="pl-empty" id="plEmpty" data-en="Nothing planned. A free day is a gift." data-it="Niente in programma. Un giorno libero è un regalo.">Nothing planned. A free day is a gift.</p>
         <button class="pl-clear" id="plClear" type="button" data-en="Clear completed" data-it="Elimina completati">Clear completed</button>
@@ -70,7 +77,7 @@
 
     <section class="glass habits reveal" id="habits" aria-label="Habits">
       <div class="hb-top">
-        <h2 class="hb-title"><span class="section-num" data-en="Habit tracker" data-it="Abitudini">Habit tracker</span><span data-en="Fill a square every day" data-it="Colora un quadratino ogni giorno">Fill a square every day</span></h2>
+        <h2 class="hb-title" id="hbTitle" role="button" tabindex="0" title="Tap to see your consistency"><span class="section-num" data-en="Habit tracker" data-it="Abitudini">Habit tracker</span><span data-en="Fill a square every day" data-it="Colora un quadratino ogni giorno">Fill a square every day</span></h2>
         <form class="hb-form" id="hbForm" autocomplete="off">
           <input id="hbText" type="text" maxlength="40" required>
           <div class="hb-pal" id="hbPal" role="group" aria-label="Colour"></div>
@@ -79,14 +86,27 @@
       </div>
       <ul class="hb-list" id="hbList"></ul>
       <p class="pl-empty" id="hbEmpty" data-en="No habits yet. Start with one small thing, like drinking water." data-it="Ancora nessuna abitudine. Parti da una cosa piccola, come bere acqua.">No habits yet. Start with one small thing, like drinking water.</p>
-      <div class="hb-chart" id="hbChart">
-        <div class="hb-score"><b id="hbPct">0%</b><span data-en="consistency, last 14 days" data-it="costanza, ultimi 14 giorni">consistency, last 14 days</span></div>
-        <svg id="hbSvg" viewBox="0 0 560 150" preserveAspectRatio="none" role="img" aria-label="Consistency chart"></svg>
+      <button class="btn hb-open" id="hbOpen" type="button" aria-expanded="false" hidden></button>
+      <div class="hb-chart" id="hbChart" hidden>
+        <p class="hb-who" id="hbWho"></p>
+        <div class="hb-hero">
+          <div class="hb-ringbox">
+            <svg class="hb-ring" id="hbRing" viewBox="0 0 120 120" aria-hidden="true"></svg>
+            <div class="hb-pctbox"><b id="hbPct">0%</b><small data-en="consistency" data-it="costanza">consistency</small></div>
+          </div>
+          <div class="hb-msg">
+            <p class="hb-cheer" id="hbMsg"></p>
+            <p class="hb-stats" id="hbStats"></p>
+            <div class="hb-goal"><span id="hbGoalTxt"></span><div class="pl-prog"><i id="hbGoal"></i></div></div>
+          </div>
+        </div>
+        <p class="hb-cap" data-en="Last 14 days" data-it="Ultimi 14 giorni">Last 14 days</p>
+        <svg id="hbSvg" viewBox="0 0 560 168" role="img" aria-label="Consistency chart"></svg>
       </div>
     </section>
 
-    <a class="row reveal" href="projects.html" style="margin-top: clamp(60px, 10vw, 110px); border-top: 1px solid var(--line);">
-      <span class="n">&larr;</span><span class="t" data-en="Projects" data-it="Progetti">Projects</span><span class="d" data-en="Back to all projects" data-it="Torna a tutti i progetti">Back to all projects</span>
+    <a class="row reveal" href="miniprojects.html" style="margin-top: clamp(60px, 10vw, 110px); border-top: 1px solid var(--line);">
+      <span class="n">&larr;</span><span class="t" data-en="Mini projects" data-it="Mini progetti">Mini projects</span><span class="d" data-en="Back to all mini projects" data-it="Torna ai mini progetti">Back to all mini projects</span>
     </a>
   </main>
 
@@ -100,10 +120,11 @@
   </footer>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-  <script src="i18n.js?v=72"></script>
-  <script src="rose.js?v=72"></script>
-  <script src="script.js?v=72"></script>
-  <script src="planner.js?v=72"></script>
-  <script src="habits.js?v=72"></script>
+  <script src="i18n.js?v=90"></script>
+  <script src="rose.js?v=90"></script>
+  <script src="script.js?v=90"></script>
+  <script src="palette.js?v=90"></script>
+  <script src="planner.js?v=90"></script>
+  <script src="habits.js?v=90"></script>
 </body>
 </html>

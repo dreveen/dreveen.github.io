@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" data-page="inner">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Mini projects | Dreveen</title>
+  <meta name="description" content="Mini projects by Denise Guadagnuolo: small useful things built to practise.">
+  <meta name="theme-color" content="#0a0406">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%230a0406'/><text x='50' y='70' font-size='64' text-anchor='middle' fill='%23c9a87a' font-family='serif' font-style='italic'>D</text></svg>">
+  <script>document.documentElement.classList.add("js");</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400&family=Playfair+Display:ital,wght@0,400;1,400&family=Great+Vibes&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css?v=90">
+</head>
+<body>
+  <canvas class="bg-rose" id="bgRose" aria-hidden="true"></canvas>
+
+  <header class="site-nav">
+    <a class="logo" href="index.html">Dreveen</a>
+    <button class="menu-toggle" aria-expanded="false" aria-controls="menu">Menu</button>
+    <button class="lang" type="button" aria-label="Language: English. Switch to Italian"><span data-l="en" class="on">EN</span><i>/</i><span data-l="it">IT</span></button>
+    <nav class="links" id="menu">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="projects.html" aria-current="page">Projects</a>
+      <a href="games.html">Games</a>
+      <a href="contacts.html">Contacts</a>
+    </nav>
+  </header>
+
+  <main class="page">
+    <p class="eyebrow reveal" data-en="Projects" data-it="Progetti">Projects</p>
+    <h1 class="display reveal" style="--d:.1s">
+      <span data-en="Mini" data-it="Mini">Mini</span>
+      <span class="shift metal" data-en="projects" data-it="progetti">projects</span>
+    </h1>
+    <p class="lead reveal" style="--d:.3s" data-en="Small useful things I build to practise and have fun. Pick one and try it." data-it="Piccole cose utili che costruisco per allenarmi e divertirmi. Scegline una e provala.">Small useful things I build to practise and have fun. Pick one and try it.</p>
+
+    <div class="picker reveal" style="--d:.4s">
+      <a class="pick glass" href="planner.html">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.500" y="5" width="17" height="15.500" rx="2"/><path d="M3.500 10h17M8 3v4M16 3v4"/><path d="M8 14.500l2 2 4-4"/></svg>
+        <b>Planner</b><small data-en="Calendar, to-do list, habits" data-it="Calendario, to-do list, abitudini">Calendar, to-do list, habits</small>
+      </a>
+      <div class="pick glass soon" aria-disabled="true">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.500"/><path d="M12 7.500V12l3 2"/></svg>
+        <b data-en="More soon" data-it="Presto altri">More soon</b><small data-en="New mini projects" data-it="Nuovi mini progetti">New mini projects</small>
+      </div>
+    </div>
+
+    <a class="row reveal" href="projects.html" style="margin-top: clamp(60px, 10vw, 110px); border-top: 1px solid var(--line);">
+      <span class="n">&larr;</span><span class="t" data-en="Projects" data-it="Progetti">Projects</span><span class="d" data-en="Back to all projects" data-it="Torna a tutti i progetti">Back to all projects</span>
+    </a>
+  </main>
+
+  <footer>
+    <span>&copy; <span id="year">2026</span> Denise Guadagnuolo</span>
+    <nav aria-label="Social">
+      <a href="https://github.com/dreveen" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://www.instagram.com/dreveen" target="_blank" rel="noopener">Instagram</a>
+      <a href="https://www.linkedin.com/in/dreveen" target="_blank" rel="noopener">LinkedIn</a>
+    </nav>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="i18n.js?v=90"></script>
+  <script src="rose.js?v=90"></script>
+  <script src="script.js?v=90"></script>
+</body>
+</html>
