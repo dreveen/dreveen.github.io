@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400&family=Playfair+Display:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=18">
+  <link rel="stylesheet" href="style.css?v=23">
 </head>
 <body>
   <canvas class="bg-rose" id="bgRose" aria-hidden="true"></canvas>
@@ -37,8 +37,13 @@
 
     <div class="split">
       <aside class="facts reveal" style="--d:.2s">
-        <div class="glass fact"><small>Studying</small><strong>Computer Engineering</strong></div>
-        <div class="glass fact"><small>University</small><strong>UNICAL</strong></div>
+        <p class="profile-title">Profile</p>
+        <dl class="profile">
+          <div><dt>Studying</dt><dd>Computer Engineering</dd></div>
+          <div><dt>University</dt><dd>UNICAL</dd></div>
+          <div><dt>Based in</dt><dd>Italy</dd></div>
+        <div><dt>Skills</dt><dd><a class="more" href="#skills">Java, Python, PHP &amp; more</a></dd></div>
+        </dl>
       </aside>
       <div class="story reveal" style="--d:.3s">
         <p>
@@ -56,7 +61,20 @@
       </div>
     </div>
 
-    <h2 class="section-title reveal"><span class="section-num">02 &mdash; Philosophy</span>Technology, <span class="metal">creativity</span> and constant growth</h2>
+    <h2 class="section-title reveal" id="skills"><span class="section-num">02 &mdash; Skills</span>My <span class="metal">tech</span> stack</h2>
+    <ul class="chips reveal">
+      <li>Java</li>
+      <li>Python</li>
+      <li>PHP</li>
+      <li>SQL</li>
+      <li>Spring</li>
+      <li>JavaScript</li>
+      <li>HTML</li>
+      <li>CSS</li>
+      <li class="more-chip"><a href="https://www.linkedin.com/in/dreveen" target="_blank" rel="noopener" aria-label="And more: see my LinkedIn profile">&amp; more &#8599;</a></li>
+    </ul>
+
+    <h2 class="section-title reveal"><span class="section-num">03 &mdash; Philosophy</span>Technology, <span class="metal">creativity</span> and constant growth</h2>
     <div class="duo">
       <p class="lead reveal">
         I believe computer science is a balance between logic and creativity: writing code is not
@@ -80,7 +98,7 @@
   </footer>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-  <script src="rose.js?v=18"></script>
-  <script src="script.js?v=18"></script>
+  <script src="rose.js?v=23"></script>
+  <script src="script.js?v=23"></script>
 </body>
 </html>
