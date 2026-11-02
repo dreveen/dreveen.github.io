@@ -147,8 +147,33 @@ if (intro && introOn) {
   light.className = "moon-light idle";
   const moon = document.createElement("div");
   moon.className = "moon";
-  moon.innerHTML =
-    '<svg viewBox="0 0 40 40" aria-hidden="true"><path d="M28 5 A16 16 0 1 0 28 35 A15 15 0 0 1 28 5 Z"/></svg>';
+  // inside "The real me" the moon turns into a sunflower (Van Gogh's flower)
+  const sun = document.body.classList.contains("me");
+  if (sun) {
+    // the cursor is the sunflower picture she chose: its white background is removed once, in the browser
+    moon.classList.add("sunflower");
+    const pic = new Image();
+    pic.onload = () => {
+      const c = document.createElement("canvas");
+      const S = 168;
+      c.width = c.height = S;
+      const cx = c.getContext("2d");
+      const k = Math.min(S / pic.width, S / pic.height);
+      cx.drawImage(pic, (S - pic.width * k) / 2, (S - pic.height * k) / 2, pic.width * k, pic.height * k);
+      const im = cx.getImageData(0, 0, S, S), d = im.data;
+      for (let i = 0; i < d.length; i += 4) {
+        const m = Math.min(d[i], d[i + 1], d[i + 2]);
+        if (m > 205) d[i + 3] = Math.max(0, Math.round(((255 - m) / 50) * 255));
+      }
+      cx.putImageData(im, 0, 0);
+      moon.innerHTML = '<img alt="" draggable="false" src="' + c.toDataURL("image/png") + '">';
+    };
+    pic.src = "sunflower.webp";
+  } else {
+    moon.innerHTML =
+      '<svg viewBox="0 0 40 40" aria-hidden="true"><path d="M28 5 A16 16 0 1 0 28 35 A15 15 0 0 1 28 5 Z"/></svg>';
+  }
+  const offX = sun ? 21 : 9, offY = sun ? 21 : 12;
   document.body.append(light, moon);
   root.classList.add("has-moon");
 
@@ -173,7 +198,7 @@ if (intro && introOn) {
   (function loop() {
     lx += (x - lx) * 0.2;
     ly += (y - ly) * 0.2;
-    moon.style.transform = "translate(" + (x - 9) + "px," + (y - 12) + "px)";
+    moon.style.transform = "translate(" + (x - offX) + "px," + (y - offY) + "px)";
     light.style.transform = "translate(" + lx + "px," + ly + "px)";
     requestAnimationFrame(loop);
   })();

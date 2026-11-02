@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en" data-page="inner">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>The real me | Dreveen</title>
+  <meta name="description" content="A quiet room about the real Denise Guadagnuolo, beyond the code.">
+  <meta name="theme-color" content="#050d24">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%230a0406'/><text x='50' y='70' font-size='64' text-anchor='middle' fill='%23c9a87a' font-family='serif' font-style='italic'>D</text></svg>">
+  <script>document.documentElement.classList.add("js");</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400&family=Playfair+Display:ital,wght@0,400;1,400&family=Great+Vibes&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css?v=124">
+  <link rel="stylesheet" href="me.css?v=124">
+</head>
+<body class="me">
+  <div class="me-world" aria-hidden="true">
+    <canvas class="me-art" id="meArt"></canvas>
+    <canvas class="me-sky" id="meSky"></canvas>
+    <canvas class="me-stars" id="meStars"></canvas>
+  </div>
+  <div class="me-veil" aria-hidden="true"></div>
+
+  <div class="me-gate" id="meGate" role="dialog" aria-label="Entrance">
+    <button class="gate-frame" id="meFrame" type="button" aria-label="Enter the painting"><span class="gf-art" aria-hidden="true"></span></button>
+    <div class="gate-plaque">
+      <b data-en="The real me" data-it="La vera me">The real me</b>
+      <span data-en="Dreveen, 2026" data-it="Dreveen, 2026">Dreveen, 2026</span>
+      <small data-en="Code, curiosity and sky" data-it="Codice, curiosità e cielo">Code, curiosity and sky</small>
+    </div>
+    <button class="gate-btn" id="meEnter" type="button" data-en="Step into the painting" data-it="Entra nel quadro">Step into the painting</button>
+    <a class="gate-back" href="about.html" data-en="Not now" data-it="Non ora">Not now</a>
+  </div>
+
+  <header class="site-nav">
+    <a class="logo" href="index.html">Dreveen</a>
+    <button class="menu-toggle" aria-expanded="false" aria-controls="menu">Menu</button>
+    <button class="lang" type="button" aria-label="Language: English. Switch to Italian"><span data-l="en" class="on">EN</span><i>/</i><span data-l="it">IT</span></button>
+    <nav class="links" id="menu">
+      <a href="index.html">Home</a>
+      <a href="about.html" aria-current="page">About</a>
+      <a href="projects.html">Projects</a>
+      <a href="games.html">Games</a>
+      <a href="contacts.html">Contacts</a>
+    </nav>
+  </header>
+
+  <main class="page me-page" id="mePage">
+    <section class="room">
+      <p class="eyebrow reveal" data-en="The real me" data-it="La vera me">The real me</p>
+      <h1 class="display reveal" style="--d:.1s">
+        <span data-en="Beyond" data-it="Oltre">Beyond</span>
+        <span class="shift metal" data-en="the code" data-it="il codice">the code</span>
+      </h1>
+      <p class="lead reveal" style="--d:.3s" data-en="Here the screen goes quiet. This is the part of me that does not compile: art, music, long days at the gym and a slow life." data-it="Qui lo schermo si fa silenzioso. Questa è la parte di me che non si compila: l'arte, la musica, giornate intere in palestra e la vita lenta.">Here the screen goes quiet. This is the part of me that does not compile: art, music, long days at the gym and a slow life.</p>
+      <p class="scroll-hint reveal" style="--d:.5s" data-en="Wander slowly" data-it="Cammina piano">Wander slowly</p>
+    </section>
+
+    <section class="room">
+      <h2 class="section-title reveal"><span class="section-num" data-en="01 — Wonder" data-it="01 — Meraviglia">01 — Wonder</span><span data-en="What I love" data-it="Ciò che amo">What I love</span></h2>
+      <div class="me-cards">
+        <article class="me-card reveal">
+          <h3 data-en="Art" data-it="Arte">Art</h3>
+          <p data-en="I do not paint, I look. I can stand for hours in front of a painting, and Van Gogh's swirling skies make even movement feel calm." data-it="Non dipingo, guardo. Posso restare ore davanti a un quadro, e i cieli vorticosi di Van Gogh mi fanno sentire calmo anche il movimento.">I do not paint, I look. I can stand for hours in front of a painting, and Van Gogh's swirling skies make even movement feel calm.</p>
+        </article>
+        <article class="me-card reveal" style="--d:.15s">
+          <h3 data-en="Music" data-it="Musica">Music</h3>
+          <p data-en="Music is the soundtrack of my days. It follows me when I study, when I train and when I do nothing at all." data-it="La musica è la colonna sonora delle mie giornate. Mi accompagna quando studio, quando mi alleno e quando non faccio proprio niente.">Music is the soundtrack of my days. It follows me when I study, when I train and when I do nothing at all.</p>
+        </article>
+        <article class="me-card reveal" style="--d:.3s">
+          <h3 data-en="The gym" data-it="La palestra">The gym</h3>
+          <p data-en="I can shut myself in the gym for whole days. Between weights and effort, my mind finally goes quiet." data-it="Posso chiudermi in palestra per intere giornate. Tra pesi e fatica, la mente finalmente si fa silenziosa.">I can shut myself in the gym for whole days. Between weights and effort, my mind finally goes quiet.</p>
+        </article>
+        <article class="me-card reveal" style="--d:.45s">
+          <h3 data-en="Slow life" data-it="Vita lenta">Slow life</h3>
+          <p data-en="I choose the slow life: no rush, small things done with care, and time that is not measured in deadlines." data-it="Scelgo la vita lenta: niente fretta, piccole cose fatte con cura e un tempo che non si misura in scadenze.">I choose the slow life: no rush, small things done with care, and time that is not measured in deadlines.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="room room-quote">
+      <blockquote class="reveal">
+        <p data-en="I often think that the night is more alive and more richly coloured than the day." data-it="Penso spesso che la notte sia più viva e più riccamente colorata del giorno.">I often think that the night is more alive and more richly coloured than the day.</p>
+        <cite>Vincent van Gogh</cite>
+      </blockquote>
+    </section>
+
+    <section class="room room-exit">
+      <p class="lead reveal" data-en="Thank you for staying a little. Take the quiet with you." data-it="Grazie per esserti fermato un po'. Porta con te la calma.">Thank you for staying a little. Take the quiet with you.</p>
+      <a class="row reveal" href="about.html" style="border-top: 1px solid var(--line);">
+        <span class="n">&larr;</span><span class="t" data-en="About" data-it="Chi sono">About</span><span class="d" data-en="Leave the room, back to the site" data-it="Esci dalla stanza e torna al sito">Leave the room, back to the site</span>
+      </a>
+    </section>
+  </main>
+
+  <footer>
+    <span>&copy; <span id="year">2026</span> Denise Guadagnuolo</span>
+    <nav aria-label="Social">
+      <a href="https://github.com/dreveen" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://www.instagram.com/dreveen" target="_blank" rel="noopener">Instagram</a>
+      <a href="https://www.linkedin.com/in/dreveen" target="_blank" rel="noopener">LinkedIn</a>
+    </nav>
+  </footer>
+
+  <script src="i18n.js?v=124"></script>
+  <script src="script.js?v=124"></script>
+  <script src="me.js?v=124"></script>
+</body>
+</html>

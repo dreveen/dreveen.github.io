@@ -1,0 +1,80 @@
+/* "The real me": a quiet, painted night sky, inspired by immersive Van Gogh rooms.
+   Different mood on purpose: deep blues and soft yellows instead of bordeaux. */
+body.me {
+  --bg: #050d24;
+  --ink: #eef4ff;
+  --muted: #a9bde0;
+  --gold: #f2d25b;
+  --gold-hi: #ffe9a0;
+  --line: rgba(160, 190, 255, 0.22);
+  --line-strong: rgba(160, 190, 255, 0.5);
+  --wine: #0d2a73;
+  --metal: linear-gradient(105deg, #b88a1c 0%, #f2d25b 20%, #fff2b8 34%, #f2d25b 48%, #b88a1c 64%, #f2d25b 80%, #fff2b8 92%, #f2d25b 100%);
+  background: #050d24;
+  color: var(--ink);
+}
+
+/* painted sky (two canvases) that slowly zooms while you scroll, like walking down the corridor */
+.me-world { position: fixed; inset: 0; z-index: 0; transform: scale(calc(1 + var(--p, 0) * 0.14)) translateY(calc(var(--p, 0) * -34px)); transform-origin: 50% 40%; will-change: transform; }
+.me-art, .me-sky, .me-stars { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.me-veil { position: fixed; inset: 0; z-index: 1; pointer-events: none; background: linear-gradient(rgba(5, 13, 36, 0.16), rgba(5, 13, 36, 0.16)), radial-gradient(ellipse at 50% 45%, rgba(5, 13, 36, 0) 30%, rgba(5, 13, 36, 0.55) 100%), linear-gradient(180deg, rgba(5, 13, 36, 0.35), rgba(5, 13, 36, 0) 30%, rgba(5, 13, 36, 0) 70%, rgba(5, 13, 36, 0.5)); }
+
+.me .site-nav { z-index: 60; }
+.me-page, .me footer { position: relative; z-index: 2; }
+.me .site-nav.scrolled { background: rgba(5, 13, 36, 0.72); }
+.me .display, .me .section-title { text-shadow: 0 2px 30px rgba(5, 13, 36, 0.8); }
+.me .lead { text-shadow: 0 1px 18px rgba(5, 13, 36, 0.9); color: #dbe7ff; }
+.me .eyebrow { color: var(--gold); }
+
+.room { min-height: 78vh; display: flex; flex-direction: column; justify-content: center; padding: clamp(40px, 8vw, 90px) 0; }
+.room:first-child { min-height: 86vh; }
+.scroll-hint { margin-top: 36px; font-size: 0.72rem; letter-spacing: 0.34em; text-transform: uppercase; color: var(--gold); }
+.scroll-hint::after { content: ""; display: block; width: 1px; height: 54px; margin: 14px 0 0 4px; background: linear-gradient(var(--gold), transparent); animation: hintDrift 3.4s ease-in-out infinite; }
+@keyframes hintDrift { 50% { transform: translateY(10px); opacity: 0.4; } }
+
+.me-cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(14px, 2.4vw, 28px); margin-top: 8px; }
+.me-card { padding: clamp(22px, 3vw, 34px); background: linear-gradient(160deg, rgba(14, 38, 104, 0.58), rgba(7, 18, 52, 0.62)); border: 1px solid var(--line); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); box-shadow: 0 30px 60px -34px rgba(0, 0, 0, 0.85), inset 0 0 40px rgba(60, 110, 220, 0.08); transition: transform 0.8s var(--ease), border-color 0.6s ease, box-shadow 0.8s ease; }
+.me-card:hover { transform: translateY(-6px); border-color: var(--gold); box-shadow: 0 30px 70px -30px rgba(0, 0, 0, 0.9), 0 0 40px rgba(242, 210, 91, 0.18); }
+.me-card h3 { margin: 0 0 12px; font-family: var(--serif); font-style: italic; font-weight: 400; font-size: clamp(1.5rem, 2.6vw, 2rem); color: var(--gold-hi); }
+.me-card p { margin: 0; line-height: 1.75; color: #d5e2ff; }
+
+.room-quote { align-items: center; text-align: center; }
+.room-quote blockquote { margin: 0; max-width: 26ch; }
+.room-quote blockquote p { margin: 0; font-family: var(--serif); font-style: italic; font-size: clamp(2rem, 6vw, 4.2rem); line-height: 1.2; color: var(--gold-hi); text-shadow: 0 0 40px rgba(242, 210, 91, 0.35), 0 2px 30px rgba(5, 13, 36, 0.9); }
+.room-quote cite { display: block; margin-top: 22px; font-style: normal; font-size: 0.74rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--muted); }
+.room-exit { min-height: 50vh; }
+.me .row .t { color: var(--ink); }
+
+/* entrance: a museum wall with one framed painting; you walk into the painting */
+.me-gate { display: none; }
+html.js .me-gate { position: fixed; inset: 0; z-index: 100; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 22px; padding: 24px; text-align: center; overflow: hidden; background: radial-gradient(ellipse at 50% 18%, rgba(255, 233, 160, 0.16), rgba(255, 233, 160, 0) 46%), linear-gradient(180deg, #0a1633 0%, #06102a 60%, #030817 100%); transition: opacity 0.9s ease, visibility 0s linear 0.9s; }
+body.me.entered .me-gate { opacity: 0; visibility: hidden; pointer-events: none; }
+html.js body.me:not(.entered) { overflow: hidden; }
+.gate-frame { appearance: none; position: relative; width: min(58vw, 270px); aspect-ratio: 4 / 5; padding: 11px; border: 0; cursor: pointer; background: var(--metal); box-shadow: 0 0 60px rgba(242, 210, 91, 0.22), 0 30px 60px -20px rgba(0, 0, 0, 0.85); transition: transform 2s cubic-bezier(0.65, 0, 0.3, 1), box-shadow 0.6s ease; }
+.gate-frame::before { content: ""; position: absolute; inset: 5px; border: 1px solid rgba(60, 40, 5, 0.55); pointer-events: none; z-index: 2; }
+.gate-frame:hover { box-shadow: 0 0 80px rgba(242, 210, 91, 0.4), 0 30px 60px -20px rgba(0, 0, 0, 0.85); }
+.gf-art { position: absolute; inset: 11px; overflow: hidden; background: #0a1f63; }
+.gf-art::before { content: ""; position: absolute; inset: -60%; background: conic-gradient(from 0deg, #0a1f63, #2456c0, #081a4f, #3b78dc, #0e2a78, #1d4aa8, #0a1f63); filter: blur(14px); animation: gateSwirl 40s linear infinite; }
+.gf-art::after { content: ""; position: absolute; inset: 0; background: radial-gradient(circle at 74% 24%, #fff6c4 0 3%, rgba(255, 214, 90, 0.6) 7%, rgba(255, 214, 90, 0) 22%), radial-gradient(circle at 30% 42%, rgba(255, 233, 160, 0.9) 0 2%, rgba(255, 214, 90, 0.4) 5%, rgba(255, 214, 90, 0) 16%), radial-gradient(circle at 60% 74%, rgba(255, 233, 160, 0.8) 0 1.6%, rgba(255, 214, 90, 0.3) 4%, rgba(255, 214, 90, 0) 14%), radial-gradient(circle at 16% 80%, rgba(255, 233, 160, 0.6) 0 1.2%, rgba(255, 214, 90, 0) 9%); }
+@keyframes gateSwirl { to { transform: rotate(360deg); } }
+.gate-plaque { display: flex; flex-direction: column; gap: 3px; padding: 12px 22px; text-align: left; border-left: 2px solid var(--gold); background: rgba(255, 255, 255, 0.04); }
+.gate-plaque b { font-family: var(--serif); font-style: italic; font-weight: 400; font-size: 1.15rem; color: var(--gold-hi); }
+.gate-plaque span { font-size: 0.78rem; letter-spacing: 0.08em; color: #d5e2ff; }
+.gate-plaque small { font-size: 0.7rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); }
+.gate-btn { appearance: none; padding: 14px 40px; font: inherit; font-size: 0.76rem; letter-spacing: 0.3em; text-transform: uppercase; color: #1a1304; background: var(--metal); border: 0; cursor: pointer; transition: transform 0.5s var(--ease), box-shadow 0.5s ease; }
+.gate-btn:hover { transform: translateY(-3px); box-shadow: 0 0 36px rgba(242, 210, 91, 0.4); }
+.gate-back { font-size: 0.72rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted); text-decoration: none; padding: 6px; }
+.gate-back:hover { color: var(--gold-hi); }
+/* walking into the painting */
+.me-gate.entering .gate-frame { transform: scale(16); box-shadow: none; }
+.me-gate.entering .gate-plaque, .me-gate.entering .gate-btn, .me-gate.entering .gate-back { opacity: 0; transition: opacity 0.5s ease; }
+
+/* reveal in the room feels slower */
+.me .reveal { transition-duration: 1.4s; }
+
+@media (max-width: 860px) { .me-cards { grid-template-columns: 1fr; } .room, .room:first-child { min-height: 0; padding: 70px 0; } .room:first-child { padding-top: 110px; min-height: 80vh; } }
+@media (prefers-reduced-motion: reduce) {
+  .gf-art::before, .scroll-hint::after { animation: none; }
+  .me-gate.entering .gate-frame { transition: none; }
+  .me-world { transform: none; }
+}
