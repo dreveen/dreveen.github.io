@@ -338,3 +338,27 @@
   window.addEventListener("langchange", () => setTimeout(build, 0));
   build();
 })();
+
+// curiosities about Van Gogh: a reader inside the room (the same 26 as the puzzle's, from facts.js), always starting from the first
+(function () {
+  const F = window.VG_FACTS;
+  const t = document.getElementById("vgTitle"), p = document.getElementById("vgText"), n = document.getElementById("vgNum");
+  if (!F || !t || !p || !n) return;
+  let i = 0;
+  const pick = (en, it) => (window.I18N ? I18N.pick(en, it) : en);
+  function paint() {
+    const f = F[i];
+    n.textContent = i + 1 + " / " + F.length;
+    t.textContent = pick(f.te, f.ti);
+    p.textContent = pick(f.en, f.it);
+  }
+  function go(k) {
+    i = (i + k + F.length) % F.length;
+    t.classList.add("out"); p.classList.add("out");
+    setTimeout(() => { paint(); t.classList.remove("out"); p.classList.remove("out"); }, 280);
+  }
+  document.getElementById("vgNext").addEventListener("click", () => go(1));
+  document.getElementById("vgPrev").addEventListener("click", () => go(-1));
+  window.addEventListener("langchange", paint);
+  paint();
+})();
