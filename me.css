@@ -1,5 +1,5 @@
 /* "The real me": a quiet room under Van Gogh's Starry Night.
-   Structure: entrance (framed painting) > title screen > four chapters (text | framed quote, alternating) > way out.
+   Structure: entrance (starry night with one star) > title screen > one reading column > way out.
    Colours: night blue and champagne gold. */
 body.me {
   --bg: #050d24;
@@ -41,36 +41,11 @@ body.me .lang:hover { background: rgba(217, 192, 142, 0.18); border-color: var(-
 .hero-room .display span:first-child { color: #fff; text-shadow: 0 2px 30px rgba(var(--night), 0.9); }
 .hero-room .display .metal { background-image: linear-gradient(105deg, #e8d3a2 0%, #fff4d8 28%, #e8d3a2 52%, #f6e6c0 76%, #e8d3a2 100%); text-shadow: none; filter: drop-shadow(0 2px 18px rgba(var(--night), 0.85)); }
 
-/* ---------- 2. four chapters: text on one side, a framed quote on the other ---------- */
-.chaps { max-width: 1160px; margin: 0 auto; padding: 20px var(--pad) 40px; }
-.chap { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: clamp(36px, 6vw, 96px); align-items: center; padding: clamp(40px, 5vw, 70px) 0; counter-increment: chap; }
-.chap + .chap { border-top: 1px solid rgba(217, 192, 142, 0.18); }
-.chaps { counter-reset: chap; }
-.chap:nth-of-type(even) .chap-text { order: 2; }
-.chap:nth-of-type(even) .me-frame { order: 1; }
-
-.chap-text { position: relative; }
-.chap-text::before { content: ""; position: absolute; z-index: -1; inset: -44px -70px; background: radial-gradient(ellipse at center, rgba(var(--night), 0.74) 0%, rgba(var(--night), 0.5) 52%, rgba(var(--night), 0) 78%); }
-.chap-text::after { content: "0" counter(chap); display: block; order: -1; }
-.chap-n { display: block; margin-bottom: 18px; font-family: var(--serif); font-style: italic; font-size: clamp(2.4rem, 4vw, 3.4rem); line-height: 1; color: var(--gold); }
-.chap-n::after { content: ""; display: inline-block; vertical-align: middle; width: 54px; height: 1px; margin-left: 18px; background: linear-gradient(90deg, #c9a87a, transparent); }
-.chap-text::after { content: none; }
+/* ---------- 2. the text: one calm column over the sky ---------- */
 .me-para { margin: 0; font-family: var(--serif); font-size: clamp(1.2rem, 1.9vw, 1.65rem); line-height: 1.62; color: #fffaf0; text-shadow: 0 2px 16px rgba(var(--night), 0.9); }
 .me-w { opacity: 0.22; transition: opacity 0.5s ease; }
 .me-w.on { opacity: 1; }
 
-/* framed quote */
-.me-frame { position: relative; justify-self: center; width: 100%; max-width: 360px; margin: 0; padding: 11px; background: var(--metal); box-shadow: 0 24px 50px -20px rgba(0, 0, 0, 0.85), 0 0 40px rgba(217, 192, 142, 0.14); transform: rotate(-1.2deg); transition: transform 0.7s var(--ease), box-shadow 0.7s ease; }
-.chap:nth-of-type(even) .me-frame { transform: rotate(1.2deg); }
-.me-frame::before { content: ""; position: absolute; inset: 5px; border: 1px solid rgba(70, 48, 12, 0.5); pointer-events: none; z-index: 2; }
-.me-frame:hover { transform: translateY(-5px) rotate(0deg); box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.9), 0 0 60px rgba(217, 192, 142, 0.3); }
-.mf-art { position: relative; padding: 36px 26px 28px; text-align: center; background: linear-gradient(rgba(var(--night), 0.66), rgba(var(--night), 0.78)), url("starry-night.jpg"); background-size: auto, 380%; background-position: center, var(--pos, 50% 40%); box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.55); }
-.f1 { --pos: 88% 12%; } .f2 { --pos: 52% 36%; } .f3 { --pos: 72% 92%; } .f4 { --pos: 12% 62%; }
-.mf-art blockquote { margin: 0; font-family: var(--serif); font-style: italic; font-size: clamp(1rem, 1.3vw, 1.14rem); line-height: 1.65; color: #fff4dc; text-shadow: 0 1px 12px rgba(var(--night), 0.9); }
-.mf-art blockquote::before { content: "\201C"; display: block; margin-bottom: 4px; font-size: 2.2rem; line-height: 0.6; color: var(--gold); }
-.mf-art figcaption { margin-top: 18px; padding-top: 14px; border-top: 1px solid rgba(217, 192, 142, 0.4); }
-.mf-art figcaption b { display: block; font-weight: 400; font-size: 0.7rem; letter-spacing: 0.26em; text-transform: uppercase; color: #ecd9ae; }
-.mf-art figcaption span { display: block; margin-top: 5px; font-size: 0.68rem; letter-spacing: 0.12em; color: #aebfe2; }
 
 /* ---------- 3. the way out ---------- */
 .room-exit { padding: 30px var(--pad) 110px; }
@@ -105,13 +80,9 @@ html.js body.me:not(.entered) { overflow: hidden; }
 .me-gate.entering .gs-flood { opacity: 1; transform: scale(90); transition: transform 1.9s cubic-bezier(0.55, 0, 0.3, 1), opacity 0.5s ease; }
 .me-gate.entering .gate-eyebrow, .me-gate.entering .gate-cta, .me-gate.entering .gate-back { opacity: 0; transition: opacity 0.5s ease; }
 
-/* ---------- small screens: one column, quote right under its text ---------- */
+/* ---------- small screens ---------- */
 @media (max-width: 900px) {
-  .chap { grid-template-columns: 1fr; gap: 30px; padding: 44px 0; }
-  .chap:nth-of-type(even) .chap-text, .chap:nth-of-type(even) .me-frame { order: 0; }
-  .chap-text::before { inset: -30px -22px; }
   .me-para { font-size: clamp(1.2rem, 5.2vw, 1.55rem); }
-  .me-frame, .chap:nth-of-type(even) .me-frame { max-width: 340px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .gs-core, .gs-ring { animation: none; }
@@ -187,40 +158,34 @@ html.has-moon body.me:not(.entered) .gate-star, html.has-moon body.me:not(.enter
 /* audit: the "Not now" link of the entrance is easier to press */
 .gate-back { padding: 12px 0; bottom: 16px; }
 
-/* ---------- chapters 05-07: Michelangelo, the way into the puzzle, discipline ---------- */
-.f5 { max-width: 440px; --pos: 50% 50%; }
-.mf-img { padding: 0; background: #060c20; overflow: hidden; }
-.mf-img img { display: block; width: 100%; height: auto; aspect-ratio: 3 / 2; object-fit: cover; object-position: 40% 40%; }
-.mf-img figcaption { margin: 0; padding: 14px 18px 18px; border-top: 1px solid rgba(217, 192, 142, 0.4); }
-.f6 { --pos: 30% 70%; }
-.mf-go { display: flex; flex-direction: column; gap: 12px; padding: 34px 24px 26px; }
-.mf-kicker { margin: 0 0 6px; font-family: var(--serif); font-style: italic; font-size: 1.15rem; color: #fff4dc; text-shadow: 0 1px 12px rgba(var(--night), 0.9); }
-.mf-btn { display: block; padding: 15px 14px; border: 1px solid rgba(217, 192, 142, 0.7); background: rgba(var(--night), 0.55); color: #ecd9ae; font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase; text-decoration: none; transition: background 0.4s ease, color 0.4s ease, border-color 0.4s ease; }
-.mf-btn:hover, .mf-btn:focus-visible { background: #d9c08e; color: #14100a; border-color: #d9c08e; }
-.mf-note { margin: 6px 0 0; font-size: 0.68rem; letter-spacing: 0.12em; color: #aebfe2; }
-.f7 { --pos: 60% 20%; }
-.mf-word { padding: 48px 24px 30px; }
-.mf-big { margin: 0; font-family: var(--serif); font-style: italic; font-size: clamp(1.9rem, 3.4vw, 2.6rem); line-height: 1.1; color: #fff4dc; text-shadow: 0 1px 12px rgba(var(--night), 0.9); }
-.mf-word figcaption { margin-top: 22px; }
 
-/* part titles: they carry the reader from one side of the room to the next */
-.part { max-width: 640px; margin: 0 auto; padding: clamp(70px, 9vw, 120px) 0 clamp(20px, 3vw, 40px); text-align: center; border-top: 1px solid rgba(217, 192, 142, 0.18); }
-.part-n { display: block; font-size: 0.7rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); }
-.part-t { margin: 16px 0 0; font-family: var(--serif); font-style: italic; font-weight: 400; font-size: clamp(2.2rem, 5.6vw, 4rem); line-height: 1.1; color: #fff4dc; text-shadow: 0 2px 20px rgba(var(--night), 0.95); }
-.part-t::after { content: ""; display: block; width: 54px; height: 1px; margin: 22px auto 0; background: linear-gradient(90deg, transparent, #c9a87a, transparent); }
-.part-d { margin: 20px auto 0; max-width: 46ch; font-family: var(--serif); font-size: clamp(1.05rem, 1.7vw, 1.3rem); line-height: 1.6; color: #e8dcc0; text-shadow: 0 1px 14px rgba(var(--night), 0.95); }
-.part + .chap { border-top: 0; }
+/* ---------- the reading column ---------- */
+.me-read { position: relative; max-width: 780px; margin: 0 auto; padding: 20px var(--pad) 50px; }
+.me-read::before { content: ""; position: absolute; z-index: -1; inset: 0 -40px; background: linear-gradient(90deg, rgba(var(--night), 0) 0%, rgba(var(--night), 0.66) 14%, rgba(var(--night), 0.66) 86%, rgba(var(--night), 0) 100%); }
+.me-read .me-para { margin: 0 0 1.5em; line-height: 1.75; }
+.me-read .me-para.me-end { margin: 2.2em 0 0; padding-top: 1.6em; border-top: 1px solid rgba(217, 192, 142, 0.3); font-style: italic; color: #f6e8c8; }
+.me-h { margin: clamp(56px, 8vw, 96px) 0 clamp(22px, 3vw, 32px); text-align: center; font-family: var(--serif); font-style: italic; font-weight: 400; font-size: clamp(2rem, 5vw, 3.2rem); line-height: 1.1; color: #fff4dc; text-shadow: 0 2px 20px rgba(var(--night), 0.95); }
+.me-h::after { content: ""; display: block; width: 54px; height: 1px; margin: 20px auto 0; background: linear-gradient(90deg, transparent, #c9a87a, transparent); }
+@media (max-width: 760px) { .me-read::before { inset: 0 -12px; } }
 
-/* curiosities about Van Gogh: a framed reader that lives in the room */
-.curio { max-width: 760px; margin: clamp(30px, 5vw, 60px) auto 0; padding: 11px; background: var(--metal); box-shadow: 0 24px 50px -20px rgba(0, 0, 0, 0.85), 0 0 40px rgba(217, 192, 142, 0.14); position: relative; }
-.curio::before { content: ""; position: absolute; inset: 5px; border: 1px solid rgba(70, 48, 12, 0.5); pointer-events: none; z-index: 2; }
-.curio-in { padding: clamp(28px, 5vw, 48px) clamp(22px, 5vw, 52px) 26px; text-align: center; background: linear-gradient(rgba(var(--night), 0.8), rgba(var(--night), 0.9)), url("starry-night.jpg"); background-size: auto, 300%; background-position: center, 20% 60%; }
-.curio-k { margin: 0; font-size: 0.7rem; letter-spacing: 0.28em; text-transform: uppercase; color: #ecd9ae; }
-.curio-n { margin: 14px 0 0; font-family: var(--serif); font-style: italic; font-size: 1rem; color: var(--gold); }
-.curio-t { margin: 8px 0 0; font-family: var(--serif); font-style: italic; font-weight: 400; font-size: clamp(1.5rem, 3.4vw, 2.2rem); line-height: 1.2; color: #fff4dc; }
-.curio-p { margin: 18px auto 0; max-width: 56ch; min-height: 9em; font-size: clamp(0.98rem, 1.4vw, 1.08rem); line-height: 1.75; color: #e8e1cf; text-align: left; transition: opacity 0.35s ease; }
-.curio-p.out, .curio-t.out { opacity: 0; }
-.curio-t { transition: opacity 0.35s ease; }
-.curio-nav { display: flex; justify-content: center; gap: 14px; margin-top: 18px; padding-top: 18px; border-top: 1px solid rgba(217, 192, 142, 0.35); }
-.curio-nav button { appearance: none; width: 48px; height: 48px; border-radius: 50%; border: 1px solid rgba(217, 192, 142, 0.7); background: rgba(var(--night), 0.55); color: #ecd9ae; font-size: 1.1rem; cursor: pointer; transition: background 0.4s ease, color 0.4s ease; }
-.curio-nav button:hover, .curio-nav button:focus-visible { background: #d9c08e; color: #14100a; }
+/* ---------- three parts: text next to a small animated picture ---------- */
+.me-read { max-width: 1140px; }
+.me-read::before { display: none; }
+.me-block { position: relative; display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: clamp(32px, 6vw, 90px); align-items: center; padding: clamp(36px, 5vw, 64px) 0; }
+.me-block + .me-block { border-top: 1px solid rgba(217, 192, 142, 0.18); }
+.me-block.rev { grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); }
+.me-txt { position: relative; }
+.me-txt::before { content: ""; position: absolute; z-index: -1; inset: -40px -50px; background: radial-gradient(ellipse at center, rgba(var(--night), 0.78) 0%, rgba(var(--night), 0.55) 55%, rgba(var(--night), 0) 80%); }
+.me-txt .me-h { margin-top: 0; text-align: left; }
+.me-txt .me-h::after { margin-left: 0; }
+.me-read .me-para.me-end { max-width: 720px; margin: clamp(30px, 5vw, 60px) auto 0; text-align: center; }
+.me-art-fig { position: relative; justify-self: center; width: 100%; max-width: 420px; aspect-ratio: 1; margin: 0; padding: 10px; background: var(--metal); box-shadow: 0 24px 50px -20px rgba(0, 0, 0, 0.85), 0 0 40px rgba(217, 192, 142, 0.14); }
+.me-art-fig::before { content: ""; position: absolute; inset: 4px; border: 1px solid rgba(70, 48, 12, 0.5); pointer-events: none; z-index: 2; }
+@media (max-width: 860px) {
+  .me-block, .me-block.rev { grid-template-columns: 1fr; gap: 30px; }
+  .me-txt::before { inset: -26px -18px; }
+  .me-art-fig { max-width: 340px; }
+}
+
+
+.me-art-fig canvas { display: block; width: 100%; height: 100%; background: radial-gradient(circle at 50% 40%, #0e2a78 0%, #08154a 60%, #050d24 100%); }
