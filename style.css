@@ -1428,3 +1428,85 @@ body.me .moon-light { background: radial-gradient(circle, rgba(255, 226, 150, .0
 .me-portal .mp-num, .me-portal .mp-go { color: #e8d3a2; }
 .me-portal .mp-title { color: #f6e8c8; text-shadow: 0 0 30px rgba(201, 168, 122, .35); }
 .me-portal .mp-go { border-bottom-color: rgba(232, 211, 162, .7); }
+
+/* ---- Van Gogh Puzzle ---- */
+.picker.five { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+@media (max-width: 1000px) { .picker.five { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 760px) { .picker.five { grid-template-columns: repeat(2, minmax(0, 1fr)); } .picker.five .pick:last-child { grid-column: 1 / -1; } }
+
+.pz-setup { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px 28px; margin-bottom: 18px; }
+.pz-paintings { display: flex; flex-wrap: wrap; gap: 10px; }
+.pz-paintings button { appearance: none; width: 62px; height: 62px; padding: 0; border: 1px solid var(--line-strong); border-radius: 4px; background-size: cover; background-position: center; cursor: pointer; opacity: .62; transition: opacity .3s, transform .3s var(--ease), border-color .3s, box-shadow .3s; }
+.pz-paintings button:hover { opacity: 1; transform: translateY(-3px); }
+.pz-paintings button.on { opacity: 1; border-color: var(--gold-hi); box-shadow: 0 0 0 2px var(--bg), 0 0 0 3px var(--gold), 0 8px 20px rgba(0, 0, 0, .5); }
+.pz-levels { display: flex; gap: 8px; }
+.pz-levels button { appearance: none; padding: 9px 16px; font: inherit; font-size: .74rem; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); background: none; border: 1px solid var(--line-strong); border-radius: 999px; cursor: pointer; transition: color .3s, background .3s, border-color .3s; }
+.pz-levels button small { margin-left: 4px; opacity: .75; letter-spacing: .08em; }
+.pz-levels button:hover { color: var(--ink); border-color: var(--gold); }
+.pz-levels button.on { color: #1a0a0d; background: var(--metal); border-color: transparent; }
+.pz-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+
+.pz-wrap { position: relative; display: flex; justify-content: center; margin: 4px auto 6px; }
+.pz-board { position: relative; flex: none; overflow: hidden; border: 1px solid var(--line-strong); background: rgba(10, 4, 6, .6); touch-action: none; user-select: none; -webkit-user-select: none; box-shadow: 0 30px 60px -30px rgba(0, 0, 0, .9); transition: box-shadow .8s ease, border-color .8s ease; }
+.pz-piece { position: absolute; left: 0; top: 0; background-repeat: no-repeat; box-shadow: inset 0 0 0 1px rgba(10, 4, 6, .55); cursor: grab; touch-action: none; transition: transform .38s var(--ease), box-shadow .3s ease, filter .3s ease; will-change: transform; }
+.pz-piece:hover { filter: brightness(1.12); }
+.pz-piece.ok { box-shadow: inset 0 0 0 1px rgba(201, 168, 122, .85); }
+.pz-piece.sel { z-index: 8; box-shadow: inset 0 0 0 3px var(--gold-hi), 0 0 18px rgba(241, 222, 184, .5); filter: brightness(1.2); }
+.pz-piece.dragging { z-index: 20; cursor: grabbing; transition: none; box-shadow: inset 0 0 0 2px var(--gold-hi), 0 18px 34px rgba(0, 0, 0, .7); filter: brightness(1.15); }
+.pz-original { position: absolute; top: 0; left: 50%; transform: translateX(-50%); opacity: 0; pointer-events: none; transition: opacity .45s ease; border: 1px solid var(--gold); object-fit: cover; box-shadow: 0 0 40px rgba(0, 0, 0, .6); }
+.pz-wrap.peek .pz-original { opacity: 1; }
+/* solved: the seams vanish and a gleam crosses the painting */
+.pz-board.solved { border-color: var(--gold-hi); box-shadow: 0 0 0 6px rgba(201, 168, 122, .22), 0 0 70px rgba(201, 168, 122, .45), 0 30px 60px -30px rgba(0, 0, 0, .9); }
+.pz-board.solved .pz-piece { box-shadow: none; cursor: default; filter: none; }
+.pz-board.solved::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(105deg, transparent 38%, rgba(255, 244, 214, .6) 50%, transparent 62%); transform: translateX(-130%); animation: pzGleam 1.8s ease .25s 1 forwards; }
+@keyframes pzGleam { to { transform: translateX(130%); } }
+
+.pz-win { margin: 16px auto 0; padding: 14px 18px; max-width: 640px; text-align: center; border: 1px solid var(--gold); background: linear-gradient(90deg, rgba(201, 168, 122, .16), rgba(201, 168, 122, .05)); animation: noteIn .8s var(--ease) both; }
+.pz-win-t { margin: 0 0 4px; font-family: var(--serif); font-style: italic; font-size: clamp(1.3rem, 3vw, 1.8rem); color: var(--gold-hi); }
+.pz-win-s { margin: 0; font-size: .82rem; letter-spacing: .08em; color: var(--ink); }
+
+.pz-top { margin-top: 26px; padding-top: 18px; border-top: 1px solid var(--line); }
+.pz-top h4 { margin: 0 0 10px; font-size: .72rem; font-weight: 400; letter-spacing: .22em; text-transform: uppercase; color: var(--gold); }
+.pz-top ol { margin: 0; padding: 0; list-style: none; counter-reset: pz; display: grid; gap: 4px; }
+.pz-top li { counter-increment: pz; display: flex; align-items: baseline; gap: 14px; padding: 6px 0; border-bottom: 1px solid rgba(201, 168, 122, .12); }
+.pz-top li:not(.none)::before { content: counter(pz); width: 1.4em; color: var(--gold); font-family: var(--serif); font-style: italic; }
+.pz-top li b { font-family: var(--serif); font-weight: 400; font-size: 1.15rem; color: var(--ink); }
+.pz-top li span { margin-left: auto; font-size: .76rem; letter-spacing: .1em; color: var(--muted); }
+.pz-top li.none { color: var(--muted); font-style: italic; border: 0; }
+
+.pz-fact { margin-top: 26px; padding: 22px clamp(18px, 3vw, 30px); border-left: 2px solid var(--gold); background: linear-gradient(90deg, rgba(201, 168, 122, .1), transparent 85%); }
+.pz-fact-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: .7rem; letter-spacing: .24em; text-transform: uppercase; color: var(--gold); }
+.pz-fact-nav { display: inline-flex; align-items: center; gap: 10px; }
+.pz-fact-nav i { font-style: normal; letter-spacing: .1em; color: var(--muted); }
+.pz-fact-nav button { appearance: none; width: 30px; height: 30px; color: var(--gold); background: none; border: 1px solid var(--line-strong); border-radius: 50%; cursor: pointer; transition: background .3s, color .3s; }
+.pz-fact-nav button:hover { background: var(--gold); color: #1a0a0d; }
+.pz-fact h5 { margin: 12px 0 6px; font-family: var(--serif); font-style: italic; font-weight: 400; font-size: clamp(1.35rem, 3vw, 1.9rem); color: var(--gold-hi); }
+.pz-fact p { margin: 0; max-width: 62ch; line-height: 1.7; color: var(--ink); }
+.pz-fact.swap h5, .pz-fact.swap p { animation: factIn .7s var(--ease) both; }
+@keyframes factIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+@media (max-width: 560px) { .pz-paintings button { width: 50px; height: 50px; } .pz-levels button { padding: 8px 11px; font-size: .68rem; } }
+@media (prefers-reduced-motion: reduce) { .pz-piece { transition: none; } .pz-board.solved::after { animation: none; } }
+
+/* curiosity under the painting: one at random; "see more" opens them all in order */
+.pz-fact:not(.browsing) #pzFactNum { display: none; }
+.pz-fact-head i { font-style: normal; letter-spacing: .1em; color: var(--muted); }
+.pz-fact-foot { display: flex; align-items: center; justify-content: flex-end; gap: 18px; margin-top: 18px; }
+.pz-fact-more { appearance: none; margin-left: auto; padding: 6px 0; font: inherit; font-size: .72rem; letter-spacing: .2em; text-transform: uppercase; color: var(--gold); background: none; border: 0; border-bottom: 1px solid rgba(201, 168, 122, .5); cursor: pointer; transition: color .3s, border-color .3s, letter-spacing .4s var(--ease); }
+.pz-fact-more::after { content: " \2192"; }
+.pz-fact-more:hover { color: var(--gold-hi); border-bottom-color: var(--gold-hi); letter-spacing: .26em; }
+.pz-fact.browsing .pz-fact-more::after { content: ""; }
+.pz-fact-foot .pz-fact-nav { margin-right: auto; display: inline-flex; gap: 10px; }
+.pz-fact-foot .pz-fact-nav[hidden] { display: none; }
+
+/* Puzzle card on the Games page: it lights up like the Starry Night section in About */
+.pick[data-game="puzzle"] { position: relative; overflow: hidden; isolation: isolate; }
+.pick[data-game="puzzle"] > b, .pick[data-game="puzzle"] > small, .pick[data-game="puzzle"] > svg { position: relative; z-index: 2; transition: color .5s ease, stroke .5s ease, transform .5s var(--ease), text-shadow .5s ease; }
+.pick-glow { position: absolute; inset: 0; z-index: 0; opacity: 0; transition: opacity .7s ease; pointer-events: none; background: #06143f; }
+.pick-glow::before { content: ""; position: absolute; inset: -70%; z-index: -2; background: conic-gradient(from 0deg, #0a1f63, #2456c0, #081a4f, #3b78dc, #0e2a78, #1d4aa8, #0a1f63); filter: blur(22px); animation: portalSwirl 30s linear infinite; }
+.pick-glow::after { content: ""; position: absolute; inset: 0; z-index: -1; background: radial-gradient(circle at 80% 24%, rgba(255, 244, 214, .95) 0 3%, rgba(241, 222, 184, .5) 7%, rgba(241, 222, 184, 0) 22%), radial-gradient(circle at 22% 70%, rgba(255, 240, 205, .75) 0 2.4%, rgba(241, 222, 184, .32) 6%, rgba(241, 222, 184, 0) 18%), radial-gradient(circle at 62% 82%, rgba(255, 240, 205, .6) 0 1.6%, rgba(241, 222, 184, 0) 12%), linear-gradient(180deg, rgba(60, 8, 24, .5), rgba(5, 13, 36, .1) 55%, rgba(60, 8, 24, .4)); }
+.pick[data-game="puzzle"]:hover, .pick[data-game="puzzle"].active { border-color: #f1deb8; box-shadow: 0 0 0 1px rgba(241, 222, 184, .35), 0 0 46px rgba(201, 168, 122, .35), 0 30px 60px -30px rgba(0, 0, 0, .8); }
+.pick[data-game="puzzle"]:hover .pick-glow, .pick[data-game="puzzle"].active .pick-glow { opacity: 1; }
+.pick[data-game="puzzle"]:hover > b, .pick[data-game="puzzle"].active > b { color: #f6e8c8; text-shadow: 0 0 22px rgba(201, 168, 122, .5); }
+.pick[data-game="puzzle"]:hover > small, .pick[data-game="puzzle"].active > small { color: #e8d3a2; }
+.pick[data-game="puzzle"]:hover > svg, .pick[data-game="puzzle"].active > svg { stroke: #f6e8c8; }
+@media (prefers-reduced-motion: reduce) { .pick-glow::before { animation: none; } }

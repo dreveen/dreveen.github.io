@@ -17,7 +17,7 @@ window.I18N = (function () {
     "From idea to code, with care for every detail.": "Dall'idea al codice, con cura per ogni dettaglio.",
     "Who I am and where I'm heading": "Chi sono e dove sto andando",
     "Selected work and experiments": "Lavori selezionati ed esperimenti",
-    "Snake, Hangman, Memory and Cat Jump": "Snake, Impiccato, Memory e Cat Jump",
+    "Snake, Hangman, Memory, Cat Jump and Puzzle": "Snake, Impiccato, Memory, Cat Jump e Puzzle",
     "Let's get in touch": "Mettiamoci in contatto",
     // about
     "Computer": "Ingegnere", "Engineer": "informatico", "& Software Developer": "& Sviluppatore software",

@@ -4,14 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Games | Dreveen</title>
-  <meta name="description" content="Small games by Denise Guadagnuolo: Snake, Hangman, Memory and Cat Jump.">
+  <meta name="description" content="Small games by Denise Guadagnuolo: Snake, Hangman, Memory, Cat Jump and Puzzle.">
   <meta name="theme-color" content="#0a0406">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%230a0406'/><text x='50' y='70' font-size='64' text-anchor='middle' fill='%23c9a87a' font-family='serif' font-style='italic'>D</text></svg>">
   <script>document.documentElement.classList.add("js");</script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400&family=Playfair+Display:ital,wght@0,400;1,400&family=Great+Vibes&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=210">
+  <link rel="stylesheet" href="style.css?v=240">
 </head>
 <body>
   <canvas class="bg-rose" id="bgRose" aria-hidden="true"></canvas>
@@ -37,7 +37,7 @@
     </h1>
     <p class="lead reveal" style="--d:.3s">A few small things I built for fun. Pick one and play.</p>
 
-    <div class="picker reveal" style="--d:.4s" role="group" aria-label="Choose a game">
+    <div class="picker five reveal" style="--d:.4s" role="group" aria-label="Choose a game">
       <button class="pick glass" type="button" data-game="snake" aria-controls="stage" aria-pressed="false">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h11a4 4 0 0 1 0 8H8a4 4 0 0 0 0 8h11"/><circle cx="19.500" cy="20" r="1.100"/></svg>
         <b>Snake</b><small>Arrow keys or swipe</small>
@@ -53,6 +53,11 @@
       <button class="pick glass" type="button" data-game="catjump" aria-controls="stage" aria-pressed="false">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 20V7.500l4 3h6l4-3V20z"/><circle cx="9.500" cy="14" r="0.900"/><circle cx="14.500" cy="14" r="0.900"/><path d="M11 17h2"/></svg>
         <b>Cat Jump</b><small>Tap to jump</small>
+      </button>
+      <button class="pick glass" type="button" data-game="puzzle" aria-controls="stage" aria-pressed="false">
+        <span class="pick-glow" aria-hidden="true"></span>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h5.5a2 2 0 1 1 4 0H19v5.5a2 2 0 1 0 0 4V19h-5.5a2 2 0 1 0-4 0H4v-5.5a2 2 0 1 1 0-4z"/></svg>
+        <b data-en="Puzzle" data-it="Puzzle">Puzzle</b><small data-en="Van Gogh, piece by piece" data-it="Van Gogh, pezzo per pezzo">Van Gogh, piece by piece</small>
       </button>
     </div>
 
@@ -119,6 +124,52 @@
         </div>
         <canvas id="cat" aria-label="Cat Jump game board"></canvas>
       </section>
+
+      <section class="glass game-card panel" data-game="puzzle" id="puzzle" hidden aria-labelledby="pz-title">
+        <h3 id="pz-title" data-en="Van Gogh Puzzle" data-it="Puzzle Van Gogh">Van Gogh Puzzle</h3>
+        <p class="hint" data-en="Piece by piece. Choose a painting and a difficulty, then drag one tile onto another (or tap two tiles) to swap them until the picture is whole." data-it="Pezzo per pezzo. Scegli un quadro e una difficoltà, poi trascina una tessera sopra un'altra (o tocca due tessere) per scambiarle finché il dipinto è completo.">Piece by piece. Choose a painting and a difficulty, then drag one tile onto another (or tap two tiles) to swap them until the picture is whole.</p>
+
+        <div class="pz-setup">
+          <div class="pz-paintings" id="pzPaintings" role="group" aria-label="Painting"></div>
+          <div class="pz-levels" id="pzLevels" role="group" aria-label="Difficulty">
+            <button type="button" class="on"><span data-en="Easy" data-it="Facile">Easy</span> <small>3×3</small></button>
+            <button type="button"><span data-en="Medium" data-it="Media">Medium</span> <small>5×5</small></button>
+            <button type="button"><span data-en="Hard" data-it="Difficile">Hard</span> <small>7×7</small></button>
+          </div>
+        </div>
+
+        <div class="game-head">
+          <div class="score"><span data-en="Time" data-it="Tempo">Time</span><b id="pzTime">0:00</b> &nbsp; <span data-en="Moves" data-it="Mosse">Moves</span><b id="pzMoves">0</b> &nbsp; <span data-en="Best" data-it="Record">Best</span><b id="pzBest">-</b></div>
+          <div class="pz-actions">
+            <button class="btn" id="pzPreview" type="button" aria-pressed="false" data-no-i18n>Show original</button>
+            <button class="btn" id="pzNew" type="button" data-en="Restart" data-it="Ricomincia">Restart</button>
+          </div>
+        </div>
+
+        <div class="pz-wrap" id="pzWrap">
+          <div class="pz-board" id="pzBoard" aria-label="Puzzle board"></div>
+          <img class="pz-original" id="pzPreviewImg" alt="" draggable="false">
+        </div>
+        <div class="pz-win" id="pzWin" hidden role="status" aria-live="polite"></div>
+
+        <div class="pz-top">
+          <h4 id="pzTopTitle"></h4>
+          <ol id="pzTop"></ol>
+        </div>
+
+        <aside class="pz-fact" id="pzFact" aria-live="polite">
+          <div class="pz-fact-head">
+            <span data-en="Did you know? Van Gogh" data-it="Curiosità su Van Gogh">Did you know? Van Gogh</span>
+            <i id="pzFactNum"></i>
+          </div>
+          <h5 id="pzFactTitle"></h5>
+          <p id="pzFactText"></p>
+          <div class="pz-fact-foot">
+            <span class="pz-fact-nav" id="pzFactNav" hidden><button type="button" id="pzFactPrev" aria-label="Previous">&larr;</button><button type="button" id="pzFactNext" aria-label="Next">&rarr;</button></span>
+            <button type="button" class="pz-fact-more" id="pzFactMore" data-no-i18n></button>
+          </div>
+        </aside>
+      </section>
     </div>
   </main>
 
@@ -133,14 +184,15 @@
   </footer>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-  <script src="i18n.js?v=210"></script>
-  <script src="rose.js?v=210"></script>
-  <script src="script.js?v=210"></script>
-  <script src="gamelock.js?v=210"></script>
-  <script src="snake.js?v=210"></script>
-  <script src="hangman.js?v=210"></script>
-  <script src="memory.js?v=210"></script>
-  <script src="catjump.js?v=210"></script>
-  <script src="games.js?v=210"></script>
+  <script src="i18n.js?v=240"></script>
+  <script src="rose.js?v=240"></script>
+  <script src="script.js?v=240"></script>
+  <script src="gamelock.js?v=240"></script>
+  <script src="snake.js?v=240"></script>
+  <script src="hangman.js?v=240"></script>
+  <script src="memory.js?v=240"></script>
+  <script src="catjump.js?v=240"></script>
+  <script src="puzzle.js?v=240"></script>
+  <script src="games.js?v=240"></script>
 </body>
 </html>
