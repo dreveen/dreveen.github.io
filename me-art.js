@@ -277,57 +277,71 @@
     };
   }
 
-  // ---- technology and art: real code falls from the sky, melts into soft colour and is drawn into a swirl around a star ----
+  // ---- technology and art: words of real code rain down on their side (S on top, T below); each word itself goes out of focus and becomes colour, flowing into the swirl ----
   function makeCode(S) {
-    const sc = S / 400, V = [S / 2, S * 0.68], Y0 = S * 0.13, Y1 = S * 0.56;
-    const CODE = ["const", "return", "if (x)", "i++", "null", "SELECT", "def f():", "<div>", "git add", "=> {}", "for (;;)", "print()", "int n;", "true", "else", "while", "import", "class A", "async", "await", "x = 1", "len(a)", "fn main", "push()"];
-    const colsX = [0.2, 0.4, 0.6, 0.8];
-    const parts = [];
-    const spawn = (p, fresh) => { p.x = S * colsX[(Math.random() * colsX.length) | 0] + rnd(-4, 4); p.y = fresh ? rnd(-S * 0.1, S * 0.45) : -rnd(S * 0.02, S * 0.3); p.v = rnd(42, 62) * sc; p.ph = 0; p.ly = p.y - S * 0.08; p.px = p.x; p.py = p.y; p.warm = Math.random() > 0.5; p.w = rnd(3, 6); };
-    const orbit = (p, fresh) => { p.ph = 1; p.r = fresh ? rnd(S * 0.06, S * 0.44) : rnd(S * 0.36, S * 0.46); p.th = rnd(0, 6.2832); p.dir = Math.random() > 0.5 ? 1 : -1; p.om = rnd(0.55, 0.95) * p.dir; p.w = rnd(3, 6); };
-    for (let n = 0; n < 64; n++) { const p = { code: true }; spawn(p, true); parts.push(p); }
-    for (let n = 0; n < 170; n++) { const p = { code: false }; orbit(p, true); parts.push(p); }
+    const sc = S / 400, V = [S / 2, S * 0.68], R = S * 0.3;
+    const WORDS = ["SELECT", "return", "const", "import", "async", "await", "while", "class", "print", "push", "null", "true", "else", "break", "int main", "def f():", "if (x)", "</div>", "for (;;)", "len(a)", "git add", "fn main", "x = 1;"];
     const stops = [BLUE[0], BLUE[2], BLUE[3], TUR[1], YEL[1], YEL[3]];
     const sm = (u) => { u = Math.max(0, Math.min(1, u)); return u * u * (3 - 2 * u); };
+    const orb = [], drops = [];
+    const orbit = (p, fresh) => { p.r = fresh ? rnd(S * 0.06, S * 0.44) : rnd(S * 0.36, S * 0.46); p.th = rnd(0, 6.2832); p.om = rnd(0.55, 0.95) * (Math.random() > 0.5 ? 1 : -1); p.w = rnd(3, 6); };
+    for (let n = 0; n < 230; n++) { const p = {}; orbit(p, true); orb.push(p); }
+    let next = 0.2;
+    const launch = () => {
+      const x = rnd(0.04, 0.96) * S; // rain across the whole width
+      const a = Math.max(-2.95, Math.min(-0.19, -Math.PI / 2 + ((x - V[0]) / S) * 2.6 + rnd(-0.12, 0.12)));
+      drops.push({ x, a, y0: -S * 0.16, word: WORDS[(Math.random() * WORDS.length) | 0], u: 0, dur: rnd(3.6, 5.2), hue: Math.random() });
+    };
     return {
+      // the swirl of strokes (it keeps its painted trails)
       step(cx, t, dt) {
-        cx.font = Math.round(S * 0.04) + "px monospace"; cx.textAlign = "center"; cx.textBaseline = "middle";
-        for (const p of parts) {
-          if (p.ph === 0) {
-            const b = sm((p.y - Y0) / (Y1 - Y0));
-            const dx = p.x - V[0], dy = p.y - V[1], r = Math.hypot(dx, dy) || 1, dir = dx < 0 ? -1 : 1;
-            // blend from "straight down" to "round and in" so the path bends smoothly into the swirl
-            const sx = dir * (-dy / r) * 1.0 + (-dx / r) * 0.8, sy = dir * (dx / r) * 1.0 + (-dy / r) * 0.8;
-            const vx = b * sx * p.v * 1.15, vy = (1 - b) * p.v + b * sy * p.v * 1.15;
-            p.px = p.x; p.py = p.y; p.x += vx * dt; p.y += vy * dt;
-            // a line of real code, fading as it melts
-            if (b < 0.98 && p.y > S * 0.03 && p.y - p.ly >= S * 0.085) {
-              p.ly = p.y; p.txt = CODE[(Math.random() * CODE.length) | 0];
-              cx.save(); cx.globalAlpha = 1 - b; cx.fillStyle = "rgb(246,232,200)"; cx.shadowColor = "rgba(246,232,200,.9)"; cx.shadowBlur = 6 * sc;
-              cx.fillText(p.txt, p.x, p.y); cx.restore();
-            }
-            // the soft colour that replaces it: a wide, blurred smear with a bright thin core
-            if (b > 0.02) {
-              const col = mix(YEL[3], p.warm ? YEL[1] : TUR[2], b);
-              cx.save(); cx.globalAlpha = Math.min(0.55, b * 0.7); cx.lineCap = "round";
-              cx.strokeStyle = rgb(col, 0); cx.shadowColor = rgb(col, 0); cx.shadowBlur = 12 * sc; cx.lineWidth = (4 + 8 * b) * sc;
-              cx.beginPath(); cx.moveTo(p.px, p.py); cx.lineTo(p.x, p.y); cx.stroke();
-              cx.globalAlpha = Math.min(0.9, b); cx.shadowBlur = 0; cx.lineWidth = 2 * sc; cx.strokeStyle = rgb(mix(col, YEL[3], 0.4), 0);
-              cx.beginPath(); cx.moveTo(p.px, p.py); cx.lineTo(p.x, p.y); cx.stroke(); cx.restore();
-            }
-            if (p.y >= Y1) { p.r = Math.hypot(p.x - V[0], p.y - V[1]); p.th = Math.atan2(p.y - V[1], p.x - V[0]); p.ph = 1; p.dir = dir; p.om = rnd(0.55, 0.95) * dir; }
-          } else {
-            const x0 = V[0] + Math.cos(p.th) * p.r, y0 = V[1] + Math.sin(p.th) * p.r * 0.92;
-            p.th += (p.om * S * 0.2) / (p.r + S * 0.06) * dt * 3; p.r -= S * 0.07 * dt * (0.7 + p.w * 0.08);
-            const x1 = V[0] + Math.cos(p.th) * p.r, y1 = V[1] + Math.sin(p.th) * p.r * 0.92;
-            brush(cx, x0, y0, Math.atan2(y1 - y0, x1 - x0), Math.hypot(x1 - x0, y1 - y0) * 4 + S * 0.02, p.w * sc, ramp(stops, 1 - Math.min(1, p.r / (S * 0.42))));
-            if (p.r < S * 0.035) { if (p.code) spawn(p, false); else orbit(p, false); }
-          }
+        for (const p of orb) {
+          const x0 = V[0] + Math.cos(p.th) * p.r, y0 = V[1] + Math.sin(p.th) * p.r * 0.92;
+          p.th += (p.om * S * 0.2) / (p.r + S * 0.06) * dt * 3; p.r -= S * 0.06 * dt * (0.7 + p.w * 0.08);
+          const x1 = V[0] + Math.cos(p.th) * p.r, y1 = V[1] + Math.sin(p.th) * p.r * 0.92;
+          brush(cx, x0, y0, Math.atan2(y1 - y0, x1 - x0), Math.hypot(x1 - x0, y1 - y0) * 4 + S * 0.02, p.w * sc, ramp(stops, 1 - Math.min(1, p.r / (S * 0.42))));
+          if (p.r < S * 0.035) orbit(p, false);
         }
       },
       over(cx, t) {
         halo(cx, V[0], V[1], S * (0.14 + Math.sin(t * 1.3) * 0.012), 0.9);
         sparkle(cx, V[0], V[1], S * 0.05, "#fffbe6", 1);
+      },
+      overlay: true,
+      drawOver(cx, t, dt) {
+        next -= dt;
+        if (next <= 0 && drops.length < 42) { launch(); next = rnd(0.09, 0.2); }
+        const k = (cx.getTransform ? cx.getTransform().a : 1) || 1, OFF = 4000;
+        for (let i = drops.length - 1; i >= 0; i--) {
+          const d = drops[i], tx = V[0] + Math.cos(d.a) * R, ty = V[1] + Math.sin(d.a) * R * 0.92;
+          d.u += dt / d.dur;
+          if (d.u >= 1) {
+            // where the colour reaches the swirl, strokes of the same colour join it
+            let n = 0; for (const p of orb) { if (p.r < S * 0.12 && n < 5) { p.r = R + rnd(-S * 0.03, S * 0.03); p.th = d.a + rnd(-0.12, 0.12); n++; } }
+            drops.splice(i, 1); continue;
+          }
+          // one single path: it falls straight down, then bends and flows into the swirl; the word turns along it
+          const e = Math.pow(d.u, 1.15), cxp = d.x, cyp = ty - S * 0.03;
+          const x = (1 - e) * (1 - e) * d.x + 2 * (1 - e) * e * cxp + e * e * tx, y = (1 - e) * (1 - e) * d.y0 + 2 * (1 - e) * e * cyp + e * e * ty;
+          const ddx = 2 * (1 - e) * (cxp - d.x) + 2 * e * (tx - cxp), ddy = 2 * (1 - e) * (cyp - d.y0) + 2 * e * (ty - cyp);
+          const ang = Math.atan2(ddy, ddx) + (ddy < 0 ? Math.PI : 0); // the word always reads along its way
+          const bl = Math.max(0, (d.u - 0.3) / 0.7), finalCol = ramp(stops, 0.45 + 0.35 * d.hue);
+          cx.save(); cx.textAlign = "center"; cx.textBaseline = "middle"; cx.font = Math.round(S * 0.042 * (1 + 0.9 * bl)) + "px monospace";
+          const sharp = (1 - sm(bl * 1.6)) * Math.min(1, d.u * 9);
+          if (sharp > 0.01) {
+            cx.save(); cx.translate(x, y); cx.rotate(ang); cx.globalAlpha = sharp;
+            cx.shadowColor = "rgba(246,232,200,.75)"; cx.shadowBlur = 5 * sc * k; cx.fillStyle = "#f6e8c8"; cx.fillText(d.word, 0, 0); cx.restore();
+          }
+          if (bl > 0.02) {
+            const col = mix([246, 232, 200], finalCol, sm(bl * 1.05));
+            cx.save(); cx.translate(x - OFF / k, y); cx.rotate(ang);
+            cx.shadowOffsetX = OFF; cx.shadowOffsetY = 0;
+            cx.shadowColor = "rgba(" + Math.round(col[0]) + "," + Math.round(col[1]) + "," + Math.round(col[2]) + "," + Math.min(1, 0.3 + bl * 0.7) * (1 - Math.pow(d.u, 8)) + ")";
+            cx.shadowBlur = (2 + 26 * Math.pow(bl, 1.05)) * sc * k;
+            cx.fillStyle = "#000"; cx.fillText(d.word, 0, 0); cx.restore();
+          }
+          cx.restore();
+        }
       },
     };
   }
@@ -340,7 +354,17 @@
     cv.width = cv.height = Math.round(S * dpr);
     const cx = cv.getContext("2d");
     cx.scale(dpr, dpr);
-    return { cv, cx, S, art: makers[cv.dataset.art](S), vis: false };
+    const art = makers[cv.dataset.art](S);
+    let ov = null, ocx = null;
+    if (art.overlay) {
+      ov = document.createElement("canvas");
+      ov.className = "ov"; ov.setAttribute("aria-hidden", "true");
+      ov.width = ov.height = cv.width;
+      cv.parentElement.appendChild(ov);
+      ocx = ov.getContext("2d");
+      ocx.scale(dpr, dpr);
+    }
+    return { cv, cx, S, art, ocx, vis: false };
   });
 
   // fade the previous marks a little, then draw new ones: strokes leave a painted trail that dissolves
@@ -352,6 +376,7 @@
     cx.globalCompositeOperation = "source-over";
     it.art.step(cx, t, dt);
     it.art.over(cx, t);
+    if (it.ocx) { it.ocx.clearRect(0, 0, it.S, it.S); it.art.drawOver(it.ocx, t, dt); }
   }
 
   if (reduce) {
