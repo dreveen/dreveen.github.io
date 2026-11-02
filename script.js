@@ -292,3 +292,57 @@ if (intro && introOn) {
     }, 1000);
   }, 9000);
 })();
+
+
+// ---------- whoever opens the code gets a quiet message that stays while the inspector is open ----------
+(function () {
+  if (!fine) return; // phones and tablets have no inspector
+  let el = null, timer = 0, held = false;
+  function hide() {
+    if (!el) return;
+    clearTimeout(timer);
+    const e = el; el = null;
+    e.classList.remove("on");
+    setTimeout(() => e.remove(), 600);
+  }
+  // keepFor: milliseconds before it goes away by itself (0 = stays as long as the inspector is detected)
+  function show(keepFor) {
+    clearTimeout(timer);
+    if (!el) {
+      el = document.createElement("div");
+      el.className = "peek-code";
+      el.setAttribute("role", "status");
+      el.innerHTML = '<p class="pc-t"></p><span class="pc-l" aria-hidden="true"></span>';
+      document.body.appendChild(el);
+      void el.offsetWidth;
+      el.classList.add("on");
+    }
+    el.querySelector(".pc-t").textContent = I18N.pick("Your curiosity fascinates me.", "La tua curiosità mi affascina.");
+    if (keepFor) timer = setTimeout(() => { if (!held) hide(); }, keepFor);
+  }
+  window.addEventListener("langchange", () => { if (el) el.querySelector(".pc-t").textContent = I18N.pick("Your curiosity fascinates me.", "La tua curiosità mi affascina."); });
+
+  // detection while the inspector is open: it reads the properties of whatever is printed to its console
+  const probe = new Image();
+  let hit = false;
+  Object.defineProperty(probe, "id", { get() { hit = true; return ""; } });
+  function poll() {
+    hit = false;
+    console.log("%c", "font-size:0", probe);
+    setTimeout(() => {
+      if (hit && !held) { held = true; show(0); }
+      else if (!hit && held) { held = false; hide(); }
+    }, 60);
+  }
+  setInterval(poll, 1200);
+
+  // keys that open the inspector or the source: show it for a few seconds even when it cannot be detected (new tab, detached window)
+  window.addEventListener("keydown", (e) => {
+    const k = (e.key || "").toLowerCase();
+    const mod = e.ctrlKey || e.metaKey;
+    const opens = k === "f12" || (mod && e.shiftKey && (k === "i" || k === "j" || k === "c")) || (e.metaKey && e.altKey && (k === "i" || k === "j" || k === "u" || k === "c")) || (mod && !e.shiftKey && k === "u");
+    if (opens) show(4200);
+    else if (k === "escape" && !held) hide();
+  }, true);
+  document.addEventListener("click", (e) => { if (el && !held && e.target.closest(".peek-code")) hide(); });
+})();

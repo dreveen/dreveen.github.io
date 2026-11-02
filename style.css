@@ -1571,3 +1571,88 @@ footer { padding-bottom: max(44px, env(safe-area-inset-bottom, 0px)); }
     radial-gradient(circle at 62% 70%, rgba(255, 240, 205, .35) 0, rgba(241, 222, 184, .14) 5%, rgba(241, 222, 184, 0) 11%);
   filter: drop-shadow(0 0 6px rgba(255, 236, 190, .8));
 }
+
+/* the fake break-in screen */
+.hk { position: fixed; inset: 0; z-index: 1000; background: #000; color: #38e26b; font-family: "Courier New", ui-monospace, monospace; opacity: 0; transition: opacity .45s ease; cursor: default; }
+.hk[hidden] { display: none; }
+.hk.show { opacity: 1; }
+.hk-rain { position: absolute; inset: 0; width: 100%; height: 100%; opacity: .55; }
+.hk-term { position: absolute; left: var(--pad); right: var(--pad); top: clamp(70px, 14vh, 140px); max-width: 760px; margin: 0 auto; padding: 22px; background: rgba(0, 12, 4, .82); border: 1px solid rgba(56, 226, 107, .5); box-shadow: 0 0 40px rgba(56, 226, 107, .18); }
+.hk-log { margin: 0; white-space: pre-wrap; font-size: clamp(.78rem, 2.2vw, .98rem); line-height: 1.7; min-height: 12.5em; }
+.hk-bar { height: 10px; margin-top: 14px; border: 1px solid rgba(56, 226, 107, .6); }
+.hk-bar i { display: block; height: 100%; width: 0; background: #38e26b; transition: width .13s linear; }
+.hk-pct { margin-top: 8px; min-height: 1.4em; font-size: clamp(.74rem, 2vw, .9rem); }
+.hk-alert { position: absolute; left: 0; right: 0; bottom: clamp(50px, 14vh, 140px); text-align: center; font-size: clamp(1.5rem, 7vw, 3.4rem); font-weight: 700; letter-spacing: .14em; color: #ff2a46; text-shadow: 0 0 22px rgba(255, 42, 70, .8); opacity: 0; }
+.hk-alert.on { opacity: 1; }
+.hk.alarm { box-shadow: inset 0 0 120px rgba(255, 30, 60, .45); }
+.hk-joke { position: absolute; inset: 0; display: grid; place-content: center; gap: 12px; padding: 24px; text-align: center; background: rgba(10, 4, 6, .96); opacity: 0; pointer-events: none; transition: opacity .6s ease; }
+.hk.ok .hk-joke { opacity: 1; pointer-events: auto; }
+.hk-j1 { margin: 0; font-family: var(--serif); font-style: italic; font-size: clamp(2.6rem, 11vw, 6rem); line-height: 1.1; color: #f1deb8; }
+.hk-j2 { margin: 0; font-family: var(--sans); font-size: clamp(.95rem, 2.4vw, 1.2rem); color: var(--muted); }
+
+/* the break-in turns aggressive: red phase with a shaking screen, a skull and a countdown (slow pulses only, nothing strobes) */
+.hk-skull { position: absolute; left: 0; right: 0; top: clamp(60px, 11vh, 120px); margin: 0 auto; width: max-content; max-width: 100%; font-size: clamp(.55rem, 2.6vw, 1.1rem); line-height: 1.15; color: #ff2a46; text-shadow: 0 0 14px rgba(255, 42, 70, .9); opacity: 0; pointer-events: none; }
+.hk.red .hk-skull { opacity: 1; animation: hkPulse 1.4s ease-in-out infinite; }
+.hk.red .hk-term { opacity: 0; transition: opacity .3s ease; }
+.hk.red { color: #ff2a46; animation: hkShake .45s linear infinite; }
+.hk.red .hk-rain { opacity: .75; }
+.hk-alert { bottom: auto; top: clamp(250px, 44vh, 420px); transition: opacity .2s ease; }
+.hk.red .hk-alert { animation: hkGlitch 2.2s steps(1, end) infinite; }
+.hk-sub { position: absolute; left: 0; right: 0; top: calc(clamp(250px, 44vh, 420px) + clamp(46px, 11vw, 90px)); padding: 0 16px; text-align: center; font-size: clamp(.85rem, 3.4vw, 1.5rem); font-weight: 700; letter-spacing: .16em; color: #fff; text-shadow: 0 0 14px #ff2a46; opacity: 0; }
+.hk-sub.on { opacity: 1; }
+.hk-count { position: absolute; left: 0; right: 0; bottom: clamp(40px, 9vh, 90px); text-align: center; font-size: clamp(2.6rem, 14vw, 6rem); font-weight: 700; letter-spacing: .08em; color: #ff2a46; text-shadow: 0 0 26px rgba(255, 42, 70, .9); opacity: 0; }
+.hk-count.on { opacity: 1; }
+.hk.red::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(ellipse at center, transparent 40%, rgba(180, 0, 20, .55) 100%); }
+@keyframes hkPulse { 50% { opacity: .65; } }
+@keyframes hkShake { 0% { transform: translate(0, 0); } 25% { transform: translate(-3px, 2px); } 50% { transform: translate(3px, -2px); } 75% { transform: translate(-2px, -3px); } 100% { transform: translate(0, 0); } }
+@keyframes hkGlitch { 0%, 100% { transform: none; } 92% { transform: translateX(-8px) skewX(-6deg); } 96% { transform: translateX(8px) skewX(6deg); } }
+@media (prefers-reduced-motion: reduce) { .hk.red, .hk.red .hk-alert, .hk.red .hk-skull { animation: none; } }
+
+/* fake error windows that open by themselves and cannot be controlled */
+.hk-wins { position: absolute; inset: 0; z-index: 5; overflow: hidden; pointer-events: none; }
+.hk-win { position: absolute; background: #e9e9ec; color: #1b1b1f; font-family: "Segoe UI", Tahoma, Arial, sans-serif; border: 1px solid #6c6c74; box-shadow: 0 10px 30px rgba(0, 0, 0, .7), 0 0 0 1px rgba(0, 0, 0, .6); animation: hkWin .16s ease-out both; text-align: left; }
+.hk-wt { display: flex; align-items: center; justify-content: space-between; padding: 5px 8px; background: linear-gradient(#b3122b, #7d0c1f); color: #fff; font-size: .74rem; letter-spacing: .02em; }
+.hk-wt b { font-weight: 400; opacity: .85; }
+.hk-wb { display: flex; gap: 12px; align-items: flex-start; padding: 16px 14px 12px; }
+.hk-wb i { flex: none; width: 30px; height: 30px; border-radius: 50%; background: #d4142e; color: #fff; font-style: normal; font-size: .95rem; line-height: 30px; text-align: center; box-shadow: inset 0 -2px 3px rgba(0, 0, 0, .3); }
+.hk-wb p { margin: 0; font-size: .82rem; line-height: 1.45; }
+.hk-wf { display: flex; justify-content: flex-end; padding: 0 14px 12px; }
+.hk-wf u { text-decoration: none; min-width: 64px; padding: 4px 12px; text-align: center; font-size: .78rem; background: #dcdce0; border: 1px solid #8a8a92; cursor: not-allowed; }
+.hk-joke { z-index: 50; }
+@keyframes hkWin { from { transform: scale(.82); opacity: 0; } }
+
+/* about: cybersecurity paragraph, and a separate "restricted area" plate with the do-not-click button */
+.cyber { margin-top: clamp(50px, 7vw, 90px); padding-top: clamp(30px, 4vw, 50px); border-top: 1px solid var(--line); display: grid; grid-template-columns: minmax(110px, 1fr) minmax(0, 4fr); gap: clamp(20px, 4vw, 60px); }
+.cyber-k { margin: 0; padding-top: 6px; font-size: .72rem; letter-spacing: .3em; text-transform: uppercase; color: var(--gold); }
+.cyber-p { margin: 0; max-width: 62ch; font-family: var(--serif); font-size: clamp(1.1rem, 1.9vw, 1.45rem); line-height: 1.7; color: var(--ink); }
+@media (max-width: 760px) { .cyber { grid-template-columns: 1fr; gap: 12px; } }
+
+.restricted { display: flex; align-items: center; gap: clamp(14px, 2.4vw, 26px); margin-top: clamp(60px, 9vw, 120px); padding: 18px clamp(16px, 2.6vw, 28px); background: rgba(8, 3, 5, .85); border: 1px solid rgba(212, 20, 46, .45); border-left: 4px solid #d4142e; font-family: "Courier New", ui-monospace, monospace; }
+.rs-ico { flex: none; width: 34px; height: 34px; color: #d4142e; }
+.rs-txt { flex: 1; min-width: 0; }
+.rs-t { margin: 0; font-size: .95rem; font-weight: 700; letter-spacing: .24em; text-transform: uppercase; color: #ff4a60; }
+.rs-d { margin: 4px 0 0; font-size: .78rem; letter-spacing: .06em; color: var(--muted); }
+.rs-btn { appearance: none; flex: none; padding: 11px 18px; border: 1px solid rgba(212, 20, 46, .7); background: transparent; color: #ff4a60; font: inherit; font-size: .74rem; letter-spacing: .2em; text-transform: uppercase; cursor: pointer; transition: background .3s ease, color .3s ease; }
+.rs-btn:hover, .rs-btn:focus-visible { background: #d4142e; color: #fff; }
+.rs-btn:disabled { opacity: .45; cursor: not-allowed; }
+@media (max-width: 560px) { .restricted { flex-wrap: wrap; } .rs-btn { width: 100%; } }
+.restricted + .me-portal { margin-top: clamp(28px, 4vw, 44px); }
+/* the central messages always sit above the error windows */
+.hk-alert, .hk-sub, .hk-count { z-index: 20; }
+/* the restricted-area plate now sits right under the cybersecurity paragraph */
+.restricted { margin-top: clamp(28px, 4vw, 48px); margin-bottom: 0; }
+.restricted + .section-title { margin-top: clamp(70px, 9vw, 120px); }
+/* restricted-area plate: reads like a real security notice (English only) */
+.rs-top { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 4px 16px; margin: 0; }
+.rs-lv { font-size: .66rem; letter-spacing: .2em; text-transform: uppercase; color: var(--muted); }
+.rs-d { max-width: 64ch; line-height: 1.55; }
+.rs-meta { display: flex; flex-wrap: wrap; gap: 4px 18px; margin: 10px 0 0; padding-top: 9px; border-top: 1px solid rgba(212, 20, 46, .25); font-size: .64rem; letter-spacing: .14em; text-transform: uppercase; color: #8d7d80; }
+.rs-dot { display: inline-block; width: 6px; height: 6px; margin-right: 7px; border-radius: 50%; background: #d4142e; box-shadow: 0 0 8px #d4142e; animation: rsBlink 2.4s ease-in-out infinite; vertical-align: 1px; }
+@keyframes rsBlink { 50% { opacity: .35; } }
+@media (prefers-reduced-motion: reduce) { .rs-dot { animation: none; } }
+
+/* the quiet message shown when someone opens the code */
+.peek-code { position: fixed; inset: 0; z-index: 2000; display: grid; place-content: center; justify-items: center; gap: 22px; padding: 24px; background: #000; opacity: 0; transition: opacity .6s ease; cursor: default; }
+.peek-code.on { opacity: 1; }
+.pc-t { margin: 0; text-align: center; font-family: var(--serif); font-style: italic; font-size: clamp(1.5rem, 4.4vw, 2.6rem); line-height: 1.3; color: #f1deb8; text-shadow: 0 0 30px rgba(201, 168, 122, .25); }
+.pc-l { display: block; width: 54px; height: 1px; background: linear-gradient(90deg, transparent, #c9a87a, transparent); }
