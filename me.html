@@ -3,16 +3,31 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Beyond what you see | Dreveen</title>| Dreveen</title>
+  <title>Beyond what you see | Dreveen</title>
   <meta name="description" content="Beyond what you see: a night sky by Denise Guadagnuolo, inspired by Van Gogh's Starry Night.">
   <meta name="theme-color" content="#050d24">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%230a0406'/><text x='50' y='70' font-size='64' text-anchor='middle' fill='%23c9a87a' font-family='serif' font-style='italic'>D</text></svg>">
-  <script>document.documentElement.classList.add("js");</script>
+  <script>
+    document.documentElement.classList.add("js", "fonts-wait");
+    (function () {
+      var go = function () { document.documentElement.classList.remove("fonts-wait"); };
+      setTimeout(go, 2500);
+      if (document.fonts && document.fonts.load) {
+        Promise.all([
+          document.fonts.load('italic 400 1em "Playfair Display"'),
+          document.fonts.load('400 1em "Playfair Display"'),
+          document.fonts.load('400 1em "Inter"'),
+          document.fonts.load('300 1em "Inter"'),
+          document.fonts.load('400 1em "Great Vibes"')
+        ]).then(go, go);
+      } else go();
+    })();
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400&family=Playfair+Display:ital,wght@0,400;1,400&family=Great+Vibes&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=256">
-  <link rel="stylesheet" href="me.css?v=256">
+  <link rel="stylesheet" href="style.css?v=261">
+  <link rel="stylesheet" href="me.css?v=261">
 </head>
 <body class="me">
   <div class="me-world" aria-hidden="true">
@@ -130,8 +145,8 @@
     </nav>
   </footer>
 
-  <script src="i18n.js?v=256"></script>
-  <script src="script.js?v=256"></script>
-  <script src="me.js?v=256"></script>
+  <script src="i18n.js?v=261"></script>
+  <script src="script.js?v=261"></script>
+  <script src="me.js?v=261"></script>
 </body>
 </html>

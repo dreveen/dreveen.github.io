@@ -176,3 +176,13 @@ html.js body.me:not(.entered) { overflow: hidden; }
   body.me .links { background: radial-gradient(900px 600px at 85% -5%, rgba(20, 52, 140, 0.5), transparent 62%), radial-gradient(700px 500px at -5% 105%, rgba(14, 42, 120, 0.45), transparent 60%), #050d24; }
   body.me .links a::after { background: linear-gradient(90deg, rgba(201, 168, 122, 0.4), rgba(201, 168, 122, 0.12) 65%, transparent); }
 }
+
+/* start screen: wait for the real fonts (no fallback-font flash) and keep the sunflower out until the night is lit */
+html.fonts-wait .gate-center, html.fonts-wait .gate-back, html.fonts-wait .gate-lang { opacity: 0; }
+.gate-center, .gate-back, .gate-lang { transition: opacity 0.5s ease; }
+body.me:not(.entered) .moon, body.me:not(.entered) .moon-light { display: none; }
+html.has-moon body.me:not(.entered), html.has-moon body.me:not(.entered) * { cursor: auto !important; }
+html.has-moon body.me:not(.entered) .gate-star, html.has-moon body.me:not(.entered) .gate-star *, html.has-moon body.me:not(.entered) a, html.has-moon body.me:not(.entered) button { cursor: pointer !important; }
+
+/* audit: the "Not now" link of the entrance is easier to press */
+.gate-back { padding: 12px 0; bottom: 16px; }

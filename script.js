@@ -8,12 +8,17 @@ const links = document.querySelector(".links");
 const nav = document.querySelector(".site-nav");
 
 if (toggle && links) {
-  toggle.addEventListener("click", () => {
-    const open = links.classList.toggle("open");
+  const setMenu = (open) => {
+    links.classList.toggle("open", open);
     toggle.setAttribute("aria-expanded", String(open));
     I18N.set(toggle, open ? "Close" : "Menu");
     document.body.style.overflow = open ? "hidden" : "";
-  });
+    root.style.overflow = open ? "hidden" : "";
+  };
+  toggle.addEventListener("click", () => setMenu(!links.classList.contains("open")));
+  // closes by itself on Escape, and when the window grows past the phone layout (rotation, resize)
+  window.addEventListener("keydown", (e) => { if (e.key === "Escape" && links.classList.contains("open")) setMenu(false); });
+  window.matchMedia("(min-width: 761px)").addEventListener("change", (e) => { if (e.matches && links.classList.contains("open")) setMenu(false); });
 }
 
 const year = document.getElementById("year");
