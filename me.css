@@ -171,4 +171,8 @@ html.js body.me:not(.entered) { overflow: hidden; }
 /* the way out: "Chi sono" always on one line */
 .room-exit .row { max-width: 920px; }
 .room-exit .row .t { font-size: clamp(2.4rem, 5.4vw, 4.6rem); white-space: nowrap; }
-.room-exit .row .d { max-width: 24ch; }
+.room-exit .row .d { max-width: 24ch; }/* in the night room the same list, in the room's own night and champagne gold */
+@media (max-width: 760px) {
+  body.me .links { background: radial-gradient(900px 600px at 85% -5%, rgba(20, 52, 140, 0.5), transparent 62%), radial-gradient(700px 500px at -5% 105%, rgba(14, 42, 120, 0.45), transparent 60%), #050d24; }
+  body.me .links a::after { background: linear-gradient(90deg, rgba(201, 168, 122, 0.4), rgba(201, 168, 122, 0.12) 65%, transparent); }
+}

@@ -1412,15 +1412,6 @@ body.me .moon-light { background: radial-gradient(circle, rgba(255, 226, 150, .0
 .moon.sunflower.hover img { animation: none; transform: scale(1.25) rotate(10deg); }
 @keyframes sunSwayFlat { 0%, 100% { transform: rotate(-6deg); } 50% { transform: rotate(6deg); } }
 
-/* ---- phone menu: never slides under the logo, scrolls when the screen is short ---- */
-@media (max-width: 760px) {
-  .links { justify-content: flex-start; overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; padding-top: 128px; padding-bottom: 36px; }
-  .links a:first-child { margin-top: auto; }
-  .links a:last-child { margin-bottom: auto; }
-  .links a { font-size: clamp(2rem, min(13vw, 9.5vh), 4rem); flex: none; }
-  .site-nav:has(.links.open) { background: rgba(8, 3, 5, 0.98); -webkit-backdrop-filter: none; backdrop-filter: none; border-bottom-color: var(--line); }
-}
-
 /* the portal to the night room: a window of another colour, framed in the site's champagne gold and softly melted into the bordeaux */
 .me-portal { border: 1px solid rgba(201, 168, 122, .65); box-shadow: 0 0 0 5px rgba(10, 4, 6, .9), 0 0 0 6px rgba(201, 168, 122, .35), 0 30px 70px -30px rgba(0, 0, 0, .9), inset 0 0 70px rgba(107, 15, 38, .55); }
 .me-portal:hover { border-color: #f1deb8; box-shadow: 0 0 0 5px rgba(10, 4, 6, .9), 0 0 0 6px rgba(241, 222, 184, .6), 0 0 60px rgba(201, 168, 122, .28), 0 30px 70px -30px rgba(0, 0, 0, .9), inset 0 0 70px rgba(107, 15, 38, .45); }
@@ -1510,3 +1501,46 @@ body.me .moon-light { background: radial-gradient(circle, rgba(255, 226, 150, .0
 .pick[data-game="puzzle"]:hover > small, .pick[data-game="puzzle"].active > small { color: #e8d3a2; }
 .pick[data-game="puzzle"]:hover > svg, .pick[data-game="puzzle"].active > svg { stroke: #f6e8c8; }
 @media (prefers-reduced-motion: reduce) { .pick-glow::before { animation: none; } }
+
+/* ---- phone menu = the same list style as "Explore" on the Home: hairlines, numbers, bordeaux band and gold text when touched or current ---- */
+@media (max-width: 760px) {
+  .links {
+    gap: 0; padding-left: var(--pad); padding-right: var(--pad);
+    background:
+      radial-gradient(1000px 700px at 85% -5%, rgba(107, 15, 38, 0.65), transparent 62%),
+      radial-gradient(800px 600px at -5% 105%, rgba(58, 10, 25, 0.8), transparent 60%),
+      radial-gradient(600px 400px at 50% 50%, rgba(163, 20, 47, 0.07), transparent 70%),
+      #0a0406;
+    -webkit-backdrop-filter: none; backdrop-filter: none;
+  }
+  .links a {
+    position: relative; isolation: isolate; overflow: hidden;
+    display: grid; grid-template-columns: 54px minmax(0, 1fr); align-items: center;
+    padding: clamp(12px, 2.4vh, 22px) 0;
+    border-top: 1px solid var(--line);
+    -webkit-tap-highlight-color: transparent;
+    transition: padding 0.5s var(--ease);
+  }
+  .links a:last-child { border-bottom: 1px solid var(--line); }
+  .links a::before { -webkit-text-fill-color: var(--gold); color: var(--gold); opacity: 0.85; }
+  /* the bordeaux band */
+  .links a::after {
+    content: ""; display: block; position: absolute; z-index: -1; inset: 0; height: auto; width: auto;
+    transform: none; transition: opacity 0.45s ease;
+    background: linear-gradient(90deg, rgba(163, 20, 47, 0.34), rgba(163, 20, 47, 0.12) 65%, transparent);
+    opacity: 0;
+  }
+  .links a:hover, .links a:active, .links a:focus-visible, .links a[aria-current="page"] {
+    padding-left: 12px;
+    background-image: var(--metal); background-size: 260% 100%; -webkit-background-clip: text; background-clip: text;
+    color: transparent; -webkit-text-fill-color: transparent;
+  }
+  .links a:hover::before, .links a:active::before, .links a[aria-current="page"]::before { opacity: 1; }
+  .links a:hover::after, .links a:active::after, .links a:focus-visible::after, .links a[aria-current="page"]::after { opacity: 1; }
+}
+@media (max-width: 760px) and (max-height: 640px) {
+  .links { justify-content: flex-start; overflow-y: auto; padding-top: 112px; padding-bottom: 28px; }
+  .links a:first-child { margin-top: auto; }
+  .links a:last-child { margin-bottom: auto; }
+  .links a { font-size: clamp(2rem, min(13vw, 9.5vh), 4rem); flex: none; }
+}
