@@ -167,3 +167,8 @@ html.js body.me:not(.entered) { overflow: hidden; }
 .gs-spark.s2 { top: -4%; right: -4%; left: auto; bottom: auto; animation-delay: 0.8s; }
 .gs-spark.s4 { bottom: -4%; right: -4%; left: auto; top: auto; animation-delay: 1.6s; }
 .gs-spark.s3 { bottom: -4%; left: -4%; right: auto; top: auto; animation-delay: 2.4s; }
+
+/* the way out: "Chi sono" always on one line */
+.room-exit .row { max-width: 920px; }
+.room-exit .row .t { font-size: clamp(2.4rem, 5.4vw, 4.6rem); white-space: nowrap; }
+.room-exit .row .d { max-width: 24ch; }
