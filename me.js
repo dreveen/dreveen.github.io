@@ -31,11 +31,24 @@
     const g1 = gsky.getContext("2d"), g2 = gst.getContext("2d");
     const GB = ["#081a4f", "#0e2a78", "#173f9c", "#2456c0", "#3b78dc", "#6aa3f0", "#a9d0ff"];
     const GY = ["#c99a1f", "#f2d25b", "#ffe9a0", "#fff6cf"];
-    const GS = [
-      { x: 0.14, y: 0.2, r: 0.04, ph: 0.3 }, { x: 0.3, y: 0.1, r: 0.028, ph: 1.4 }, { x: 0.8, y: 0.16, r: 0.06, ph: 2.6 },
-      { x: 0.92, y: 0.42, r: 0.036, ph: 3.5 }, { x: 0.2, y: 0.66, r: 0.045, ph: 4.4 }, { x: 0.82, y: 0.74, r: 0.05, ph: 5.3 },
-      { x: 0.1, y: 0.9, r: 0.034, ph: 0.9 }, { x: 0.58, y: 0.92, r: 0.04, ph: 2.1 }, { x: 0.62, y: 0.1, r: 0.026, ph: 3.2 },
-    ];
+    // a lighter sky: a few stars of different sizes (same soft glowing look as before)
+    // Placed by chance on every visit, but never on the centre star, the text, the language switch or on each other.
+    const GS = [], DOTS = [];
+    (function scatter() {
+      const free = (x, y, minD) => {
+        if (Math.hypot((x - 0.5) * 1.1, y - 0.46) < 0.24) return false;                 // the central star
+        if (x > 0.26 && x < 0.74 && y > 0.54 && y < 0.68) return false;                // the sentence
+        if (x > 0.74 && y < 0.1) return false;                                          // language switch
+        if (y > 0.9 && x > 0.3 && x < 0.7) return false;                               // "Not now"
+        return GS.every((s) => Math.hypot(x - s.x, y - s.y) > minD);
+      };
+      let tries = 0;
+      while (GS.length < 8 && tries++ < 400) {
+        const x = 0.07 + Math.random() * 0.86, y = 0.06 + Math.random() * 0.88;
+        if (!free(x, y, 0.2)) continue;
+        GS.push({ x: x, y: y, r: 0.022 + Math.random() * 0.03, ph: Math.random() * 6.28 });
+      }
+    })();
     let gw = 0, gh = 0, gd = 1, gt = 0, gl = 0, grt;
     const gp = (s) => ({ x: s.x * gw, y: s.y * gh, R: s.r * (gw + gh) * 0.5 });
     function gfield(x, y) {
@@ -44,7 +57,7 @@
       const c = { x: gw * 0.5, y: gh * 0.46 }, dx0 = x - c.x, dy0 = y - c.y, d0 = Math.hypot(dx0, dy0) + 1, k0 = 3.2 * Math.exp(-d0 / (Math.min(gw, gh) * 0.55));
       vx += (-dy0 / d0) * k0; vy += (dx0 / d0) * k0;
       for (let i = 0; i < GS.length; i++) {
-        const p = gp(GS[i]), dx = x - p.x, dy = y - p.y, d = Math.hypot(dx, dy) + 1, k = 2.3 * Math.exp(-d / (p.R * 3.4));
+        const p = gp(GS[i]), dx = x - p.x, dy = y - p.y, d = Math.hypot(dx, dy) + 1, k = 1.8 * Math.exp(-d / (p.R * 3.2));
         vx += (-dy / d) * k; vy += (dx / d) * k;
       }
       return [vx, vy];
