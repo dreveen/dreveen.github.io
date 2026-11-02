@@ -1420,3 +1420,11 @@ body.me .moon-light { background: radial-gradient(circle, rgba(255, 226, 150, .0
   .links a { font-size: clamp(2rem, min(13vw, 9.5vh), 4rem); flex: none; }
   .site-nav:has(.links.open) { background: rgba(8, 3, 5, 0.98); -webkit-backdrop-filter: none; backdrop-filter: none; border-bottom-color: var(--line); }
 }
+
+/* the portal to the night room: a window of another colour, framed in the site's champagne gold and softly melted into the bordeaux */
+.me-portal { border: 1px solid rgba(201, 168, 122, .65); box-shadow: 0 0 0 5px rgba(10, 4, 6, .9), 0 0 0 6px rgba(201, 168, 122, .35), 0 30px 70px -30px rgba(0, 0, 0, .9), inset 0 0 70px rgba(107, 15, 38, .55); }
+.me-portal:hover { border-color: #f1deb8; box-shadow: 0 0 0 5px rgba(10, 4, 6, .9), 0 0 0 6px rgba(241, 222, 184, .6), 0 0 60px rgba(201, 168, 122, .28), 0 30px 70px -30px rgba(0, 0, 0, .9), inset 0 0 70px rgba(107, 15, 38, .45); }
+.me-portal::after { background: radial-gradient(circle at 82% 28%, rgba(255, 244, 214, .9) 0 2.5%, rgba(241, 222, 184, .5) 5%, rgba(241, 222, 184, 0) 16%), radial-gradient(circle at 62% 70%, rgba(255, 240, 205, .65) 0 1.5%, rgba(241, 222, 184, .28) 3.5%, rgba(241, 222, 184, 0) 11%), radial-gradient(circle at 12% 22%, rgba(255, 240, 205, .55) 0 1.2%, rgba(241, 222, 184, 0) 8%), linear-gradient(90deg, rgba(60, 8, 24, .55), rgba(5, 13, 36, .2) 45%, rgba(5, 13, 36, .1) 70%, rgba(60, 8, 24, .45)); }
+.me-portal .mp-num, .me-portal .mp-go { color: #e8d3a2; }
+.me-portal .mp-title { color: #f6e8c8; text-shadow: 0 0 30px rgba(201, 168, 122, .35); }
+.me-portal .mp-go { border-bottom-color: rgba(232, 211, 162, .7); }
