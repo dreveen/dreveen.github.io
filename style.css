@@ -1411,3 +1411,12 @@ body.me .moon-light { background: radial-gradient(circle, rgba(255, 226, 150, .0
 .moon.sunflower img { display: block; width: 100%; height: 100%; user-select: none; -webkit-user-drag: none; filter: contrast(1.18) saturate(1.1) brightness(.97) drop-shadow(0 2px 1.5px rgba(40, 14, 0, .65)) drop-shadow(0 5px 5px rgba(0, 0, 0, .4)); animation: sunSwayFlat 6s ease-in-out infinite; transition: transform .3s ease; }
 .moon.sunflower.hover img { animation: none; transform: scale(1.25) rotate(10deg); }
 @keyframes sunSwayFlat { 0%, 100% { transform: rotate(-6deg); } 50% { transform: rotate(6deg); } }
+
+/* ---- phone menu: never slides under the logo, scrolls when the screen is short ---- */
+@media (max-width: 760px) {
+  .links { justify-content: flex-start; overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; padding-top: 128px; padding-bottom: 36px; }
+  .links a:first-child { margin-top: auto; }
+  .links a:last-child { margin-bottom: auto; }
+  .links a { font-size: clamp(2rem, min(13vw, 9.5vh), 4rem); flex: none; }
+  .site-nav:has(.links.open) { background: rgba(8, 3, 5, 0.98); -webkit-backdrop-filter: none; backdrop-filter: none; border-bottom-color: var(--line); }
+}

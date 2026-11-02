@@ -1,80 +1,137 @@
-/* "The real me": a quiet, painted night sky, inspired by immersive Van Gogh rooms.
-   Different mood on purpose: deep blues and soft yellows instead of bordeaux. */
+/* "The real me": a quiet room under Van Gogh's Starry Night.
+   Structure: entrance (framed painting) > title screen > four chapters (text | framed quote, alternating) > way out.
+   Colours: night blue and champagne gold. */
 body.me {
   --bg: #050d24;
   --ink: #eef4ff;
   --muted: #a9bde0;
-  --gold: #f2d25b;
-  --gold-hi: #ffe9a0;
+  --gold: #d9c08e;
+  --gold-hi: #f4e6c4;
   --line: rgba(160, 190, 255, 0.22);
   --line-strong: rgba(160, 190, 255, 0.5);
-  --wine: #0d2a73;
-  --metal: linear-gradient(105deg, #b88a1c 0%, #f2d25b 20%, #fff2b8 34%, #f2d25b 48%, #b88a1c 64%, #f2d25b 80%, #fff2b8 92%, #f2d25b 100%);
+  --metal: linear-gradient(105deg, #7d6140 0%, #c9a87a 16%, #f1deb8 30%, #c9a87a 44%, #7d6140 60%, #c9a87a 76%, #f1deb8 90%, #c9a87a 100%);
+  --night: 5, 13, 36;
   background: #050d24;
   color: var(--ink);
 }
+body.me ::selection { background: rgba(217, 192, 142, 0.45); color: #fff; }
 
-/* painted sky (two canvases) that slowly zooms while you scroll, like walking down the corridor */
+/* ---------- the painted sky (it slowly zooms while you scroll) ---------- */
 .me-world { position: fixed; inset: 0; z-index: 0; transform: scale(calc(1 + var(--p, 0) * 0.14)) translateY(calc(var(--p, 0) * -34px)); transform-origin: 50% 40%; will-change: transform; }
 .me-art, .me-sky, .me-stars { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
-.me-veil { position: fixed; inset: 0; z-index: 1; pointer-events: none; background: linear-gradient(rgba(5, 13, 36, 0.16), rgba(5, 13, 36, 0.16)), radial-gradient(ellipse at 50% 45%, rgba(5, 13, 36, 0) 30%, rgba(5, 13, 36, 0.55) 100%), linear-gradient(180deg, rgba(5, 13, 36, 0.35), rgba(5, 13, 36, 0) 30%, rgba(5, 13, 36, 0) 70%, rgba(5, 13, 36, 0.5)); }
-
+.me-veil { position: fixed; inset: 0; z-index: 1; pointer-events: none; background: linear-gradient(rgba(var(--night), 0.16), rgba(var(--night), 0.16)), radial-gradient(ellipse at 50% 45%, rgba(var(--night), 0) 30%, rgba(var(--night), 0.55) 100%), linear-gradient(180deg, rgba(var(--night), 0.35), rgba(var(--night), 0) 30%, rgba(var(--night), 0) 70%, rgba(var(--night), 0.5)); }
 .me .site-nav { z-index: 60; }
+.me .site-nav.scrolled { background: rgba(var(--night), 0.72); box-shadow: 0 1px 0 rgba(217, 192, 142, 0.18); }
 .me-page, .me footer { position: relative; z-index: 2; }
-.me .site-nav.scrolled { background: rgba(5, 13, 36, 0.72); }
-.me .display, .me .section-title { text-shadow: 0 2px 30px rgba(5, 13, 36, 0.8); }
-.me .lead { text-shadow: 0 1px 18px rgba(5, 13, 36, 0.9); color: #dbe7ff; }
-.me .eyebrow { color: var(--gold); }
+.me .reveal { transition-duration: 1.2s; }
 
-.room { min-height: 78vh; display: flex; flex-direction: column; justify-content: center; padding: clamp(40px, 8vw, 90px) 0; }
-.room:first-child { min-height: 86vh; }
-.scroll-hint { margin-top: 36px; font-size: 0.72rem; letter-spacing: 0.34em; text-transform: uppercase; color: var(--gold); }
-.scroll-hint::after { content: ""; display: block; width: 1px; height: 54px; margin: 14px 0 0 4px; background: linear-gradient(var(--gold), transparent); animation: hintDrift 3.4s ease-in-out infinite; }
-@keyframes hintDrift { 50% { transform: translateY(10px); opacity: 0.4; } }
+/* navigation accents: champagne */
+body.me .links a::after { background: linear-gradient(90deg, #c9a87a, #f6e8c8, #c9a87a); }
+body.me .links a::before { color: var(--gold); }
+body.me .lang:hover { background: rgba(217, 192, 142, 0.18); border-color: var(--gold); }
 
-.me-cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(14px, 2.4vw, 28px); margin-top: 8px; }
-.me-card { padding: clamp(22px, 3vw, 34px); background: linear-gradient(160deg, rgba(14, 38, 104, 0.58), rgba(7, 18, 52, 0.62)); border: 1px solid var(--line); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); box-shadow: 0 30px 60px -34px rgba(0, 0, 0, 0.85), inset 0 0 40px rgba(60, 110, 220, 0.08); transition: transform 0.8s var(--ease), border-color 0.6s ease, box-shadow 0.8s ease; }
-.me-card:hover { transform: translateY(-6px); border-color: var(--gold); box-shadow: 0 30px 70px -30px rgba(0, 0, 0, 0.9), 0 0 40px rgba(242, 210, 91, 0.18); }
-.me-card h3 { margin: 0 0 12px; font-family: var(--serif); font-style: italic; font-weight: 400; font-size: clamp(1.5rem, 2.6vw, 2rem); color: var(--gold-hi); }
-.me-card p { margin: 0; line-height: 1.75; color: #d5e2ff; }
+/* ---------- 1. title screen ---------- */
+.hero-room { min-height: 100svh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 110px 0 70px; }
+.hero-room .eyebrow { justify-content: center; margin-bottom: 26px; color: var(--gold); }
+.hero-room .eyebrow::before { display: none; }
+.hero-room .eyebrow::after { content: ""; display: block; width: 44px; height: 1px; margin-left: 16px; background: linear-gradient(90deg, #c9a87a, transparent); }
+.hero-room .display { font-size: clamp(3.2rem, 10vw, 8.6rem); line-height: 1.02; text-align: center; }
+.hero-room .display span { display: block; }
+.hero-room .display .shift { margin-left: 0; padding-left: 0; }
+.hero-room .display span:first-child { color: #fff; text-shadow: 0 2px 30px rgba(var(--night), 0.9); }
+.hero-room .display .metal { background-image: linear-gradient(105deg, #e8d3a2 0%, #fff4d8 28%, #e8d3a2 52%, #f6e6c0 76%, #e8d3a2 100%); text-shadow: none; filter: drop-shadow(0 2px 18px rgba(var(--night), 0.85)); }
 
-.room-quote { align-items: center; text-align: center; }
-.room-quote blockquote { margin: 0; max-width: 26ch; }
-.room-quote blockquote p { margin: 0; font-family: var(--serif); font-style: italic; font-size: clamp(2rem, 6vw, 4.2rem); line-height: 1.2; color: var(--gold-hi); text-shadow: 0 0 40px rgba(242, 210, 91, 0.35), 0 2px 30px rgba(5, 13, 36, 0.9); }
-.room-quote cite { display: block; margin-top: 22px; font-style: normal; font-size: 0.74rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--muted); }
-.room-exit { min-height: 50vh; }
-.me .row .t { color: var(--ink); }
+/* ---------- 2. four chapters: text on one side, a framed quote on the other ---------- */
+.chaps { max-width: 1160px; margin: 0 auto; padding: 20px var(--pad) 40px; }
+.chap { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: clamp(36px, 6vw, 96px); align-items: center; padding: clamp(40px, 5vw, 70px) 0; counter-increment: chap; }
+.chap + .chap { border-top: 1px solid rgba(217, 192, 142, 0.18); }
+.chaps { counter-reset: chap; }
+.chap:nth-child(even) .chap-text { order: 2; }
+.chap:nth-child(even) .me-frame { order: 1; }
 
-/* entrance: a museum wall with one framed painting; you walk into the painting */
+.chap-text { position: relative; }
+.chap-text::before { content: ""; position: absolute; z-index: -1; inset: -44px -70px; background: radial-gradient(ellipse at center, rgba(var(--night), 0.74) 0%, rgba(var(--night), 0.5) 52%, rgba(var(--night), 0) 78%); }
+.chap-text::after { content: "0" counter(chap); display: block; order: -1; }
+.chap-n { display: block; margin-bottom: 18px; font-family: var(--serif); font-style: italic; font-size: clamp(2.4rem, 4vw, 3.4rem); line-height: 1; color: var(--gold); }
+.chap-n::after { content: ""; display: inline-block; vertical-align: middle; width: 54px; height: 1px; margin-left: 18px; background: linear-gradient(90deg, #c9a87a, transparent); }
+.chap-text::after { content: none; }
+.me-para { margin: 0; font-family: var(--serif); font-size: clamp(1.2rem, 1.9vw, 1.65rem); line-height: 1.62; color: #fffaf0; text-shadow: 0 2px 16px rgba(var(--night), 0.9); }
+.me-w { opacity: 0.22; transition: opacity 0.5s ease; }
+.me-w.on { opacity: 1; }
+
+/* framed quote */
+.me-frame { position: relative; justify-self: center; width: 100%; max-width: 360px; margin: 0; padding: 11px; background: var(--metal); box-shadow: 0 24px 50px -20px rgba(0, 0, 0, 0.85), 0 0 40px rgba(217, 192, 142, 0.14); transform: rotate(-1.2deg); transition: transform 0.7s var(--ease), box-shadow 0.7s ease; }
+.chap:nth-child(even) .me-frame { transform: rotate(1.2deg); }
+.me-frame::before { content: ""; position: absolute; inset: 5px; border: 1px solid rgba(70, 48, 12, 0.5); pointer-events: none; z-index: 2; }
+.me-frame:hover { transform: translateY(-5px) rotate(0deg); box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.9), 0 0 60px rgba(217, 192, 142, 0.3); }
+.mf-art { position: relative; padding: 36px 26px 28px; text-align: center; background: linear-gradient(rgba(var(--night), 0.66), rgba(var(--night), 0.78)), url("starry-night.jpg"); background-size: auto, 380%; background-position: center, var(--pos, 50% 40%); box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.55); }
+.f1 { --pos: 88% 12%; } .f2 { --pos: 52% 36%; } .f3 { --pos: 72% 92%; } .f4 { --pos: 12% 62%; }
+.mf-art blockquote { margin: 0; font-family: var(--serif); font-style: italic; font-size: clamp(1rem, 1.3vw, 1.14rem); line-height: 1.65; color: #fff4dc; text-shadow: 0 1px 12px rgba(var(--night), 0.9); }
+.mf-art blockquote::before { content: "\201C"; display: block; margin-bottom: 4px; font-size: 2.2rem; line-height: 0.6; color: var(--gold); }
+.mf-art figcaption { margin-top: 18px; padding-top: 14px; border-top: 1px solid rgba(217, 192, 142, 0.4); }
+.mf-art figcaption b { display: block; font-weight: 400; font-size: 0.7rem; letter-spacing: 0.26em; text-transform: uppercase; color: #ecd9ae; }
+.mf-art figcaption span { display: block; margin-top: 5px; font-size: 0.68rem; letter-spacing: 0.12em; color: #aebfe2; }
+
+/* ---------- 3. the way out ---------- */
+.room-exit { padding: 30px var(--pad) 110px; }
+.room-exit .row { max-width: 760px; margin: 0 auto; }
+body.me .row .t { color: var(--ink); }
+body.me .row::before { background: linear-gradient(90deg, rgba(201, 168, 122, 0.5), rgba(201, 168, 122, 0.26) 55%, rgba(201, 168, 122, 0.06)); }
+body.me .row:hover { box-shadow: inset 3px 0 0 var(--gold); }
+body.me .row:hover .t { background-image: none; -webkit-text-fill-color: #fffaf0; color: #fffaf0; text-shadow: 0 2px 14px rgba(40, 28, 8, 0.65); }
+
+/* ---------- entrance: a starry night, and one star that is the door ---------- */
 .me-gate { display: none; }
-html.js .me-gate { position: fixed; inset: 0; z-index: 100; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 22px; padding: 24px; text-align: center; overflow: hidden; background: radial-gradient(ellipse at 50% 18%, rgba(255, 233, 160, 0.16), rgba(255, 233, 160, 0) 46%), linear-gradient(180deg, #0a1633 0%, #06102a 60%, #030817 100%); transition: opacity 0.9s ease, visibility 0s linear 0.9s; }
+html.js .me-gate { position: fixed; inset: 0; z-index: 100; display: block; overflow: hidden; background: #050d24; transition: opacity 1.4s ease, visibility 0s linear 1.4s; }
 body.me.entered .me-gate { opacity: 0; visibility: hidden; pointer-events: none; }
 html.js body.me:not(.entered) { overflow: hidden; }
-.gate-frame { appearance: none; position: relative; width: min(58vw, 270px); aspect-ratio: 4 / 5; padding: 11px; border: 0; cursor: pointer; background: var(--metal); box-shadow: 0 0 60px rgba(242, 210, 91, 0.22), 0 30px 60px -20px rgba(0, 0, 0, 0.85); transition: transform 2s cubic-bezier(0.65, 0, 0.3, 1), box-shadow 0.6s ease; }
-.gate-frame::before { content: ""; position: absolute; inset: 5px; border: 1px solid rgba(60, 40, 5, 0.55); pointer-events: none; z-index: 2; }
-.gate-frame:hover { box-shadow: 0 0 80px rgba(242, 210, 91, 0.4), 0 30px 60px -20px rgba(0, 0, 0, 0.85); }
-.gf-art { position: absolute; inset: 11px; overflow: hidden; background: #0a1f63; }
-.gf-art::before { content: ""; position: absolute; inset: -60%; background: conic-gradient(from 0deg, #0a1f63, #2456c0, #081a4f, #3b78dc, #0e2a78, #1d4aa8, #0a1f63); filter: blur(14px); animation: gateSwirl 40s linear infinite; }
-.gf-art::after { content: ""; position: absolute; inset: 0; background: radial-gradient(circle at 74% 24%, #fff6c4 0 3%, rgba(255, 214, 90, 0.6) 7%, rgba(255, 214, 90, 0) 22%), radial-gradient(circle at 30% 42%, rgba(255, 233, 160, 0.9) 0 2%, rgba(255, 214, 90, 0.4) 5%, rgba(255, 214, 90, 0) 16%), radial-gradient(circle at 60% 74%, rgba(255, 233, 160, 0.8) 0 1.6%, rgba(255, 214, 90, 0.3) 4%, rgba(255, 214, 90, 0) 14%), radial-gradient(circle at 16% 80%, rgba(255, 233, 160, 0.6) 0 1.2%, rgba(255, 214, 90, 0) 9%); }
-@keyframes gateSwirl { to { transform: rotate(360deg); } }
-.gate-plaque { display: flex; flex-direction: column; gap: 3px; padding: 12px 22px; text-align: left; border-left: 2px solid var(--gold); background: rgba(255, 255, 255, 0.04); }
-.gate-plaque b { font-family: var(--serif); font-style: italic; font-weight: 400; font-size: 1.15rem; color: var(--gold-hi); }
-.gate-plaque span { font-size: 0.78rem; letter-spacing: 0.08em; color: #d5e2ff; }
-.gate-plaque small { font-size: 0.7rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); }
-.gate-btn { appearance: none; padding: 14px 40px; font: inherit; font-size: 0.76rem; letter-spacing: 0.3em; text-transform: uppercase; color: #1a1304; background: var(--metal); border: 0; cursor: pointer; transition: transform 0.5s var(--ease), box-shadow 0.5s ease; }
-.gate-btn:hover { transform: translateY(-3px); box-shadow: 0 0 36px rgba(242, 210, 91, 0.4); }
-.gate-back { font-size: 0.72rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted); text-decoration: none; padding: 6px; }
+.gate-sky, .gate-stars { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.gate-center { position: absolute; inset: 0; z-index: 2; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 30px; padding: 24px; text-align: center; }
+.gate-eyebrow { margin: 0; font-size: 0.78rem; letter-spacing: 0.42em; text-transform: uppercase; color: var(--gold-hi); text-shadow: 0 1px 16px rgba(5, 13, 36, 0.95); }
+.gate-cta { margin: 0; font-family: var(--serif); font-style: italic; font-size: clamp(1.15rem, 2.6vw, 1.6rem); color: #fff4dc; text-shadow: 0 2px 20px rgba(5, 13, 36, 1), 0 0 4px rgba(5, 13, 36, 0.8); }
+.gate-back { position: absolute; z-index: 3; left: 0; right: 0; bottom: 28px; text-align: center; font-size: 0.72rem; letter-spacing: 0.24em; text-transform: uppercase; color: #c9d6f2; text-decoration: none; text-shadow: 0 1px 10px rgba(5, 13, 36, 0.95); }
 .gate-back:hover { color: var(--gold-hi); }
-/* walking into the painting */
-.me-gate.entering .gate-frame { transform: scale(16); box-shadow: none; }
-.me-gate.entering .gate-plaque, .me-gate.entering .gate-btn, .me-gate.entering .gate-back { opacity: 0; transition: opacity 0.5s ease; }
 
-/* reveal in the room feels slower */
-.me .reveal { transition-duration: 1.4s; }
+.gate-star { appearance: none; position: relative; width: clamp(150px, 26vw, 210px); aspect-ratio: 1; padding: 0; border: 0; background: none; cursor: pointer; transition: transform 0.6s var(--ease); }
+.gate-star:hover { transform: scale(1.06); }
+.gs-core { position: absolute; inset: 33%; border-radius: 50%; background: radial-gradient(circle, #fffbe0 0%, #ffe9a0 38%, #f2c64a 72%, #d9a02a 100%); box-shadow: 0 0 40px 12px rgba(255, 226, 130, 0.55), 0 0 110px 40px rgba(255, 200, 70, 0.28); animation: gsBreath 5s ease-in-out infinite; }
+.gs-ring { position: absolute; inset: 14%; border-radius: 50%; border: 1px solid rgba(255, 233, 160, 0.6); box-shadow: 0 0 22px rgba(255, 214, 90, 0.2), inset 0 0 18px rgba(255, 214, 90, 0.12); animation: gsPulse 5s ease-in-out infinite; }
+.gs-ring.r2 { inset: 0; border-color: rgba(255, 233, 160, 0.34); animation-delay: 0.7s; }
+.gs-ring.r3 { inset: -16%; border-color: rgba(255, 233, 160, 0.18); animation-delay: 1.4s; }
+@keyframes gsBreath { 50% { transform: scale(1.1); } }
+@keyframes gsPulse { 0%, 100% { transform: scale(0.94); opacity: 0.55; } 50% { transform: scale(1.06); opacity: 1; } }
+.gs-flood { position: absolute; left: 50%; top: 50%; width: 40px; height: 40px; margin: -20px 0 0 -20px; border-radius: 50%; background: radial-gradient(circle, rgba(255, 244, 200, 0.95) 0%, rgba(255, 214, 90, 0.7) 40%, rgba(255, 214, 90, 0) 72%); opacity: 0; transform: scale(1); pointer-events: none; }
+/* touching the star: the light grows until it fills the night, then the room appears */
+.me-gate.entering .gs-flood { opacity: 1; transform: scale(90); transition: transform 1.9s cubic-bezier(0.55, 0, 0.3, 1), opacity 0.5s ease; }
+.me-gate.entering .gate-eyebrow, .me-gate.entering .gate-cta, .me-gate.entering .gate-back { opacity: 0; transition: opacity 0.5s ease; }
 
-@media (max-width: 860px) { .me-cards { grid-template-columns: 1fr; } .room, .room:first-child { min-height: 0; padding: 70px 0; } .room:first-child { padding-top: 110px; min-height: 80vh; } }
-@media (prefers-reduced-motion: reduce) {
-  .gf-art::before, .scroll-hint::after { animation: none; }
-  .me-gate.entering .gate-frame { transition: none; }
-  .me-world { transform: none; }
+/* ---------- small screens: one column, quote right under its text ---------- */
+@media (max-width: 900px) {
+  .chap { grid-template-columns: 1fr; gap: 30px; padding: 44px 0; }
+  .chap:nth-child(even) .chap-text, .chap:nth-child(even) .me-frame { order: 0; }
+  .chap-text::before { inset: -30px -22px; }
+  .me-para { font-size: clamp(1.2rem, 5.2vw, 1.55rem); }
+  .me-frame, .chap:nth-child(even) .me-frame { max-width: 340px; }
 }
+@media (prefers-reduced-motion: reduce) {
+  .gs-core, .gs-ring { animation: none; }
+  .me-gate.entering .gs-flood { transition: none; }
+  .me-world { transform: none; }
+  .me-w { opacity: 1; transition: none; }
+}
+
+/* "Click here" written on the star itself */
+.gs-core { inset: 27%; }
+.gs-label { position: absolute; inset: 0; z-index: 3; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; pointer-events: none; font-family: var(--sans); font-weight: 400; font-size: clamp(0.62rem, 1.5vw, 0.8rem); line-height: 1.15; letter-spacing: 0.16em; text-transform: uppercase; color: #3d2704; }
+.gs-label span:first-child { font-weight: 600; }
+.me-gate.entering .gs-label { opacity: 0; transition: opacity 0.4s ease; }
+
+/* language switch on the entrance too, like everywhere else on the site */
+.gate-lang, html .gate-lang { position: absolute; z-index: 5; top: 22px; bottom: auto; right: var(--pad); left: auto; margin: 0; }
+.me-gate.entering .gate-lang { opacity: 0; transition: opacity 0.4s ease; }
+
+/* elegant writing inside the star: calligraphic, same hand as the logo */
+.gs-core { inset: 24%; }
+.gs-label { gap: 0; font-family: var(--script); font-weight: 400; font-size: clamp(1.15rem, 3vw, 1.6rem); line-height: 0.92; letter-spacing: 0; text-transform: none; color: #3a2402; text-shadow: 0 1px 0 rgba(255, 246, 200, 0.55); }
+.gs-label span:first-child { font-weight: 400; }
+.gs-label { font-size: clamp(1.5rem, 3.9vw, 2.05rem); line-height: 0.88; color: #2f1c00; text-shadow: 0 1px 0 rgba(255, 246, 200, 0.7); }
