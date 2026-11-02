@@ -1548,3 +1548,12 @@ footer { padding-bottom: max(44px, env(safe-area-inset-bottom, 0px)); }
 /* the header blur lives on a pseudo-element: a backdrop-filter on the header itself would trap the fixed full-screen menu inside it once the page is scrolled */
 .site-nav.scrolled { -webkit-backdrop-filter: none; backdrop-filter: none; }
 .site-nav.scrolled::before { content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none; -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px); }
+
+/* tablets just above the phone breakpoint: the five links and the logo stay on one line */
+.logo, .links a { white-space: nowrap; }
+@media (min-width: 761px) and (max-width: 1000px) {
+  .site-nav { gap: 20px; }
+  .links { gap: 20px; }
+  .links a { letter-spacing: 0.15em; }
+  .links a::before { margin-right: 5px; }
+}
