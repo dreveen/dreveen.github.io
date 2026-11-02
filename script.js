@@ -297,7 +297,8 @@ if (intro && introOn) {
 // ---------- whoever opens the code gets a quiet message that stays while the inspector is open ----------
 (function () {
   if (!fine) return; // phones and tablets have no inspector
-  let el = null, timer = 0, held = false;
+  let el = null, timer = 0, held = false, shownAt = 0;
+  const MIN = 20000; // it stays at least this long, whatever happens
   function hide() {
     if (!el) return;
     clearTimeout(timer);
@@ -316,6 +317,7 @@ if (intro && introOn) {
       document.body.appendChild(el);
       void el.offsetWidth;
       el.classList.add("on");
+      shownAt = Date.now();
     }
     el.querySelector(".pc-t").textContent = I18N.pick("Your curiosity fascinates me.", "La tua curiosità mi affascina.");
     if (keepFor) timer = setTimeout(() => { if (!held) hide(); }, keepFor);
@@ -331,7 +333,7 @@ if (intro && introOn) {
     console.log("%c", "font-size:0", probe);
     setTimeout(() => {
       if (hit && !held) { held = true; show(0); }
-      else if (!hit && held) { held = false; hide(); }
+      else if (!hit && held) { held = false; const left = MIN - (Date.now() - shownAt); if (left > 0) timer = setTimeout(() => { if (!held) hide(); }, left); else hide(); }
     }, 60);
   }
   setInterval(poll, 1200);
@@ -341,8 +343,8 @@ if (intro && introOn) {
     const k = (e.key || "").toLowerCase();
     const mod = e.ctrlKey || e.metaKey;
     const opens = k === "f12" || (mod && e.shiftKey && (k === "i" || k === "j" || k === "c")) || (e.metaKey && e.altKey && (k === "i" || k === "j" || k === "u" || k === "c")) || (mod && !e.shiftKey && k === "u");
-    if (opens) show(4200);
-    else if (k === "escape" && !held) hide();
+    if (opens) show(20000);
+    else if (k === "escape" && !held && Date.now() - shownAt >= MIN) hide();
   }, true);
-  document.addEventListener("click", (e) => { if (el && !held && e.target.closest(".peek-code")) hide(); });
+  document.addEventListener("click", (e) => { if (el && !held && Date.now() - shownAt >= MIN && e.target.closest(".peek-code")) hide(); });
 })();
