@@ -490,8 +490,8 @@
       }
     }
     const L2 = S.len / 2;
-    const heads = glow(S.headGlow.flatMap((p) => [[L2 + 0.05, p[0], p[1]], [L2 + 0.05, p[0], -p[1]]]), "#fff3dc", 0.45);
-    const tails = glow(S.tailGlow.flatMap((p) => [[-L2 - 0.03, p[0], p[1]], [-L2 - 0.03, p[0], -p[1]]]), "#ff2020", 0.35);
+    const heads = glow(S.headGlow.flatMap((p) => [[L2 - p[2], p[0], p[1]], [L2 - p[2], p[0], -p[1]]]), "#fff3dc", 0.28);
+    const tails = glow(S.tailGlow.flatMap((p) => [[-L2 + p[2], p[0], p[1]], [-L2 + p[2], p[0], -p[1]]]), "#ff2020", 0.22);
     car.add(heads, tails);
     const shadow = new THREE.Mesh(new THREE.PlaneGeometry(S.len * 1.25, 2.6), new THREE.MeshBasicMaterial({
       map: canvasTex(128, 64, (g, w, h) => {
@@ -528,7 +528,7 @@
     topW: [[0, 0.88], [0.25, 0.82], [0.36, 0.62], [0.47, 0.58], [0.58, 0.62], [0.66, 0.8], [0.75, 0.9], [1, 0.9]],
     dip: (u) => 0.035 * smooth((u - 0.7) / 0.06) * (1 - smooth((u - 0.98) / 0.02)),
     mirror: [0.32, 0.94, 0.9], paintRGB: C("#c8001c"),
-    headGlow: [[0.64, 0.72]], tailGlow: [[0.88, 0.62]],
+    headGlow: [[0.57, 0.66, 0.3]], tailGlow: [[0.87, 0.64, 0.02]],
   };
   const ferrari = makeCar(FER, `
     void paint(vec3 p, vec3 n, inout vec3 c, inout float e, inout float g) {
@@ -557,31 +557,43 @@
 
   // silver rear-engine German sports coupe
   const POR = {
-    len: 4.5, n: 3.0, clear: 0.12, Rw: 0.34, wheels: [0.2, 0.82], archU: 0.09, archH: 0.62, capT: 0.03, capN: 0.05,
-    top: [[0, 0.7], [0.02, 0.9], [0.04, 0.97], [0.09, 0.95], [0.2, 1.04], [0.3, 1.15], [0.42, 1.27], [0.52, 1.3],
-      [0.6, 1.22], [0.66, 1.06], [0.71, 0.9], [0.78, 0.82], [0.88, 0.77], [0.96, 0.66], [1, 0.52]],
-    mid: [[0, 0.68], [0.2, 0.72], [0.5, 0.68], [0.8, 0.7], [0.94, 0.62], [1, 0.45]],
-    w: [[0, 0.86], [0.07, 0.98], [0.2, 1.0], [0.32, 0.9], [0.55, 0.86], [0.75, 0.91], [0.9, 0.89], [1, 0.7]],
-    topW: [[0, 0.84], [0.12, 0.76], [0.3, 0.66], [0.45, 0.62], [0.58, 0.64], [0.68, 0.8], [1, 0.92]],
-    dip: (u) => 0.08 * smooth((u - 0.68) / 0.06) * (1 - smooth((u - 0.97) / 0.03)),
-    headGlow: [[0.74, 0.62]], tailGlow: [[0.83, 0.5], [0.83, 0.15]], paintRGB: C("#b8bcc2"),
+    len: 4.52, n: 3.0, clear: 0.12, Rw: 0.345, wheels: [0.2, 0.82], archU: 0.09, archH: 0.62, capT: 0.03, capN: 0.05,
+    top: [[0, 0.62], [0.02, 0.86], [0.05, 0.94], [0.08, 0.92], [0.18, 1.0], [0.3, 1.13], [0.42, 1.25], [0.5, 1.29],
+      [0.57, 1.27], [0.63, 1.14], [0.69, 0.94], [0.74, 0.84], [0.86, 0.78], [0.95, 0.68], [1, 0.5]],
+    mid: [[0, 0.66], [0.2, 0.74], [0.5, 0.68], [0.8, 0.7], [0.94, 0.62], [1, 0.45]],
+    w: [[0, 0.88], [0.07, 0.99], [0.18, 1.02], [0.32, 0.9], [0.55, 0.86], [0.75, 0.91], [0.9, 0.9], [1, 0.72]],
+    topW: [[0, 0.84], [0.12, 0.76], [0.3, 0.64], [0.45, 0.6], [0.58, 0.63], [0.68, 0.8], [0.8, 0.94], [1, 0.95]],
+    dip: (u) => 0.1 * smooth((u - 0.68) / 0.06) * (1 - smooth((u - 0.97) / 0.03)),
+    mirror: [0.5, 0.96, 0.86], paintRGB: C("#9ea3aa"),
+    headGlow: [[0.74, 0.6, 0.36]], tailGlow: [[0.83, 0.55, 0.02], [0.83, 0.2, 0.02]],
   };
   const porsche = makeCar(POR, `
     void paint(vec3 p, vec3 n, inout vec3 c, inout float e, inout float g) {
-      float x = p.x, y = p.y, az = abs(p.z), L2 = 2.25;
-      vec3 CF = vec3(0.035, 0.035, 0.04), GL = vec3(0.012, 0.016, 0.025), SV = vec3(0.72, 0.74, 0.77);
-      c = SV; g = 1.0; e = 0.0;
+      float x = p.x, y = p.y, az = abs(p.z), L2 = 2.26;
+      vec3 CF = vec3(0.035, 0.035, 0.04), GL = vec3(0.012, 0.016, 0.025), SV = vec3(0.56, 0.58, 0.61);
+      c = SV; g = 0.85; e = 0.0;
       if (y < 0.27) { c = CF; g = 0.3; }
-      if (y > 0.88 && x > 0.5 && x < 1.02 && n.y > 0.2) { c = GL; g = 1.0; }                     // windscreen
-      float belt = 0.93 + max(0.0, -x - 0.2) * 0.12;                       // side window with the rounded rear corner
+      if (y > 0.88 && x > 0.5 && x < 1.02 && n.y > 0.2) { c = GL; g = 1.0; }                     // raked windscreen
+      float belt = 0.93 + max(0.0, -x - 0.2) * 0.12;                       // long teardrop side window
       if (y > belt && x < 0.52 - (y - 0.93) * 0.9 && x > -1.12 + pow(max(y - belt, 0.0), 0.6) * 0.9 && abs(n.z) > 0.28) { c = GL; g = 1.0; }
       if (y > 0.98 && x > -1.6 && x < -0.85 && az < 0.5 && n.y > 0.45) { c = GL; g = 1.0; }       // fastback rear screen
-      if (y > 0.9 && x > -2.05 && x < -1.6 && az < 0.42 && n.y > 0.6 && fract(x * 7.0) < 0.5) { c = CF; g = 0.4; } // engine grille
-      float hd = length(vec2(x - (L2 - 0.34), az - 0.62));                  // round headlights on the wings
-      if (hd < 0.16 && y > 0.6) { c = vec3(0.95, 0.97, 1.0); e = hd > 0.12 ? 0.5 : 1.0; g = 1.0; }
-      if (x > L2 - 0.14 && y < 0.42) { c = CF; g = 0.3; }
-      if (x < -L2 + 0.1 && y > 0.79 && y < 0.86) { c = vec3(1.0, 0.04, 0.04); e = 1.0; g = 0.6; } // light bar
+      if (y > 0.88 && x > -2.0 && x < -1.62 && az < 0.42 && n.y > 0.6 && fract(x * 9.0) < 0.5) { c = CF; g = 0.4; } // engine lid louvres
+      if (x < -2.04 && y > 0.88 && n.y > 0.3) { c = CF; g = 0.5; }        // spoiler lip
+      float hd = length(vec2(x - (L2 - 0.36), az - 0.6));                  // round headlights on the wings
+      if (y > 0.58 && hd < 0.19) {
+        c = CF; g = 1.0;                                                   // black bezel
+        if (hd < 0.155) { c = vec3(0.8, 0.82, 0.86); e = 0.35; }
+        float a = atan(az - 0.6, x - (L2 - 0.36));
+        if (hd < 0.13 && hd > 0.1 && fract(a / 1.5708 + 0.125) < 0.22) { c = vec3(1.0); e = 1.0; } // 4-point light signature
+        if (hd < 0.05) { c = vec3(1.0); e = 1.0; }
+      }
+      if (x > L2 - 0.16 && y < 0.44 && y > 0.18) {                        // three front intakes
+        if (az < 0.32 || (az > 0.46 && az < 0.84)) { c = CF; g = 0.3; }
+        if (az > 0.52 && az < 0.8 && abs(y - 0.4) < 0.012) { c = vec3(1.0); e = 1.0; }
+      }
+      if (x < -L2 + 0.1 && y > 0.8 && y < 0.86) { c = vec3(1.0, 0.04, 0.04); e = 1.0; g = 0.6; } // full-width light bar
       if (x < -L2 + 0.12 && y < 0.5) { c = CF; g = 0.3; }
+      if (abs(y - 0.74) < 0.006 && x > -1.3 && x < 1.6 && abs(n.z) > 0.6) { c *= 0.7; }  // shoulder line
     }`, C("#c9ccd1"), C("#c3001a"), 5);
   scene.add(ferrari, porsche);
 
@@ -699,17 +711,17 @@
       }, order: (u) => Math.abs(u - 0.5) * 2, pt: 0.02,
     });
   }
-  const chipOrbit = new THREE.Group();
-  roulette.add(chipOrbit);
-  const chips = ["#b5122e", "#121214", "#0c7a3c", "#1d3fa8", "#c9a87a", "#b5122e", "#f2f2f2", "#121214", "#6b2fa0"].map((hex, i) => {
-    const c = chip(hex), piv = new THREE.Group();
-    const a = (i / 9) * TAU, r = 3.2 + rnd() * 0.7;
-    c.position.set(Math.cos(a) * r, -0.3 + rnd() * 0.9, Math.sin(a) * r);
+  // a few poker chips scattered all over the scene, floating and tumbling slowly
+  // [screen x, screen y (-1..1), distance from the camera]
+  const CHIP_SPOTS = [[-0.86, 0.62, 13], [-0.32, 0.86, 26], [0.12, 0.5, 34], [0.92, -0.18, 11],
+    [-0.62, -0.3, 9], [0.42, -0.62, 8.5], [-0.08, 0.12, 40], [0.3, 0.9, 18]];
+  const chips = ["#b5122e", "#121214", "#0c7a3c", "#1d3fa8", "#c9a87a", "#f2f2f2", "#6b2fa0", "#b5122e"].map((hex, i) => {
+    const c = chip(hex);
     c.rotation.set(rnd() * 3, rnd() * 3, rnd() * 3);
-    piv.add(c);
-    chipOrbit.add(piv);
-    at(c, 2 + i * 0.25, 2.4);
-    return { c: c, sx: 0.6 + rnd(), sz: 0.4 + rnd() };
+    c.scale.setScalar(1.4);
+    scene.add(c);
+    at(c, 1.6 + i * 0.35, 2.4);
+    return { c: c, spot: CHIP_SPOTS[i], base: new THREE.Vector3(), ph: rnd() * TAU, sx: 0.3 + rnd() * 0.6, sz: 0.2 + rnd() * 0.5 };
   });
 
   // ================================================================ layout
@@ -735,7 +747,11 @@
     const dir = new THREE.Vector3(rouletteAt[0], rouletteAt[1], 0.5).unproject(camera).sub(camera.position).normalize();
     roulette.position.copy(camera.position).addScaledVector(dir, rouletteAt[2]);
     roulette.rotation.set(0.62, 0, -0.12);
-    chipOrbit.rotation.set(-0.35, 0, 0.18);
+    for (const c of chips) {
+      const d = new THREE.Vector3(c.spot[0], c.spot[1], 0.5).unproject(camera).sub(camera.position).normalize();
+      c.base.copy(camera.position).addScaledVector(d, c.spot[2]);
+      c.c.position.copy(c.base);
+    }
     camera.updateProjectionMatrix();
     SCALE.value = (H * DPR) / (2 * Math.tan((camera.fov * Math.PI) / 360));
   }
@@ -814,8 +830,8 @@
     } else {
       ballMesh.setP(0);
     }
-    chipOrbit.rotation.y = t * 0.18;
     for (const c of chips) {
+      c.c.position.set(c.base.x + Math.sin(t * 0.3 + c.ph) * 0.25, c.base.y + Math.sin(t * 0.5 + c.ph) * 0.3, c.base.z);
       c.c.rotation.x += dt * c.sx;
       c.c.rotation.z += dt * c.sz;
     }
