@@ -95,6 +95,19 @@ html[data-page="inner"] .bg-rose { opacity: 0.42; }
 
 main, footer { position: relative; z-index: 2; }
 
+/* ---------- Monte Carlo page: black night with circuit, cars and roulette ---------- */
+html[data-bg="montecarlo"] { background: #000; }
+html[data-bg="montecarlo"] body::before { display: none; }
+.bg-mc {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.6;
+}
+
 /* ---------- metal, glass, type helpers ---------- */
 .metal {
   background-image: var(--metal);
